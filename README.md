@@ -1,8 +1,8 @@
 ### WELCOME TO SWP PROJECT
 #### YOU WILL FIND IN THIS REPO THE FOLLOWING STUFF
 
-*A C# SOLUTION OFFER...
+*A  JAVA SOLUTION OFFER...
 *A ...
 
 #### CONNECT ME VIA : anhquanpro332002@gmail.com
-#### &#169; 2024 tuanpn
+#### &#169; 2024 
