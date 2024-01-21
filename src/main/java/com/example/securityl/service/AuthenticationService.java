@@ -10,6 +10,7 @@ import com.example.securityl.request.AuthenticationRequest;
 import com.example.securityl.request.RegisterRequest;
 import com.example.securityl.response.AuthenticationResponse;
 import com.example.securityl.response.LoginGoogleResponse;
+import com.example.securityl.response.RegisterResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,6 +23,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -31,28 +38,48 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final String emailRegex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+            + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+    Pattern pattern = Pattern.compile(emailRegex);
 
-
-    public AuthenticationResponse register(RegisterRequest request) {
+    public RegisterResponse register(RegisterRequest request) {
+        if (!(request.getPhone().length() == 10)) {
+            return RegisterResponse
+                    .builder()
+                    .status("Register fail")
+                    .message("Phone is not valid")
+                    .build();
+        }
+        Matcher matcher = pattern.matcher(request.getEmail());
+        if (!matcher.matches()) {
+            return RegisterResponse
+                    .builder()
+                    .status("Register fail")
+                    .message("Email is not valid")
+                    .build();
+        }
         var user = User.builder()
                 .name(request.getName())
                 .phone(request.getPhone())
                 .address(request.getAddress())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .role(request.getRole())
+                .status(true)
                 .build();
-        var saveUser = userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefeshToken(user);
-        saveToken(saveUser, jwtToken);
-        return AuthenticationResponse.builder()
-                .staus("Success")
-                .messages("Register success")
-                .token(jwtToken)
-                .refeshToken(refreshToken)
-                .build();
-
+        var existedEmail = userRepository.findByEmail(user.getEmail()).orElse(null);
+        if (existedEmail == null) {
+            userRepository.save(user);
+            return RegisterResponse.builder()
+                    .status("Success")
+                    .message("Register success")
+                    .build();
+        } else {
+            return RegisterResponse.builder()
+                    .status("Register fail")
+                    .message("Account existed")
+                    .build();
+        }
     }
 
     private void saveToken(User user, String jwtToken) {
@@ -126,7 +153,6 @@ public class AuthenticationService {
             }
         }
     }
-
 
 
 }

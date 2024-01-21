@@ -3,6 +3,7 @@ package com.example.securityl.controller;
 import com.example.securityl.request.AuthenticationRequest;
 import com.example.securityl.request.RegisterRequest;
 import com.example.securityl.response.AuthenticationResponse;
+import com.example.securityl.response.RegisterResponse;
 import com.example.securityl.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,9 +18,19 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     private final AuthenticationService service;
+
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
-        return ResponseEntity.ok(service.register(request));
+    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request) {
+        try {
+            return ResponseEntity.ok(service.register(request));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(RegisterResponse
+                    .builder()
+                    .status(e.getMessage())
+                    .message("Register fail")
+                    .build());
+        }
+
 
     }
 
@@ -38,12 +49,9 @@ public class AuthenticationController {
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response
-    )throws Exception{
-        service.refreshToken(request,response);
+    ) throws Exception {
+        service.refreshToken(request, response);
     }
-
-
-
 
 
 }
