@@ -6,19 +6,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "gallery")
-public class Galery {
+@Table(name = "image_category")
+public class ImageCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer gallery_id;
+    @Column(name = "gallery_id")
+    private Integer galleryId;
+
+    @Column(name = "thumbnail")
     private String thumbnail;
+
 
     @ManyToOne
     @JoinColumn(name = "product")

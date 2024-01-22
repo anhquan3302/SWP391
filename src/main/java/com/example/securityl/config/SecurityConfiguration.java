@@ -7,23 +7,16 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 
-import java.util.Arrays;
-
-import static com.example.securityl.entity.Permission.*;
-import static com.example.securityl.entity.Role.ADMIN;
-import static com.example.securityl.entity.Role.STAFF;
+import static com.example.securityl.entity.Enum.Permission.*;
+import static com.example.securityl.entity.Enum.Role.ADMIN;
+import static com.example.securityl.entity.Enum.Role.STAFF;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -56,7 +49,7 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(o -> o
-                        .successHandler(customOAuth2AuthenticationSuccessHandler) // Sử dụng CustomOAuth2AuthenticationSuccessHandler
+                        .successHandler(customOAuth2AuthenticationSuccessHandler)
                         .failureHandler((request, response, exception) -> {
                             request.getSession().setAttribute("error.message", exception.getMessage());
                         })

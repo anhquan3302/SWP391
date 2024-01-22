@@ -11,20 +11,30 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "oders_detail")
+@Table(name = "order_details")
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer order_details;
+    @Column(name = "order_detail_id")
+    private Integer orderDetailId;
+
+    @Column(name = "fullname")
     private String fullname;
+
+    @Column(name = "price")
     private Double price;
+
+    @Column(name = "number")
     private Integer number;
-    private Double total_money;
+
+    @Column(name = "total_money")
+    private Double totalMoney;
+
     @ManyToOne
     @JoinColumn(name = "product_id")
-    private Products productss;
+    private Products product;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Orders orderss;
+    private Orders order;
 }

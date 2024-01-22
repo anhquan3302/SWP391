@@ -1,15 +1,13 @@
 package com.example.securityl.service;
 
-import com.example.securityl.entity.Role;
 import com.example.securityl.entity.Token;
-import com.example.securityl.entity.TokenType;
+import com.example.securityl.entity.Enum.TokenType;
 import com.example.securityl.entity.User;
 import com.example.securityl.repository.TokenRepository;
 import com.example.securityl.repository.UserRepository;
 import com.example.securityl.request.AuthenticationRequest;
 import com.example.securityl.request.RegisterRequest;
 import com.example.securityl.response.AuthenticationResponse;
-import com.example.securityl.response.LoginGoogleResponse;
 import com.example.securityl.response.RegisterResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,15 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

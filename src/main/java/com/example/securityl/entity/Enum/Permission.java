@@ -1,4 +1,4 @@
-package com.example.securityl.entity;
+package com.example.securityl.entity.Enum;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,11 @@ public enum Permission {
     USER_READ("user:read"),
     USER_UPDATE("user:update"),
     USER_CREATE("user:create"),
-    USER_DELETE("user:delete")
-    ;
+    USER_DELETE("user:delete"),
+    DESIGNER_READ("designer:read"),
+    DESIGNER_UPDATE("designer:update"),
+    DESIGNER_CREATE("designer:create"),
+    DESIGNER_DELETE("designer:delete");
 
     @Getter
     private final String perminssion;

@@ -1,6 +1,6 @@
 package com.example.securityl.repository;
 
-import com.example.securityl.entity.Role;
+import com.example.securityl.entity.Enum.Role;
 
 public interface UserDTO {
     String getName();

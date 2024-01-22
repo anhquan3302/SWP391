@@ -1,10 +1,8 @@
 package com.example.securityl;
 
-import com.example.securityl.entity.Role;
-import com.example.securityl.repository.UserRepository;
+import com.example.securityl.entity.Enum.Role;
 import com.example.securityl.request.RegisterRequest;
 import com.example.securityl.service.AuthenticationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

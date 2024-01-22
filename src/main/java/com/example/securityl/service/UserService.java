@@ -1,6 +1,6 @@
 package com.example.securityl.service;
 
-import com.example.securityl.entity.Role;
+import com.example.securityl.entity.Enum.Role;
 import com.example.securityl.entity.User;
 import com.example.securityl.repository.UserRepository;
 import com.example.securityl.request.CreateUserRequest;

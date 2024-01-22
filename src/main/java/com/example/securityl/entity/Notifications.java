@@ -1,31 +1,35 @@
 package com.example.securityl.entity;
 
-import com.example.securityl.entity.Enum.TokenType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Table(name = "token")
-public class Token {
+@Table(name = "noticfications")
+public class Notifications {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String token;
-
-    @Enumerated(EnumType.STRING)
-    private TokenType tokenType;
-
-    private boolean expired;
-
-    private boolean revoked;
+    private int notificationId;
+    private String content;
+    private String read;
+    private Date createdAt;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Orders order;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Products product;
 }
