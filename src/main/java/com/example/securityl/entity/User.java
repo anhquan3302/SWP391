@@ -19,9 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "users")
 public class User implements UserDetails {
-
     @Id
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Integer userId;
@@ -57,6 +55,12 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<DesignProjects> designProjects;
+
+    @OneToMany(mappedBy = "user")
+    private List<Blog> blogs;
+
+    @OneToMany(mappedBy = "user")
+    private List<Feedback> feedbacks;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();

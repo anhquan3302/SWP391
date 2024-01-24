@@ -23,6 +23,9 @@ public class DesignProjects {
     @Column(name = "user_id")
     private int userId;
 
+    @OneToOne
+    @JoinColumn(name = "order_id", unique = true)
+    private Orders order; // Mỗi dự án chỉ liên kết với một đơn hàng
 
     @Column(name = "project_name")
     private String projectName;
@@ -35,6 +38,8 @@ public class DesignProjects {
 
     @Column(name = "status")
     private String status;
+
+
 
     @ManyToOne
     @JoinColumn(name = "user_id", insertable = false, updatable = false)

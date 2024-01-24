@@ -44,7 +44,11 @@ public class Products {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "color")
+    private String color;
 
+    @Column(name = "material")
+    private String material;
 
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
     private List<Category> categories;
@@ -54,5 +58,16 @@ public class Products {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Notifications> notifications;
+
+    @ManyToOne
+    @JoinColumn(name = "material_id")
+    private Material materials;
+
+    @ManyToMany
+    @JoinTable(
+            name = "product_colors",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "color_id"))
+    private List<Color> colors;
 
 }

@@ -46,6 +46,9 @@ public class Orders {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private DesignProjects designProject;
+
     // mỗi đơn hàng chỉ có thể áp dụng một voucher)
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "voucher_id", referencedColumnName = "id")
