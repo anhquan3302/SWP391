@@ -7,15 +7,19 @@ import com.example.securityl.request.CreateUserRequest;
 import com.example.securityl.request.UpdateUserRequest;
 import com.example.securityl.response.CreateResponse;
 import com.example.securityl.response.DeleteResponse;
+import com.example.securityl.response.ResponseObject;
 import com.example.securityl.response.UpdateUserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -138,6 +142,27 @@ public class UserService {
                 .build());
 
 
+    }
+
+
+
+
+    public User getUser(Integer id) {
+        var userId = userRepository.findUsersByUserId(id).orElse(null);
+        if(userId!= null){
+            return userId;
+        }else {
+            return null;
+        }
+    }
+
+    public List<User> getList(String email) {
+            var user = userRepository.findAllByEmail(email);
+            if(!user.isEmpty()){
+                return user;
+            }
+
+        return null;
     }
 }
 

@@ -1,25 +1,39 @@
 package com.example.securityl.controller;
 
 
+import com.example.securityl.entity.User;
 import com.example.securityl.request.CreateUserRequest;
 import com.example.securityl.request.UpdateUserRequest;
-import com.example.securityl.response.CreateResponse;
-import com.example.securityl.response.DeleteResponse;
-import com.example.securityl.response.UpdateUserResponse;
+import com.example.securityl.response.*;
 import com.example.securityl.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.logging.Logger;
+
 @RestController
 @RequestMapping("/api/v1/admin")
 @PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
+//@CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
 public class AdminController {
     private final UserService userService;
-//    private static final Logger logger = (Logger) LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = Logger.getLogger(UserController.class.getName());
+
+//    @GetMapping("/getAll")
+//    @PreAuthorize("hasAuthority('admin:read')")
+//    private ResponseEntity<ResponseObject> getAll(){
+//        List<User> userList = userService.findAll();
+//        return  ResponseEntity.ok(ResponseObject.builder()
+//                        .status("Success")
+//                        .message("get all success")
+//                        .list(userList)
+//                .build());
+//    }
+
 
     @PostMapping("/createUser")
     @PreAuthorize("hasAuthority('admin:create')")
@@ -62,5 +76,45 @@ public class AdminController {
                     .build());
         }
     }
+
+    @GetMapping("/findAll/{email}")
+    @PreAuthorize("hasAuthority('admin:read')")
+    public ResponseEntity<ResponseUser> getAll(@PathVariable String email){
+        try{
+            List<User> list = userService.getList(email);
+            return ResponseEntity.ok(ResponseUser.builder()
+                            .status("Success")
+                            .message("Get All User")
+                            .userList(list)
+                    .build());
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(ResponseUser.builder()
+                            .status("Fail")
+                            .message(e.getMessage())
+                            .userList(null)
+                    .build());
+        }
+    }
+    @GetMapping("/findUserById/{id}")
+    @PreAuthorize("hasAuthority('admin:read')")
+    public ResponseEntity<ResponseObject> geUserById(@PathVariable Integer id){
+        try{
+            var user = userService.getUser(id);
+            return ResponseEntity.ok(ResponseObject.builder()
+                            .status("Success")
+                            .message("Find user")
+                            .user(user)
+                    .build());
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                            .status("Fail")
+                            .message(e.getMessage())
+                            .user(null)
+                    .build());
+        }
+
+    }
+
+
+
 }
- hello

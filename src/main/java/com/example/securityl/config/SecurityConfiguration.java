@@ -39,7 +39,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authentication -> authentication
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/managemnet/**").hasAnyRole(ADMIN.name(), STAFF.name())
-                        .requestMatchers(GET, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_READ.name(), STAFF_READ.name())
+                        .requestMatchers(GET, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_VIEW.name(), STAFF_VIEW.name())
                         .requestMatchers(POST, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_CREATE.name(), STAFF_CREATE.name())
                         .requestMatchers(PUT, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_UPDATE.name(), STAFF_UPDATE.name())
                         .requestMatchers(DELETE, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_DELETE.name(), STAFF_DELETE.name())

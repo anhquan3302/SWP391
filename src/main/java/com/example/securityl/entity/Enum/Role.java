@@ -14,7 +14,7 @@ import static com.example.securityl.entity.Enum.Permission.*;
 public enum Role {
     USER(
             Set.of(
-                    USER_READ,
+                    USER_VIEW,
                     USER_CREATE,
                     USER_UPDATE,
                     USER_DELETE
@@ -23,11 +23,11 @@ public enum Role {
     ),
     ADMIN(
             Set.of(
-                    ADMIN_READ,
+                    ADMIN_VIEW,
                     ADMIN_CREATE,
                     ADMIN_UPDATE,
                     ADMIN_DELETE,
-                    STAFF_READ,
+                    STAFF_VIEW,
                     STAFF_CREATE,
                     STAFF_UPDATE,
                     STAFF_DELETE
@@ -36,7 +36,7 @@ public enum Role {
     ),
     STAFF(
             Set.of(
-                    STAFF_READ,
+                    STAFF_VIEW,
                     STAFF_CREATE,
                     STAFF_UPDATE,
                     STAFF_DELETE
@@ -44,7 +44,7 @@ public enum Role {
     ),
     DESIGNER(
             Set.of(
-                    DESIGNER_READ,
+                    DESIGNER_VIEW,
                     DESIGNER_CREATE,
                     DESIGNER_UPDATE,
                     DESIGNER_DELETE
