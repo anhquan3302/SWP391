@@ -19,7 +19,7 @@ public class Notifications {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int notificationId;
     private String content;
-    private String read;
+    private String view;
     private Date createdAt;
     @ManyToOne
     @JoinColumn(name = "user_id")

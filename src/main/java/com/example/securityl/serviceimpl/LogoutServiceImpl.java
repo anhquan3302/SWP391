@@ -1,7 +1,6 @@
-package com.example.securityl.service;
+package com.example.securityl.serviceimpl;
 
 import com.example.securityl.repository.TokenRepository;
-import com.example.securityl.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class LogoutService implements LogoutHandler {
+public class LogoutServiceImpl implements LogoutHandler {
     private final TokenRepository tokenRepository;
     @Override
     public void logout(HttpServletRequest request,

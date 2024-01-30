@@ -1,11 +1,13 @@
 package com.example.securityl.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,11 +45,24 @@ public class Orders {
     private Double totalMoney;
 
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
-    private DesignProjects designProject;
+    @Column(name = "history")
+    private Date history;
+
+    @Column(name = "designer_id")
+    private String desginer;
+
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Payment> payments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "designer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Consultant> consultants = new ArrayList<>();
+
 
     // mỗi đơn hàng chỉ có thể áp dụng một voucher)
     @OneToOne(cascade = CascadeType.ALL)

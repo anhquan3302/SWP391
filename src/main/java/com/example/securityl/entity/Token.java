@@ -1,6 +1,8 @@
 package com.example.securityl.entity;
 
 import com.example.securityl.entity.Enum.TokenType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +28,7 @@ public class Token {
 
     private boolean revoked;
     @ManyToOne
+    @JsonBackReference // quan ly 1 cap
     @JoinColumn(name = "user_id")
     private User user;
 }

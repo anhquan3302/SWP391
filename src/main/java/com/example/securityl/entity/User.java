@@ -1,6 +1,7 @@
 package com.example.securityl.entity;
 
 import com.example.securityl.entity.Enum.Role;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,21 +46,27 @@ public class User implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Token> tokens;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Products> products;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Orders> orders;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<DesignProjects> designProjects;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Blog> blogs;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Feedback> feedbacks;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

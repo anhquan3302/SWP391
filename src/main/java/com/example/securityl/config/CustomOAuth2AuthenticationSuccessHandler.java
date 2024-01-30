@@ -4,7 +4,7 @@ import com.example.securityl.entity.Enum.Role;
 import com.example.securityl.entity.User;
 import com.example.securityl.repository.UserRepository;
 import com.example.securityl.response.AuthenticationResponse;
-import com.example.securityl.service.JwtService;
+import com.example.securityl.serviceimpl.JwtServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,10 +22,10 @@ import java.io.IOException;
 public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     private final UserRepository userRepository;
-    private final JwtService jwtService;
+    private final JwtServiceImpl jwtService;
 
     @Autowired
-    public CustomOAuth2AuthenticationSuccessHandler(UserRepository userRepository, JwtService jwtService) {
+    public CustomOAuth2AuthenticationSuccessHandler(UserRepository userRepository, JwtServiceImpl jwtService) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
     }

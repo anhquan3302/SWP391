@@ -1,6 +1,7 @@
 package com.example.securityl.entity;
 
 import com.example.securityl.entity.Category;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,15 +41,18 @@ public class Products {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @Column(name="size")
+    private float size;
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "color")
     private String color;
 
-    @Column(name = "material")
-    private String material;
+//    @Column(name = "material")
+//    private String material;
 
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
     private List<Category> categories;
@@ -59,9 +63,8 @@ public class Products {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Notifications> notifications;
 
-    @ManyToOne
-    @JoinColumn(name = "material_id")
-    private Material materials;
+    @Column(name = "material")
+    private String materials;
 
     @ManyToMany
     @JoinTable(
