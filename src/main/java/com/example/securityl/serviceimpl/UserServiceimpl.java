@@ -3,9 +3,12 @@ package com.example.securityl.serviceimpl;
 import com.example.securityl.entity.Enum.Role;
 import com.example.securityl.entity.User;
 import com.example.securityl.repository.UserRepository;
-import com.example.securityl.request.CreateUserRequest;
-import com.example.securityl.request.UpdateUserRequest;
-import com.example.securityl.response.*;
+import com.example.securityl.request.UserRequest.CreateUserRequest;
+import com.example.securityl.request.UserRequest.UpdateUserRequest;
+import com.example.securityl.response.UserResponse.CreateResponse;
+import com.example.securityl.response.UserResponse.DeleteResponse;
+import com.example.securityl.response.UserResponse.ResponseUser;
+import com.example.securityl.response.UserResponse.UpdateUserResponse;
 import com.example.securityl.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -158,11 +161,11 @@ public class UserServiceimpl implements UserService {
     public ResponseEntity<ResponseUser> findAllUser() {
         try {
             List<User> userList = userRepository.findAll();
-            return ResponseEntity.ok(new ResponseUser("Success","Find list users", userList));
+            return ResponseEntity.ok(new ResponseUser("Success","List users", userList));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseUser.builder()
                             .status("Fail")
-                            .message("Find list user fail")
+                            .message("List user fail")
                             .userList(null)
                     .build());
         }

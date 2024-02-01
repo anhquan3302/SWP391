@@ -1,6 +1,8 @@
 package com.example.securityl.entity;
 
 import com.example.securityl.entity.Category;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,50 +25,58 @@ public class Products {
     @Column(name = "product_id")
     private Integer productId;
 
-    @Column(name = "title")
+    @Column(name = "title",nullable = false)
     private String title;
 
-    @Column(name = "thumbnail")
+    @Column(name = "thumbnail",nullable = false)
     private String thumbnail;
 
-    @Column(name = "discount")
+    @Column(name = "discount",nullable = false)
     private Integer discount;
 
-    @Column(name = "description")
+    @Column(name = "description",nullable = false)
     private String description;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at",nullable = false)
     private Date createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at",nullable = false)
     private Date updatedAt;
 
-    @Column(name="size")
-    private float size;
+    @Column(name="size",nullable = false)
+    private double size;
+
     @ManyToOne
-    @JsonManagedReference
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "color")
+    @Column(name = "color",nullable = false)
     private String color;
+
+    @Column(name ="price",nullable = false)
+    private double price;
 
 //    @Column(name = "material")
 //    private String material;
 
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Category> categories;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<OrderDetail> orderDetails;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Notifications> notifications;
 
     @Column(name = "material")
     private String materials;
 
     @ManyToMany
+    @JsonBackReference
     @JoinTable(
             name = "product_colors",
             joinColumns = @JoinColumn(name = "product_id"),

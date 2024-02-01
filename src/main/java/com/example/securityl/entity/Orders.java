@@ -1,5 +1,6 @@
 package com.example.securityl.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -45,7 +46,7 @@ public class Orders {
     private Double totalMoney;
 
     @ManyToOne
-    @JsonManagedReference
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -71,6 +72,7 @@ public class Orders {
 
     // mỗi đơn hàng chỉ có một trạng thái)
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "order_status_id")
     private OrderStatus orderStatus;
 }

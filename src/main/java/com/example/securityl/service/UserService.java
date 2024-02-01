@@ -1,12 +1,12 @@
 package com.example.securityl.service;
 
 import com.example.securityl.entity.User;
-import com.example.securityl.request.CreateUserRequest;
-import com.example.securityl.request.UpdateUserRequest;
-import com.example.securityl.response.CreateResponse;
-import com.example.securityl.response.DeleteResponse;
-import com.example.securityl.response.ResponseUser;
-import com.example.securityl.response.UpdateUserResponse;
+import com.example.securityl.request.UserRequest.CreateUserRequest;
+import com.example.securityl.request.UserRequest.UpdateUserRequest;
+import com.example.securityl.response.UserResponse.CreateResponse;
+import com.example.securityl.response.UserResponse.DeleteResponse;
+import com.example.securityl.response.UserResponse.ResponseUser;
+import com.example.securityl.response.UserResponse.UpdateUserResponse;
 import org.springframework.http.ResponseEntity;
 
 public interface UserService {

@@ -1,5 +1,6 @@
 package com.example.securityl.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,15 +22,19 @@ public class Notifications {
     private String content;
     private String view;
     private Date createdAt;
+
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "order_id")
     private Orders order;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "product_id")
     private Products product;
 }

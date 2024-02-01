@@ -1,24 +1,16 @@
-package com.example.securityl.response;
+package com.example.securityl.response.UserResponse;
 
-import com.example.securityl.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.Objects;
-
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class ResponseObject {
+
+public class RegisterResponse {
     private String status;
     private String message;
-    private User user;
-
-
-
-
 }

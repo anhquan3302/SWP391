@@ -1,4 +1,4 @@
-package com.example.securityl.response;
+package com.example.securityl.response.UserResponse;
 
 import com.example.securityl.entity.User;
 import lombok.AllArgsConstructor;
@@ -6,12 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class DeleteResponse {
+@AllArgsConstructor
+@Builder
+public class ResponseUser {
     private String status;
     private String message;
-    private User deleteUser;
+    private List<User> userList;
 }

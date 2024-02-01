@@ -1,4 +1,4 @@
-package com.example.securityl.request;
+package com.example.securityl.request.UserRequest;
 
 import com.example.securityl.entity.Enum.Role;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateUserRequest {
+public class RegisterRequest {
     private String name;
     private String address;
     private String phone;

@@ -1,4 +1,4 @@
-package com.example.securityl.response;
+package com.example.securityl.response.UserResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreateResponse {
+public class ResponseObject {
     private String status;
     private String message;
+    private Object object;
+
+
+
+
 }

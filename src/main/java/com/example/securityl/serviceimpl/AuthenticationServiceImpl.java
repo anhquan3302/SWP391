@@ -1,14 +1,15 @@
 package com.example.securityl.serviceimpl;
 
+import com.example.securityl.entity.Enum.Role;
 import com.example.securityl.entity.Token;
 import com.example.securityl.entity.Enum.TokenType;
 import com.example.securityl.entity.User;
 import com.example.securityl.repository.TokenRepository;
 import com.example.securityl.repository.UserRepository;
-import com.example.securityl.request.AuthenticationRequest;
-import com.example.securityl.request.RegisterRequest;
-import com.example.securityl.response.AuthenticationResponse;
-import com.example.securityl.response.RegisterResponse;
+import com.example.securityl.request.UserRequest.AuthenticationRequest;
+import com.example.securityl.request.UserRequest.RegisterRequest;
+import com.example.securityl.response.UserResponse.AuthenticationResponse;
+import com.example.securityl.response.UserResponse.RegisterResponse;
 import com.example.securityl.service.AuthenticationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -58,7 +59,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .address(request.getAddress())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
+                .role(Role.USER)
                 .status(true)
                 .build();
         var existedEmail = userRepository.findByEmail(user.getEmail()).orElse(null);

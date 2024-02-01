@@ -1,4 +1,4 @@
-package com.example.securityl.request;
+package com.example.securityl.request.UserRequest;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

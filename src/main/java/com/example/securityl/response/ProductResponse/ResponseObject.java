@@ -1,17 +1,16 @@
-package com.example.securityl.response;
+package com.example.securityl.response.ProductResponse;
 
-import com.example.securityl.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class UpdateUserResponse {
+@NoArgsConstructor
+@Builder
+public class ResponseObject {
     private String status;
     private String message;
-    private User updateUser;
+    private Object payload;
 }

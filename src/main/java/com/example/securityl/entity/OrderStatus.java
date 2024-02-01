@@ -1,5 +1,6 @@
 package com.example.securityl.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,5 +35,6 @@ public class OrderStatus {
     private Date updateDate;
 
     @OneToMany(mappedBy = "orderStatus")
+    @JsonManagedReference
     private List<Orders> orders;
 }

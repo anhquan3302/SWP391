@@ -1,12 +1,10 @@
 package com.example.securityl.entity;
 
 import com.example.securityl.entity.Enum.Role;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -42,6 +40,7 @@ public class User implements UserDetails {
 
     @Column(name = "status")
     private boolean status;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -51,6 +50,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
+    @ToString.Exclude
     private List<Products> products;
 
     @OneToMany(mappedBy = "user")
@@ -102,4 +102,19 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @Override
+    public String toString(){
+        return  "User{" +
+                "userId=" + userId +
+                ", address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", status=" + status +
+                ", role=" + role +
+                '}';
+    }
+
 }

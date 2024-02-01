@@ -1,4 +1,4 @@
-package com.example.securityl.response;
+package com.example.securityl.response.UserResponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -10,12 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AuthenticationResponse {
+
+public class LoginGoogleResponse {
     private String staus;
     private String messages;
     @JsonProperty("token")
     private String token;
-
-    @JsonProperty("refesh_token")
-    private String refeshToken;
 }

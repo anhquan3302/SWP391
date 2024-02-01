@@ -1,9 +1,9 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.request.AuthenticationRequest;
-import com.example.securityl.request.RegisterRequest;
-import com.example.securityl.response.AuthenticationResponse;
-import com.example.securityl.response.RegisterResponse;
+import com.example.securityl.request.UserRequest.AuthenticationRequest;
+import com.example.securityl.request.UserRequest.RegisterRequest;
+import com.example.securityl.response.UserResponse.AuthenticationResponse;
+import com.example.securityl.response.UserResponse.RegisterResponse;
 import com.example.securityl.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -1,5 +1,6 @@
 package com.example.securityl.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,10 +32,12 @@ public class OrderDetail {
     private Double totalMoney;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "product_id")
     private Products product;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "order_id")
     private Orders order;
 }
