@@ -1,6 +1,6 @@
 package com.example.securityl.response.UserResponse;
 
-import com.example.securityl.entity.User;
+import com.example.securityl.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

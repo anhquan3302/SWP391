@@ -1,4 +1,4 @@
-package com.example.securityl.entity.Enum;
+package com.example.securityl.model.Enum;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.example.securityl.entity.Enum.Permission.*;
+import static com.example.securityl.model.Enum.Permission.*;
 
 @RequiredArgsConstructor
 public enum Role {
@@ -40,14 +40,6 @@ public enum Role {
                     STAFF_CREATE,
                     STAFF_UPDATE,
                     STAFF_DELETE
-            )
-    ),
-    DESIGNER(
-            Set.of(
-                    DESIGNER_VIEW,
-                    DESIGNER_CREATE,
-                    DESIGNER_UPDATE,
-                    DESIGNER_DELETE
             )
     )
     ;

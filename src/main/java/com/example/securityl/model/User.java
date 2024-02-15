@@ -1,7 +1,6 @@
-package com.example.securityl.entity;
+package com.example.securityl.model;
 
-import com.example.securityl.entity.Enum.Role;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.example.securityl.model.Enum.Role;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -59,7 +58,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
-    private List<DesignProjects> designProjects;
+    private List<BookingDesign> bookings;
 
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
@@ -68,6 +67,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
     private List<Feedback> feedbacks;
+
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<OrderDesign> payments;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();

@@ -1,6 +1,6 @@
 package com.example.securityl.service;
 
-import com.example.securityl.entity.User;
+import com.example.securityl.model.User;
 import com.example.securityl.request.UserRequest.CreateUserRequest;
 import com.example.securityl.request.UserRequest.UpdateUserRequest;
 import com.example.securityl.response.UserResponse.CreateResponse;

@@ -1,8 +1,6 @@
-package com.example.securityl.entity;
+package com.example.securityl.model;
 
-import com.example.securityl.entity.Category;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,9 +25,6 @@ public class Products {
 
     @Column(name = "title",nullable = false)
     private String title;
-
-    @Column(name = "thumbnail",nullable = false)
-    private String thumbnail;
 
     @Column(name = "discount",nullable = false)
     private Integer discount;
@@ -57,12 +52,14 @@ public class Products {
     @Column(name ="price",nullable = false)
     private double price;
 
-//    @Column(name = "material")
-//    private String material;
 
-    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<Category> categories;
+    private List<CategoryProduct> categoryProducts;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<ImageProduct> imageProducts;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonManagedReference
@@ -75,12 +72,7 @@ public class Products {
     @Column(name = "material")
     private String materials;
 
-    @ManyToMany
-    @JsonBackReference
-    @JoinTable(
-            name = "product_colors",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "color_id"))
-    private List<Color> colors;
+    @Column(name = "colors")
+    private String colors;
 
 }

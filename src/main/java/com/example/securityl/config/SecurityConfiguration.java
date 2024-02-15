@@ -14,9 +14,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 
-import static com.example.securityl.entity.Enum.Permission.*;
-import static com.example.securityl.entity.Enum.Role.ADMIN;
-import static com.example.securityl.entity.Enum.Role.STAFF;
+import static com.example.securityl.model.Enum.Permission.*;
+import static com.example.securityl.model.Enum.Role.ADMIN;
+import static com.example.securityl.model.Enum.Role.STAFF;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration

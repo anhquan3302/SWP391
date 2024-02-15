@@ -1,4 +1,4 @@
-package com.example.securityl.entity;
+package com.example.securityl.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -10,20 +10,17 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
+@Entity
 @Builder
 @NoArgsConstructor
-@Entity
-@Table(name = "feedback")
-public class Feedback {
+@AllArgsConstructor
+@Table(name = "noticfications")
+public class Notifications {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int feedbackId;
-
-    @Column(name = "content", columnDefinition = "TEXT")
+    private int notificationId;
     private String content;
-
-    @Column(name = "created_at")
+    private String view;
     private Date createdAt;
 
     @ManyToOne
@@ -33,7 +30,11 @@ public class Feedback {
 
     @ManyToOne
     @JsonBackReference
+    @JoinColumn(name = "order_id")
+    private Orders order;
+
+    @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "product_id")
     private Products product;
-
 }

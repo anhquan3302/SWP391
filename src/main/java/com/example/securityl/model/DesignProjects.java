@@ -1,4 +1,4 @@
-package com.example.securityl.entity;
+package com.example.securityl.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -24,7 +24,6 @@ public class DesignProjects {
     @Column(name = "user_id")
     private int userId;
 
-
     @Column(name = "project_name")
     private String projectName;
 
@@ -37,10 +36,8 @@ public class DesignProjects {
     @Column(name = "status")
     private String status;
 
-
-
     @ManyToOne
+    @JoinColumn(name = "booking_id")
     @JsonBackReference
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    private User user;
+    private BookingDesign booking;
 }

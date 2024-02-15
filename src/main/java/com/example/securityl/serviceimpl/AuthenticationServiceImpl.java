@@ -1,9 +1,9 @@
 package com.example.securityl.serviceimpl;
 
-import com.example.securityl.entity.Enum.Role;
-import com.example.securityl.entity.Token;
-import com.example.securityl.entity.Enum.TokenType;
-import com.example.securityl.entity.User;
+import com.example.securityl.model.Enum.Role;
+import com.example.securityl.model.Token;
+import com.example.securityl.model.Enum.TokenType;
+import com.example.securityl.model.User;
 import com.example.securityl.repository.TokenRepository;
 import com.example.securityl.repository.UserRepository;
 import com.example.securityl.request.UserRequest.AuthenticationRequest;
@@ -59,7 +59,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .address(request.getAddress())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .role(request.getRole())
                 .status(true)
                 .build();
         var existedEmail = userRepository.findByEmail(user.getEmail()).orElse(null);

@@ -1,17 +1,13 @@
 package com.example.securityl.request.ProductRequest;
 
-import com.example.securityl.entity.Category;
-import com.example.securityl.entity.User;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.example.securityl.model.Category;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +15,7 @@ import java.util.Date;
 @Builder
 public class RequestObject {
     private String title;
-    private String thumbnail;
+    private byte[] thumbnail;
     private Integer discount;
     private String description;
     private Date createdAt;
@@ -28,5 +24,6 @@ public class RequestObject {
     private double size;
     private String color;
     private double price;
+//    private String category;
 
 }

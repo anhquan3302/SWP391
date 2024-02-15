@@ -1,8 +1,7 @@
-package com.example.securityl.entity;
+package com.example.securityl.model;
 
-import com.example.securityl.entity.Enum.TokenType;
+import com.example.securityl.model.Enum.TokenType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

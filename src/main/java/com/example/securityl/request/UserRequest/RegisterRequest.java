@@ -1,6 +1,6 @@
 package com.example.securityl.request.UserRequest;
 
-import com.example.securityl.entity.Enum.Role;
+import com.example.securityl.model.Enum.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

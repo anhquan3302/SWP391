@@ -1,7 +1,7 @@
 package com.example.securityl.config;
 
-import com.example.securityl.entity.Enum.Role;
-import com.example.securityl.entity.User;
+import com.example.securityl.model.Enum.Role;
+import com.example.securityl.model.User;
 import com.example.securityl.repository.UserRepository;
 import com.example.securityl.response.UserResponse.AuthenticationResponse;
 import com.example.securityl.serviceimpl.JwtServiceImpl;

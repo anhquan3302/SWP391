@@ -1,6 +1,6 @@
 package com.example.securityl;
 
-import com.example.securityl.entity.Enum.Role;
+import com.example.securityl.model.Enum.Role;
 import com.example.securityl.request.UserRequest.RegisterRequest;
 import com.example.securityl.service.AuthenticationService;
 import org.springframework.boot.CommandLineRunner;
