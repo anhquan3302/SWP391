@@ -17,11 +17,10 @@ public class ImageProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id")
-    private Long imageId;
+    private Integer imageId;
 
-    @Lob
-    @Column(name = "image_data", nullable = false)
-    private byte[] imageData;
+    @Column(name = "image_url")
+    private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)

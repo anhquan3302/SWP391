@@ -1,5 +1,7 @@
 package com.example.securityl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.securityl.model.Enum.Role;
 import com.example.securityl.request.UserRequest.RegisterRequest;
 import com.example.securityl.service.AuthenticationService;
@@ -15,6 +17,15 @@ public class SecurityLApplication {
         SpringApplication.run(SecurityLApplication.class, args);
     }
 
+    @Bean
+    public Cloudinary CloudinaryConfig(){
+        Cloudinary c = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "dxorh7ue1",
+                "api_key", "547243734762266",
+                "api_secret", "YbPOvxckYbyokrSl2z1Wci6nRCI"));
+
+        return c;
+    }
     @Bean
     public CommandLineRunner commandLineRunner(
             AuthenticationService service

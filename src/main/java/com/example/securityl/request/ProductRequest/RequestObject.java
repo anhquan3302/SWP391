@@ -1,6 +1,7 @@
 package com.example.securityl.request.ProductRequest;
 
 import com.example.securityl.model.Category;
+import com.example.securityl.model.ImageProduct;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,6 @@ import java.util.List;
 @Builder
 public class RequestObject {
     private String title;
-    private byte[] thumbnail;
     private Integer discount;
     private String description;
     private Date createdAt;

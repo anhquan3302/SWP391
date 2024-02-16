@@ -41,6 +41,8 @@ public class Products {
     @Column(name="size",nullable = false)
     private double size;
 
+
+
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "user_id")
@@ -72,7 +74,5 @@ public class Products {
     @Column(name = "material")
     private String materials;
 
-    @Column(name = "colors")
-    private String colors;
 
 }
