@@ -38,6 +38,4 @@ public class Blog {
     private User user;
 
 
-    public static class Consultant {
-    }
 }

@@ -19,13 +19,14 @@ public class SecurityLApplication {
 
     @Bean
     public Cloudinary CloudinaryConfig(){
-        Cloudinary c = new Cloudinary(ObjectUtils.asMap(
+        Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", "dxorh7ue1",
                 "api_key", "547243734762266",
                 "api_secret", "YbPOvxckYbyokrSl2z1Wci6nRCI"));
 
-        return c;
+        return cloudinary;
     }
+
     @Bean
     public CommandLineRunner commandLineRunner(
             AuthenticationService service

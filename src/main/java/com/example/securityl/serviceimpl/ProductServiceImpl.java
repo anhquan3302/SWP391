@@ -8,6 +8,7 @@ import com.example.securityl.model.Products;
 import com.example.securityl.repository.ImageProductRepository;
 import com.example.securityl.repository.ProductRepository;
 import com.example.securityl.repository.UserRepository;
+import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.response.ProductResponse.ResponseObject;
 import com.example.securityl.service.JwtService;
 import com.example.securityl.service.ProductService;
@@ -94,15 +95,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<ResponseObject> updateProduct(
-            Integer productId,
-            MultipartFile file,
-            String title,
-            String description,
-            Integer discount,
-            String color,
-            double size,
-            double price,
-            String material) {
+            Integer productId, RequestObject requestObject) {
         try {
             String token = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
                     .getRequest()
@@ -113,16 +106,16 @@ public class ProductServiceImpl implements ProductService {
             if (requester == null) {
                 return ResponseEntity.status(404).body(new ResponseObject("Fail", "User not found", null));
             }
-            if (size <= 0) {
+            if (requestObject.getSize() <= 0) {
                 return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Size must be greater than 0", null));
             }
-            if (description == null || description.trim().isEmpty()) {
+            if (requestObject.getDescription() == null || requestObject.getDescription().trim().isEmpty()) {
                 return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Description is empty", null));
             }
-            if (title == null || title.trim().isEmpty()) {
+            if (requestObject.getTitle() == null || requestObject.getTitle().trim().isEmpty()) {
                 return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Title is empty", null));
             }
-            if (price <= 0) {
+            if (requestObject.getPrice() <= 0) {
                 return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Price must be greater than 0", null));
             }
             if (!(requester.getRole().equals(Role.ADMIN) || requester.getRole().equals(Role.STAFF))) {
@@ -130,15 +123,10 @@ public class ProductServiceImpl implements ProductService {
             }
             var checkProduct = productRepository.findById(productId).orElse(null);
             if (checkProduct != null) {
-                checkProduct.setSize(size);
-                checkProduct.setDescription(description.trim());
-                checkProduct.setTitle(title.trim());
-                checkProduct.setPrice(price);
-//                if (file != null && !file.isEmpty()) {
-//                    byte[] imageData = file.getBytes();
-//                    String thumbnailBase64 = Base64.getEncoder().encodeToString(imageData);
-//                    checkProduct.setThumbnail(thumbnailBase64.getBytes());
-//                }
+                checkProduct.setSize(requestObject.getSize());
+                checkProduct.setDescription(requestObject.getDescription().trim());
+                checkProduct.setTitle(requestObject.getTitle().trim());
+                checkProduct.setPrice(requestObject.getPrice());
                 checkProduct.setUpdatedAt(new Date());
                 var updateProduct = productRepository.save(checkProduct);
                 return ResponseEntity.ok(new ResponseObject("Success", "Update product success", updateProduct));
@@ -146,7 +134,6 @@ public class ProductServiceImpl implements ProductService {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ResponseObject("Fail", "Internal Server Error", null));
         }
-
         return ResponseEntity.status(500).body(ResponseObject.builder()
                 .status("Fail")
                 .message("Internal sever error ")

@@ -1,9 +1,12 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.model.ImageProduct;
+import com.example.securityl.model.Category;
+import com.example.securityl.model.CategoryProduct;
 import com.example.securityl.request.CategoryRequest.RequestCategory;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.response.ProductResponse.ResponseObject;
+import com.example.securityl.service.CategoryProductService;
+import com.example.securityl.service.CategoryService;
 import com.example.securityl.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,8 @@ import java.util.List;
 @RequestMapping("/api/v1/management")
 public class ManagementController {
     private final ProductService productService;
-
+    private final CategoryProductService categoryProductService;
+    private final CategoryService categoryService;
 
     @GetMapping("/getAllProduct")
     public ResponseEntity<ResponseObject> getAllProduct(){
@@ -61,26 +63,11 @@ public class ManagementController {
         }
     }
 
-
-
-
-
-
-
-
-
-    @PutMapping("/updateProduct")
+    @PutMapping("/updateProduct/{productId}")
     public ResponseEntity<ResponseObject> updateProduct(
             @PathVariable Integer productId,
-            @RequestParam ("image") MultipartFile file,
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("discount") Integer discount,
-            @RequestParam("color") String color,
-            @RequestParam("size") double size,
-            @RequestParam("price") double price,
-            @RequestParam("material") String material) {
-        return productService.updateProduct(productId,file, title, description, discount, color, size, price, material);
+            @RequestBody RequestObject requestObject) {
+        return productService.updateProduct(productId, requestObject);
     }
 
     @DeleteMapping("/deleteProduct/{productId}")
@@ -88,5 +75,21 @@ public class ManagementController {
             @PathVariable Integer productId){
         return productService.deleteProduct(productId);
     }
+
+    @PostMapping("/createCategory/{productId}")
+    public ResponseEntity<ResponseObject> addProductToCategory(@PathVariable Integer productId,
+                                                               @RequestBody RequestCategory requestCategory) {
+        try {
+            return categoryProductService.addProductToCategory(productId, requestCategory);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ResponseObject.builder()
+                            .status("Fail")
+                            .message("Unauthorized access")
+                            .build());
+        }
+    }
+
+
 }
 

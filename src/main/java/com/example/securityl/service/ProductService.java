@@ -12,7 +12,7 @@ import java.util.List;
 public interface ProductService  {
     ResponseEntity<ResponseObject> createProduct(String title, String description, Integer discount, String color, double size, double price, String material);
 
-    ResponseEntity<ResponseObject> updateProduct(Integer productId ,MultipartFile file, String title, String description, Integer discount, String color, double size, double price, String material);
+    ResponseEntity<ResponseObject> updateProduct(Integer productId , RequestObject requestObject);
 
     ResponseEntity<ResponseObject> deleteProduct(Integer productId);
 
