@@ -2,10 +2,16 @@ package com.example.securityl.controller;
 
 import com.example.securityl.model.ImageProduct;
 import com.example.securityl.request.BlogRequest.BlogRequest;
+import com.example.securityl.model.Category;
+import com.example.securityl.model.CategoryProduct;
+import com.example.securityl.request.BlogRequest.BlogRequest;
 import com.example.securityl.request.CategoryRequest.RequestCategory;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.response.ProductResponse.ResponseObject;
 import com.example.securityl.service.BlogService;
+import com.example.securityl.service.BlogService;
+import com.example.securityl.service.CategoryProductService;
+import com.example.securityl.service.CategoryService;
 import com.example.securityl.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,8 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +27,9 @@ import java.util.List;
 @RequestMapping("/api/v1/management")
 public class ManagementController {
     private final ProductService productService;
+    private final CategoryProductService categoryProductService;
+    private final CategoryService categoryService;
+    private final BlogService blogService;
     private final BlogService blogService;
 
 

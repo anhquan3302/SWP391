@@ -12,5 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RequestCategory {
     private String categoryName;
+    private String categoryDescription;
+    private String productName;
 
 }
