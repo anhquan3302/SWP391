@@ -1,5 +1,6 @@
 package com.example.securityl.service;
 
+import com.example.securityl.request.UserRequest.SearchRequest;
 import com.example.securityl.model.User;
 import com.example.securityl.request.UserRequest.CreateUserRequest;
 import com.example.securityl.request.UserRequest.UpdateUserRequest;
@@ -15,4 +16,6 @@ public interface UserService {
     ResponseEntity<DeleteResponse> deleteUser(String email);
     User getUser(Integer id);
     ResponseEntity<ResponseUser> findAllUser();
+
+    ResponseEntity<ResponseUser> searchUsers(SearchRequest req);
 }

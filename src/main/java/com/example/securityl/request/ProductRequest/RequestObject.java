@@ -24,6 +24,7 @@ public class RequestObject {
     private double size;
     private String color;
     private double price;
+    private String productName;
 //    private String category;
 
 }

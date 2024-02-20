@@ -41,7 +41,8 @@ public class Products {
     @Column(name="size",nullable = false)
     private double size;
 
-
+    @Column(name = "product_name",nullable = false)
+    private String productName;
 
     @ManyToOne
     @JsonBackReference

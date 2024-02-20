@@ -1,5 +1,6 @@
 package com.example.securityl.serviceimpl;
 
+import com.example.securityl.request.UserRequest.SearchRequest;
 import com.example.securityl.model.Enum.Role;
 import com.example.securityl.model.User;
 import com.example.securityl.repository.UserRepository;
@@ -149,12 +150,7 @@ public class UserServiceimpl implements UserService {
 
     @Override
     public User getUser(Integer id) {
-        var userId = userRepository.findUsersByUserId(id).orElse(null);
-        if (userId != null) {
-            return userId;
-        } else {
-            return null;
-        }
+        return userRepository.findUsersByUserId(id);
     }
 
     @Override
@@ -171,6 +167,31 @@ public class UserServiceimpl implements UserService {
         }
 
 
+    }
+
+    @Override
+    public ResponseEntity<ResponseUser> searchUsers(SearchRequest req) {
+        try {
+            List<User> userList = userRepository.findAll();
+            if(req.getUserId() != null){
+                userList = userList.stream().filter(n -> n.getUserId() == req.getUserId()).toList();
+            }
+            if(req.getName() != null && !req.getName().trim().isEmpty()){
+                userList = userList.stream()
+                        .filter(n -> n.getName() != null && n.getName().equalsIgnoreCase(req.getName()) || n.getName().contains(req.getName())).toList();
+
+            }
+            if(req.getEmail() != null && !req.getEmail().trim().isEmpty()){
+                userList = userList.stream().filter(n -> n.getEmail().contains(req.getEmail())).toList();
+            }
+            return ResponseEntity.ok(new ResponseUser("Success","List users", userList));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseUser.builder()
+                    .status("Fail")
+                    .message("List user fail")
+                    .userList(null)
+                    .build());
+        }
     }
 }
 

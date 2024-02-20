@@ -4,6 +4,7 @@ import com.example.securityl.model.Category;
 import com.example.securityl.model.CategoryProduct;
 import com.example.securityl.request.CategoryRequest.RequestCategory;
 import com.example.securityl.request.ProductRequest.RequestObject;
+import com.example.securityl.request.ProductRequest.SearchProduct;
 import com.example.securityl.response.ProductResponse.ResponseObject;
 import com.example.securityl.service.CategoryProductService;
 import com.example.securityl.service.CategoryService;
@@ -32,6 +33,7 @@ public class ManagementController {
 
     @PostMapping("/createProduct")
     public ResponseEntity<ResponseObject> createProduct(
+                                                        @RequestParam("productName") String productName,
                                                         @RequestParam("title") String title,
                                                         @RequestParam("description") String description,
                                                         @RequestParam("discount") Integer discount,
@@ -39,7 +41,7 @@ public class ManagementController {
                                                         @RequestParam("size") double size,
                                                         @RequestParam("price") double price,
                                                         @RequestParam("material") String material) {
-        return productService.createProduct(title, description, discount, color, size, price, material);
+        return productService.createProduct(productName,title, description, discount, color, size, price, material);
     }
 
     @PostMapping("/upload-images/{productId}")
@@ -93,6 +95,11 @@ public class ManagementController {
     @GetMapping("/getAllCategory")
     private ResponseEntity<ResponseObject> getAllCategory(){
         return categoryService.findAllCategory();
+    }
+
+    @PostMapping("/getProduct")
+    private ResponseEntity<ResponseObject> searchProducts(@RequestBody SearchProduct searchProduct){
+        return productService.searchProduct(searchProduct);
     }
 
 

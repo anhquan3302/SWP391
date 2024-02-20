@@ -9,7 +9,9 @@ import com.example.securityl.repository.ImageProductRepository;
 import com.example.securityl.repository.ProductRepository;
 import com.example.securityl.repository.UserRepository;
 import com.example.securityl.request.ProductRequest.RequestObject;
+import com.example.securityl.request.ProductRequest.SearchProduct;
 import com.example.securityl.response.ProductResponse.ResponseObject;
+import com.example.securityl.response.UserResponse.ResponseUser;
 import com.example.securityl.service.JwtService;
 import com.example.securityl.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,6 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,9 +42,9 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ResponseEntity<ResponseObject> createProduct(String title, String description, Integer discount, String color, double size, double price, String material) {
+    public ResponseEntity<ResponseObject> createProduct(String productName,String title, String description, Integer discount, String color, double size, double price, String material) {
         try {
-            Products product = createNewProduct(title, description, discount, color, size, price, material);
+            Products product = createNewProduct(productName,title, description, discount, color, size, price, material);
             if (product == null) {
                 return ResponseEntity.status(500).body(new ResponseObject("Fail", "Failed to create product", null));
             }
@@ -56,7 +59,9 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    private Products createNewProduct(String title, String description, Integer discount, String color, double size, double price, String material) {
+
+
+    private Products createNewProduct(String productName,String title, String description, Integer discount, String color, double size, double price, String material) {
         try {
             Date date = new Date();
             String token = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
@@ -68,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
             if (requester == null || !(requester.getRole().equals(Role.STAFF) || requester.getRole().equals(Role.ADMIN))) {
                 return null;
             }
-            if (size <= 0 || description == null || description.trim().isEmpty() || title == null || title.trim().isEmpty() || price <= 0) {
+            if (size <= 0 || productName ==null|| productName.trim().isEmpty() || description == null || description.trim().isEmpty() || title == null || title.trim().isEmpty() || price <= 0) {
                 return null;
             }
             if (!(requester.getRole().equals(Role.ADMIN) || requester.getRole().equals(Role.STAFF))) {
@@ -76,6 +81,7 @@ public class ProductServiceImpl implements ProductService {
             }
 
             return Products.builder()
+                    .productName(productName.trim())
                     .description(description.trim())
                     .title(title.trim())
                     .color(color)
@@ -209,6 +215,28 @@ public class ProductServiceImpl implements ProductService {
             throw new RuntimeException("Failed to upload product images: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public ResponseEntity<ResponseObject> searchProduct(SearchProduct searchProduct) {
+        try {
+            List<Products> productsList = productRepository.findAll();
+            List<Products> showProduct = new ArrayList<>();
+            if (searchProduct.getProductId() != null) {
+                showProduct = productsList.stream()
+                        .filter(n -> n.getProductId() == searchProduct.getProductId())
+                        .toList();
+            }
+            if (searchProduct.getProductName() != null && !searchProduct.getProductName().trim().isEmpty()) {
+                showProduct = productsList.stream()
+                        .filter(n -> n.getProductName().toLowerCase().contains(searchProduct.getProductName().toLowerCase()))
+                        .toList();
+            }
+            return ResponseEntity.ok(new ResponseObject("Success", "List users", showProduct));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Not found product", null));
+        }
+    }
+
 
 
 }
