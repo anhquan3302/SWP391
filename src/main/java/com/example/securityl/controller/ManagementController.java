@@ -1,5 +1,6 @@
 package com.example.securityl.controller;
 
+import com.example.securityl.model.Blog;
 import com.example.securityl.model.ImageProduct;
 import com.example.securityl.request.BlogRequest.BlogRequest;
 import com.example.securityl.model.Category;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -30,7 +32,7 @@ public class ManagementController {
     private final CategoryProductService categoryProductService;
     private final CategoryService categoryService;
     private final BlogService blogService;
-    private final BlogService blogService;
+
 
 
     @GetMapping("/getAllProduct")
@@ -79,18 +81,11 @@ public class ManagementController {
 
 
 
-    @PutMapping("/updateProduct")
+    @PutMapping("/updateProduct/{productId}")
     public ResponseEntity<ResponseObject> updateProduct(
             @PathVariable Integer productId,
-            @RequestParam ("image") MultipartFile file,
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("discount") Integer discount,
-            @RequestParam("color") String color,
-            @RequestParam("size") double size,
-            @RequestParam("price") double price,
-            @RequestParam("material") String material) {
-        return productService.updateProduct(productId,file, title, description, discount, color, size, price, material);
+            @RequestBody RequestObject requestObject) {
+        return productService.updateProduct(productId, requestObject);
     }
 
     @DeleteMapping("/deleteProduct/{productId}")
@@ -104,11 +99,49 @@ public class ManagementController {
         return blogService.createBlog(blogRequest);
     }
 
+//    @PutMapping("/updateBlog/{blogId}")
+//    public ResponseEntity<ResponseObject> updateBlog(
+//            @PathVariable Integer blogId,
+//            @RequestBody RequestObjectBlog requestObject) {
+//        return productService.updateProduct(blogId, requestObject);
+//    }
+
+    @GetMapping("/searchBlog")
+    public ResponseEntity<?> searchBlog(@RequestParam(name = "createdAt",required = false)
+                                            String createdAt,
+                                            @RequestParam(name = "searchValue",required = false)
+                                            String searchValue,
+                                            @RequestParam(name = "orderBy",required = false)
+                                            String orderBy)
+    {
+        List<Blog> syllabusList = blogService.searchBlog(createdAt, searchValue, orderBy);
+        return ResponseEntity.ok(syllabusList);
+    }
+
+//    @GetMapping("/searchBlog")
+//    public ResponseEntity<?> searchBlog1(@RequestParam(name = "id", required = false) Integer id,
+//                                        @RequestParam(name = "startDate", required = false) Date startDate,
+//                                        @RequestParam(name = "endDate", required = false) Date endDate) {
+//        List<Blog> blogs = blogService.searchBlog(id, startDate, endDate);
+//        return ResponseEntity.ok(blogs);
+//    }
+
     @PutMapping("/updateBlog/{blogId}")
     public ResponseEntity<ResponseObject> updateBlog(
-            @PathVariable Integer blogId,
-            @RequestBody RequestObjectBlog requestObject) {
-        return productService.updateProduct(blogId, requestObject);
+            @PathVariable int blogId,
+            @RequestBody BlogRequest blogRequest) {
+        return blogService.updateBlog(blogId, blogRequest);
+    }
+
+    @DeleteMapping("/deleteBlog/{blogId}")
+    public ResponseEntity<ResponseObject> deleteBlog(@PathVariable int blogId) {
+        return blogService.deleteBlog(blogId);
+    }
+
+    // Endpoint để tìm kiếm blog theo id
+    @GetMapping("/findBlog/{blogId}")
+    public ResponseEntity<ResponseObject> findBlogById(@PathVariable int blogId) {
+        return blogService.findBlogById(blogId);
     }
 }
 
