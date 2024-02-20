@@ -2,6 +2,7 @@ package com.example.securityl.controller;
 
 
 import com.example.securityl.request.UserRequest.CreateUserRequest;
+import com.example.securityl.request.UserRequest.SearchRequest;
 import com.example.securityl.request.UserRequest.UpdateUserRequest;
 import com.example.securityl.response.UserResponse.ResponseObject;
 import com.example.securityl.response.UserResponse.CreateResponse;
@@ -115,5 +116,8 @@ public class AdminController {
 
     }
 
-
+    @GetMapping("/getUsers")
+    public ResponseEntity<ResponseUser> getAllUsers(@RequestBody SearchRequest req){
+        return userService.searchUsers(req);
+    }
 }

@@ -1,9 +1,11 @@
 package com.example.securityl.controller;
 
 import com.example.securityl.model.ImageProduct;
+import com.example.securityl.request.BlogRequest.BlogRequest;
 import com.example.securityl.request.CategoryRequest.RequestCategory;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.response.ProductResponse.ResponseObject;
+import com.example.securityl.service.BlogService;
 import com.example.securityl.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ import java.util.List;
 @RequestMapping("/api/v1/management")
 public class ManagementController {
     private final ProductService productService;
+    private final BlogService blogService;
 
 
     @GetMapping("/getAllProduct")
@@ -87,6 +90,18 @@ public class ManagementController {
     private ResponseEntity<ResponseObject> deleteProduct(
             @PathVariable Integer productId){
         return productService.deleteProduct(productId);
+    }
+
+    @PostMapping("/createBlog")
+    public ResponseEntity<ResponseObject> createBlog(@RequestBody BlogRequest blogRequest) {
+        return blogService.createBlog(blogRequest);
+    }
+
+    @PutMapping("/updateBlog/{blogId}")
+    public ResponseEntity<ResponseObject> updateBlog(
+            @PathVariable Integer blogId,
+            @RequestBody RequestObjectBlog requestObject) {
+        return productService.updateProduct(blogId, requestObject);
     }
 }
 
