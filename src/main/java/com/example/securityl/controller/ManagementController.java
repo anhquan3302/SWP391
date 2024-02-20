@@ -90,6 +90,11 @@ public class ManagementController {
         }
     }
 
+    @GetMapping("/getAllCategory")
+    private ResponseEntity<ResponseObject> getAllCategory(){
+        return categoryService.findAllCategory();
+    }
+
 
 }
 
