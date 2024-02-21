@@ -99,12 +99,7 @@ public class ManagementController {
         return blogService.createBlog(blogRequest);
     }
 
-//    @PutMapping("/updateBlog/{blogId}")
-//    public ResponseEntity<ResponseObject> updateBlog(
-//            @PathVariable Integer blogId,
-//            @RequestBody RequestObjectBlog requestObject) {
-//        return productService.updateProduct(blogId, requestObject);
-//    }
+
 
     @GetMapping("/searchBlog")
     public ResponseEntity<?> searchBlog(@RequestParam(name = "createdAt",required = false)
@@ -118,13 +113,7 @@ public class ManagementController {
         return ResponseEntity.ok(syllabusList);
     }
 
-//    @GetMapping("/searchBlog")
-//    public ResponseEntity<?> searchBlog1(@RequestParam(name = "id", required = false) Integer id,
-//                                        @RequestParam(name = "startDate", required = false) Date startDate,
-//                                        @RequestParam(name = "endDate", required = false) Date endDate) {
-//        List<Blog> blogs = blogService.searchBlog(id, startDate, endDate);
-//        return ResponseEntity.ok(blogs);
-//    }
+
 
     @PutMapping("/updateBlog/{blogId}")
     public ResponseEntity<ResponseObject> updateBlog(
