@@ -1,11 +1,16 @@
 package com.example.securityl.serviceimpl;
 
 import com.example.securityl.model.Blog;
+import com.example.securityl.model.Enum.Role;
+import com.example.securityl.model.User;
 import com.example.securityl.repository.BlogRepository;
 
+import com.example.securityl.repository.UserDTO;
+import com.example.securityl.repository.UserRepository;
 import com.example.securityl.request.BlogRequest.BlogRequest;
 import com.example.securityl.response.ProductResponse.ResponseObject;
 import com.example.securityl.service.BlogService;
+import com.example.securityl.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import com.example.securityl.request.BlogRequest.BlogRequest;
 import com.example.securityl.response.ProductResponse.ResponseObject;
@@ -14,37 +19,56 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-
 public class BlogServiceImpl implements BlogService {
     private final BlogRepository blogRepository;
+    private final UserRepository userRepository;
+    private final JwtService jwtService;
     @Autowired
-    public BlogServiceImpl(BlogRepository blogRepository) {
+    public BlogServiceImpl(BlogRepository blogRepository, UserRepository userRepository, JwtService jwtService) {
         this.blogRepository = blogRepository;
+        this.userRepository = userRepository;
+        this.jwtService = jwtService;
     }
 
     @Override
     public ResponseEntity<ResponseObject> createBlog(BlogRequest blogRequest) {
         try {
-            Blog blog = new Blog();
-            blog.setTitle(blogRequest.getTitle());
-            blog.setContent(blogRequest.getContent());
-            blog.setCreatedAt(new Date());
-            blog.setUpdatedAt(new Date());
-            // Set user if necessary
+            String token = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
+                    .getRequest().getHeader("Authorization").substring(7);
+            String userEmail = jwtService.extractUsername(token);
 
+            // Truy vấn người dùng từ repository
+            var requester = userRepository.findUsersByEmail(userEmail);
+
+
+            Blog blog = Blog.builder()
+                    .title(blogRequest.getTitle())
+                    .content(blogRequest.getContent())
+                    .createdAt(new Date())
+                    .updatedAt(new Date())
+                    .user(requester)
+                    .build();
+
+            // Lưu đối tượng Blog vào cơ sở dữ liệu
             Blog savedBlog = blogRepository.save(blog);
+
+            // Trả về ResponseEntity thành công với thông điệp và payload
             return ResponseEntity.ok(new ResponseObject("Success", "Create blog success", savedBlog));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ResponseObject("Fail", "Internal Server Error", null));
         }
     }
+
+
+
 
     @Override
     public List<Blog> searchBlog(String createdAt, String searchValue, String orderBy) {

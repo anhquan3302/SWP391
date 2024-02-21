@@ -10,7 +10,7 @@ import java.util.List;
 public interface BlogService {
 //    ResponseObject createBlog(String title, String content);
 
-    ResponseEntity<com.example.securityl.response.ProductResponse.ResponseObject> createBlog(BlogRequest blogRequest);
+    ResponseEntity<ResponseObject> createBlog(BlogRequest blogRequest);
 
     List<Blog> searchBlog(String createdAt, String searchValue, String orderBy);
 

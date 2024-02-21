@@ -1,8 +1,11 @@
 package com.example.securityl.request.BlogRequest;
 
+import com.example.securityl.model.User;
+
 public class BlogRequest {
     private String title;
     private String content;
+
 
     public BlogRequest() {
     }
@@ -28,4 +31,7 @@ public class BlogRequest {
     public void setContent(String content) {
         this.content = content;
     }
+
+
+
 }

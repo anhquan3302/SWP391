@@ -1,6 +1,7 @@
 package com.example.securityl.service;
 
 import com.example.securityl.model.ImageProduct;
+import com.example.securityl.model.Products;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.request.ProductRequest.SearchProduct;
 import com.example.securityl.response.ProductResponse.ResponseObject;
@@ -12,18 +13,19 @@ import java.util.List;
 
 public interface ProductService  {
     ResponseEntity<ResponseObject> createProduct(String productName,String title, String description, Integer discount, String color, double size, double price, String material);
-
-
+    
 
     ResponseEntity<ResponseObject> deleteProduct(Integer productId);
 
     ResponseEntity<ResponseObject> getAll();
-
-    void updateProductImage(Integer productId, String imageUrl);
 
     String uploadImage(MultipartFile file) throws IOException;
 
     void uploadProductImage(Integer productId, List<String> imageUrls);
 
     ResponseEntity<ResponseObject> searchProduct(SearchProduct searchProduct);
+
+    ResponseEntity<ResponseObject> updateProduct(Integer productId, RequestObject requestObject);
+
+    Products getProductById(Integer productId);
 }

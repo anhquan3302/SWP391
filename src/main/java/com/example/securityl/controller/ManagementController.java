@@ -1,10 +1,7 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.model.Blog;
-import com.example.securityl.model.ImageProduct;
+import com.example.securityl.model.*;
 import com.example.securityl.request.BlogRequest.BlogRequest;
-import com.example.securityl.model.Category;
-import com.example.securityl.model.CategoryProduct;
 import com.example.securityl.request.BlogRequest.BlogRequest;
 import com.example.securityl.request.CategoryRequest.RequestCategory;
 import com.example.securityl.request.ProductRequest.RequestObject;
@@ -78,11 +75,6 @@ public class ManagementController {
 
 
 
-
-
-
-
-
     @PutMapping("/updateProduct/{productId}")
     public ResponseEntity<ResponseObject> updateProduct(
             @PathVariable Integer productId,
@@ -112,7 +104,10 @@ public class ManagementController {
     }
 
 
-
+    @GetMapping("/getProductById/{productId}")
+    private Products getProductById(@PathVariable Integer productId){
+        return productService.getProductById(productId);
+    }
     @GetMapping("/searchBlog")
     public ResponseEntity<?> searchBlog(@RequestParam(name = "createdAt",required = false)
                                             String createdAt,

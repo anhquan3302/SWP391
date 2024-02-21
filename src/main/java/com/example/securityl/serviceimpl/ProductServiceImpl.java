@@ -147,10 +147,20 @@ public class ProductServiceImpl implements ProductService {
                 .build());
     }
 
+    @Override
+    public Products getProductById(Integer productId) {
+        try {
+            return productRepository.findProductByProductId(productId).orElse(null);
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+
 
     @Override
     public ResponseEntity<ResponseObject> deleteProduct(Integer productId) {
-        var checkProduct = productRepository.findProductsByProductId(productId).orElse(null);
+        var checkProduct = productRepository.findProductByProductId(productId).orElse(null);
         if (checkProduct != null) {
             productRepository.delete(checkProduct);
             return ResponseEntity.ok(new ResponseObject("Success", "Delete successful", checkProduct));
@@ -169,22 +179,7 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    @Override
-    public void updateProductImage(Integer productId, String imageUrl) {
-        try {
-            if (productId == null) {
-                throw new IllegalArgumentException("Product ID cannot be null");
-            }
-            if (imageUrl == null || imageUrl.isEmpty()) {
-                throw new IllegalArgumentException("Image URL cannot be null or empty");
-            }
-            Products product = productRepository.findById(productId)
-                    .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + productId));
-            productRepository.save(product);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to update product image: " + e.getMessage(), e);
-        }
-    }
+
 
 
     @Override

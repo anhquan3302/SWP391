@@ -1,5 +1,6 @@
 package com.example.securityl.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,8 +33,11 @@ public class Blog {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @ManyToOne
-    @JsonManagedReference
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
 

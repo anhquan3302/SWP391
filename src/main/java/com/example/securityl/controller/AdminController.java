@@ -1,6 +1,7 @@
 package com.example.securityl.controller;
 
 
+import com.example.securityl.model.User;
 import com.example.securityl.request.UserRequest.CreateUserRequest;
 import com.example.securityl.request.UserRequest.SearchRequest;
 import com.example.securityl.request.UserRequest.UpdateUserRequest;
