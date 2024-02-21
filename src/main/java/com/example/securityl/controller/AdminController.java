@@ -100,7 +100,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<ResponseObject> geUserById(@PathVariable Integer id) {
         try {
-            var user = userService.getUser(id);
+            User user = userService.getUser(id);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status("Success")
                     .message("Find user")

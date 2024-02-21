@@ -1,21 +1,17 @@
 package com.example.securityl.serviceimpl;
 
+import com.example.securityl.request.UserRequest.SearchRequest;
 import com.example.securityl.model.Enum.Role;
 import com.example.securityl.model.User;
 import com.example.securityl.repository.UserRepository;
 import com.example.securityl.request.UserRequest.CreateUserRequest;
-import com.example.securityl.request.UserRequest.SearchRequest;
 import com.example.securityl.request.UserRequest.UpdateUserRequest;
 import com.example.securityl.response.UserResponse.CreateResponse;
 import com.example.securityl.response.UserResponse.DeleteResponse;
 import com.example.securityl.response.UserResponse.ResponseUser;
 import com.example.securityl.response.UserResponse.UpdateUserResponse;
 import com.example.securityl.service.UserService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,14 +26,9 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class UserServiceimpl implements UserService {
-    @Autowired
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtServiceImpl jwtService;
-
-
-    @PersistenceContext
-    private EntityManager entityManager;
     private final String emailRegex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
             + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
     Pattern pattern = Pattern.compile(emailRegex);
@@ -159,12 +150,7 @@ public class UserServiceimpl implements UserService {
 
     @Override
     public User getUser(Integer id) {
-        var userId = userRepository.findUsersByUserId(id).orElse(null);
-        if (userId != null) {
-            return userId;
-        } else {
-            return null;
-        }
+        return userRepository.findUsersByUserId(id);
     }
 
     @Override
@@ -184,18 +170,19 @@ public class UserServiceimpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<ResponseUser> searchUsers(SearchRequest searchRequest) {
-
+    public ResponseEntity<ResponseUser> searchUsers(SearchRequest req) {
         try {
             List<User> userList = userRepository.findAll();
-            if(searchRequest.getUserId() != null){
-                userList = userList.stream().filter(n -> n.getUserId() == searchRequest.getUserId()).toList();
+            if(req.getUserId() != null){
+                userList = userList.stream().filter(n -> n.getUserId() == req.getUserId()).toList();
             }
-            if(searchRequest.getName() != null && !searchRequest.getName().trim().isEmpty()){
-                userList = userList.stream().filter(n -> n.getName() != null && n.getName().equalsIgnoreCase(searchRequest.getName()) || n.getName().contains(searchRequest.getName())).toList();
+            if(req.getName() != null && !req.getName().trim().isEmpty()){
+                userList = userList.stream()
+                        .filter(n -> n.getName() != null && n.getName().equalsIgnoreCase(req.getName()) || n.getName().contains(req.getName())).toList();
+
             }
-            if(searchRequest.getEmail() != null && !searchRequest.getEmail().trim().isEmpty()){
-                userList = userList.stream().filter(n -> n.getEmail().contains(searchRequest.getEmail())).toList();
+            if(req.getEmail() != null && !req.getEmail().trim().isEmpty()){
+                userList = userList.stream().filter(n -> n.getEmail().contains(req.getEmail())).toList();
             }
             return ResponseEntity.ok(new ResponseUser("Success","List users", userList));
         } catch (Exception e) {
