@@ -26,4 +26,8 @@ public interface ProductService  {
     void uploadProductImage(Integer productId, List<String> imageUrls);
 
     ResponseEntity<ResponseObject> searchProduct(SearchProduct searchProduct);
+
+    ResponseEntity<ResponseObject> updateProduct(Integer productId, RequestObject requestObject);
+
+
 }

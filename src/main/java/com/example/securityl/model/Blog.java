@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -32,10 +33,15 @@ public class Blog {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+
     @ManyToOne
     @JsonManagedReference
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<ImageBlog> imageBlogs;
 
 
 }

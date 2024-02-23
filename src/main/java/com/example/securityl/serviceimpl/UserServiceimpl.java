@@ -20,6 +20,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -149,9 +150,19 @@ public class UserServiceimpl implements UserService {
     }
 
     @Override
-    public User getUser(Integer id) {
-        return userRepository.findUsersByUserId(id);
+    public User getUser(Integer userId) {
+        // Thực hiện truy vấn để lấy thông tin người dùng từ cơ sở dữ liệu
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        // Kiểm tra xem người dùng có tồn tại không
+        if (userOptional.isPresent()) {
+            return userOptional.get();
+        } else {
+            // Nếu không tìm thấy người dùng, trả về null hoặc xử lý theo cách phù hợp
+            return null;
+        }
     }
+
 
     @Override
     public ResponseEntity<ResponseUser> findAllUser() {
@@ -192,6 +203,16 @@ public class UserServiceimpl implements UserService {
                     .userList(null)
                     .build());
         }
+    }
+
+    @Override
+    public User findByEmailForMail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public User saveUserForMail(User user) {
+        return userRepository.save(user);
     }
 }
 

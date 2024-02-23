@@ -18,4 +18,8 @@ public interface UserService {
     ResponseEntity<ResponseUser> findAllUser();
 
     ResponseEntity<ResponseUser> searchUsers(SearchRequest req);
+
+    User findByEmailForMail(String email);
+
+    User saveUserForMail(User user);
 }

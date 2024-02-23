@@ -16,6 +16,8 @@ import com.example.securityl.service.CategoryProductService;
 import com.example.securityl.service.CategoryService;
 import com.example.securityl.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -100,7 +102,26 @@ public class ManagementController {
     public ResponseEntity<ResponseObject> createBlog(@RequestBody BlogRequest blogRequest) {
         return blogService.createBlog(blogRequest);
     }
+    @PostMapping("/upload-images/{blogId}")
+    public ResponseEntity<?> uploadImagesBlog(@PathVariable Integer blogId,
+                                          @RequestParam("files") MultipartFile[] files) {
+        try {
+            if (files == null || files.length == 0) {
+                return ResponseEntity.badRequest().body("No files uploaded");
+            }
+            List<String> imageUrls = new ArrayList<>();
+            for (MultipartFile file : files) {
+                String imageUrl = blogService.uploadBImage(file);
+                imageUrls.add(imageUrl);
+            }
+            blogService.uploadBlogImage(blogId, imageUrls);
 
+            return ResponseEntity.ok().body("Images uploaded successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to upload images: " + e.getMessage());
+        }
+    }
     @GetMapping("/getAllCategory")
     private ResponseEntity<ResponseObject> getAllCategory(){
         return categoryService.findAllCategory();
@@ -144,5 +165,17 @@ public class ManagementController {
     public ResponseEntity<ResponseObject> findBlogById(@PathVariable int blogId) {
         return blogService.findBlogById(blogId);
     }
+
+    @GetMapping("/getAllBlog")
+    private ResponseEntity<ResponseObject> getAllBlog(){
+        return blogService.findAllBlog();
+    }
+
+//    @GetMapping
+//    public List<Blog> getAllItems(@RequestParam(defaultValue = "0") int page,
+//                                  @RequestParam(defaultValue = "10") int size) {
+//        Page<Blog> pageItems = blogService.findPaginated(page, size);
+//        return pageItems.getContent();
+//    }
 }
 
