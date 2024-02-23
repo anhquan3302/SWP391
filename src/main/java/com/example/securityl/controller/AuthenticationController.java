@@ -61,6 +61,31 @@ public class AuthenticationController {
     ) throws Exception {
         service.refreshToken(request, response);
     }
-    
+
+    @PostMapping("/forgetpass")
+    public ResponseEntity<?> register(@RequestParam String email) {
+        try {
+            User user = userService.findByEmailForMail(email);
+            if(user == null){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("NOT FOUND");
+            }
+            else {
+                String pass = RandomStringUtils.randomAlphanumeric(6);
+
+                user.setPassword(passwordEncoder.encode(pass));
+                user = userService.saveUserForMail(user);
+                emailService.sendSimpleMessage(email,"Reset password","New password is : " + pass);
+                return ResponseEntity.ok(user);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(RegisterResponse
+                    .builder()
+                    .status(e.getMessage())
+                    .message("Register fail")
+                    .build());
+        }
+
+
+    }
 
 }
