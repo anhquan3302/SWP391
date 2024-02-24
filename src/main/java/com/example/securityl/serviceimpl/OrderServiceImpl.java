@@ -51,6 +51,7 @@ public class OrderServiceImpl implements OrderService {
             double totalMoney = shoppingCartService.getTotal();
             OrderDetail orderDetail = OrderDetail.builder()
                     .product(product)
+                    .fullname(product.getProductName())
                     .price(cartItem.getPrice())
                     .number(quantity)
                     .order(order)
