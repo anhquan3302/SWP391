@@ -28,7 +28,7 @@ public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final LogoutHandler logoutHandler;
-    private final CustomOAuth2AuthenticationSuccessHandler customOAuth2AuthenticationSuccessHandler;
+//    private final CustomOAuth2AuthenticationSuccessHandler customOAuth2AuthenticationSuccessHandler;
 
 
     @Bean
@@ -50,12 +50,12 @@ public class SecurityConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .oauth2Login(o -> o
-                        .successHandler(customOAuth2AuthenticationSuccessHandler)
-                        .failureHandler((request, response, exception) -> {
-                            request.getSession().setAttribute("error.message", exception.getMessage());
-                        })
-                )
+//                .oauth2Login(o -> o
+//                        .successHandler(customOAuth2AuthenticationSuccessHandler)
+//                        .failureHandler((request, response, exception) -> {
+//                            request.getSession().setAttribute("error.message", exception.getMessage());
+//                        })
+//                )
                 .logout(logoutRequest -> logoutRequest
                         .logoutUrl("/authentication/logout")
                         .addLogoutHandler(logoutHandler)
