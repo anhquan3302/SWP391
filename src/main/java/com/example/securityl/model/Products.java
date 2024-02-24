@@ -39,10 +39,13 @@ public class Products {
     private Date updatedAt;
 
     @Column(name="size",nullable = false)
-    private double size;
+    private String size;
 
     @Column(name = "product_name",nullable = false)
     private String productName;
+
+    @Column(name = "thumbnail")
+    private String thumbnail;
 
     @ManyToOne
     @JsonBackReference
@@ -63,6 +66,14 @@ public class Products {
 //    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 //    @JsonManagedReference
 //    private List<CategoryProduct> categoryProducts;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "product_categories",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categories;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference

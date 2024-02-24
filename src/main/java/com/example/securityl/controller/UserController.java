@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/shoppingCart")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('USER')")
+@PreAuthorize("hasAnyRole('USER','ADMIN','STAFF')")
 @CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
 public class UserController {
   private final ShoppingCartService shoppingCartService;

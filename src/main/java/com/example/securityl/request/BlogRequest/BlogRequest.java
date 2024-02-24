@@ -6,7 +6,7 @@ public class BlogRequest {
 
     private  Integer userId;
 
-
+    private String thumbnail;
 
     public BlogRequest() {
     }
@@ -40,5 +40,13 @@ public class BlogRequest {
     }
     public void setUserId(Integer userId){
         this.userId =userId;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

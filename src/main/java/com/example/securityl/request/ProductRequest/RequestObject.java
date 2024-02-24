@@ -21,10 +21,10 @@ public class RequestObject {
     private Date createdAt;
     private Date updatedAt;
     private String material;
-    private double size;
+    private String size;
     private String color;
     private double price;
     private String productName;
-
+    private String thumbnail;
 
 }

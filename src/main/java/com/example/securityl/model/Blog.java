@@ -33,7 +33,10 @@ public class Blog {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @Column(name = "thumbnail")
+    private String thumbnail;
     @ManyToOne
+
     @JsonManagedReference
     @JoinColumn(name = "user_id")
     private User user;

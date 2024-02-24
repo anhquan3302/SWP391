@@ -1,5 +1,6 @@
 package com.example.securityl.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,7 @@ public class Category {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<CategoryProduct> categoryProducts;
+    @ManyToMany(mappedBy = "categories")
+    @JsonBackReference
+    private List<Products> products;
 }

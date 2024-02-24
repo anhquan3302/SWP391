@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -127,5 +129,20 @@ public class BlogServiceImpl implements BlogService {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ResponseObject("Fail", "Internal Server Error", null));
         }
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> findAllBlog() {
+        return null;
+    }
+
+    @Override
+    public void uploadBlogImage(Integer blogId, List<String> imageUrls) {
+
+    }
+
+    @Override
+    public String uploadBImage(MultipartFile file) throws IOException {
+        return null;
     }
 }

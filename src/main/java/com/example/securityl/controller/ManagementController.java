@@ -1,13 +1,12 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.model.*;
-import com.example.securityl.request.BlogRequest.BlogRequest;
+import com.example.securityl.model.Blog;
+import com.example.securityl.model.Products;
 import com.example.securityl.request.BlogRequest.BlogRequest;
 import com.example.securityl.request.CategoryRequest.RequestCategory;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.request.ProductRequest.SearchProduct;
 import com.example.securityl.response.ProductResponse.ResponseObject;
-import com.example.securityl.service.BlogService;
 import com.example.securityl.service.BlogService;
 import com.example.securityl.service.CategoryProductService;
 import com.example.securityl.service.CategoryService;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -31,8 +29,6 @@ public class ManagementController {
     private final CategoryProductService categoryProductService;
     private final CategoryService categoryService;
     private final BlogService blogService;
-
-
 
     @GetMapping("/getAllProduct")
     public ResponseEntity<ResponseObject> getAllProduct(){
@@ -46,10 +42,12 @@ public class ManagementController {
                                                         @RequestParam("description") String description,
                                                         @RequestParam("discount") double discount,
                                                         @RequestParam("color") String color,
-                                                        @RequestParam("size") double size,
+                                                        @RequestParam("size") String size,
                                                         @RequestParam("price") double price,
-                                                        @RequestParam("material") String material) {
-        return productService.createProduct(productName,title, description, discount, color, size, price, material);
+                                                        @RequestParam("material") String material,
+                                                        @RequestParam("thumbnail") String thumbnail,
+                                                        @RequestParam("categoryId")Integer categoryId) {
+        return productService.createProduct(productName,title, description, discount, color, size, price, material,thumbnail,categoryId);
     }
 
     @PostMapping("/upload-images/{productId}")
@@ -65,16 +63,12 @@ public class ManagementController {
                 imageUrls.add(imageUrl);
             }
             productService.uploadProductImage(productId, imageUrls);
-
             return ResponseEntity.ok().body("Images uploaded successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to upload images: " + e.getMessage());
         }
     }
-
-
-
 
     @PutMapping("/updateProduct/{productId}")
     public ResponseEntity<ResponseObject> updateProduct(
@@ -93,36 +87,21 @@ public class ManagementController {
     public ResponseEntity<ResponseObject> createBlog(@RequestBody BlogRequest blogRequest) {
         return blogService.createBlog(blogRequest);
     }
-    @PostMapping("/upload-images/{blogId}")
-    public ResponseEntity<?> uploadImagesBlog(@PathVariable Integer blogId,
-                                          @RequestParam("files") MultipartFile[] files) {
-        try {
-            if (files == null || files.length == 0) {
-                return ResponseEntity.badRequest().body("No files uploaded");
-            }
-            List<String> imageUrls = new ArrayList<>();
-            for (MultipartFile file : files) {
-                String imageUrl = blogService.uploadBImage(file);
-                imageUrls.add(imageUrl);
-            }
-            blogService.uploadBlogImage(blogId, imageUrls);
 
-            return ResponseEntity.ok().body("Images uploaded successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to upload images: " + e.getMessage());
-        }
-    }
     @GetMapping("/getAllCategory")
     private ResponseEntity<ResponseObject> getAllCategory(){
         return categoryService.findAllCategory();
     }
 
+    @PostMapping("/createCategory")
+    private ResponseEntity<ResponseObject> createCategory(@RequestBody RequestCategory requestCategory){
+        var category = categoryService.createCategory(requestCategory);
+        return ResponseEntity.ok().body(new ResponseObject("Success","Create Category succes",category));
+    }
     @PostMapping("/getProduct")
     private ResponseEntity<ResponseObject> searchProducts(@RequestBody SearchProduct searchProduct){
         return productService.searchProduct(searchProduct);
     }
-
 
     @GetMapping("/getProductById/{productId}")
     private Products getProductById(@PathVariable Integer productId){
@@ -165,11 +144,6 @@ public class ManagementController {
         return blogService.findAllBlog();
     }
 
-//    @GetMapping
-//    public List<Blog> getAllItems(@RequestParam(defaultValue = "0") int page,
-//                                  @RequestParam(defaultValue = "10") int size) {
-//        Page<Blog> pageItems = blogService.findPaginated(page, size);
-//        return pageItems.getContent();
-//    }
+
 }
 
