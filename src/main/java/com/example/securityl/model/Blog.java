@@ -1,6 +1,5 @@
 package com.example.securityl.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -33,13 +33,14 @@ public class Blog {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @Column(name = "image_url")
-    private String imageUrl;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
+    @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<ImageBlog> imageBlogs;
 
 
 }

@@ -1,18 +1,21 @@
 package com.example.securityl.request.BlogRequest;
 
-import com.example.securityl.model.User;
-
 public class BlogRequest {
     private String title;
     private String content;
+
+    private  Integer userId;
+
 
 
     public BlogRequest() {
     }
 
-    public BlogRequest(String title, String content) {
+    public BlogRequest(String title, String content,Integer userId) {
         this.title = title;
         this.content = content;
+        this.userId = userId;
+
     }
 
     // Getters and setters
@@ -32,6 +35,10 @@ public class BlogRequest {
         this.content = content;
     }
 
-
-
+    public Integer getUserId(){
+        return userId;
+    }
+    public void setUserId(Integer userId){
+        this.userId =userId;
+    }
 }
