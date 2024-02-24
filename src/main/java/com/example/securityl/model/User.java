@@ -43,34 +43,34 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "user")
-    @JsonManagedReference
-    private List<Token> tokens;
+//    @OneToMany(mappedBy = "user")
+//    @JsonManagedReference
+//    private List<Token> tokens;
+//
+//    @OneToMany(mappedBy = "user")
+//    @JsonManagedReference
+//    @ToString.Exclude
+//    private List<Products> products;
 
-    @OneToMany(mappedBy = "user")
-    @JsonManagedReference
-    @ToString.Exclude
-    private List<Products> products;
-
-    @OneToMany(mappedBy = "user")
-    @JsonManagedReference
-    private List<Orders> orders;
-
-    @OneToMany(mappedBy = "user")
-    @JsonManagedReference
-    private List<BookingDesign> bookings;
-
-    @OneToMany(mappedBy = "user")
-    @JsonManagedReference
-    private List<Blog> blogs;
-
-    @OneToMany(mappedBy = "user")
-    @JsonManagedReference
-    private List<Feedback> feedbacks;
-
-    @OneToMany(mappedBy = "user")
-    @JsonManagedReference
-    private List<OrderDesign> payments;
+//    @OneToMany(mappedBy = "user")
+//    @JsonManagedReference
+//    private List<Orders> orders;
+//
+//    @OneToMany(mappedBy = "user")
+//    @JsonManagedReference
+//    private List<BookingDesign> bookings;
+//
+//    @OneToMany(mappedBy = "user")
+//    @JsonManagedReference
+//    private List<Blog> blogs;
+//
+//    @OneToMany(mappedBy = "user")
+//    @JsonManagedReference
+//    private List<Feedback> feedbacks;
+//
+//    @OneToMany(mappedBy = "user")
+//    @JsonManagedReference
+//    private List<OrderDesign> payments;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();
@@ -106,18 +106,6 @@ public class User implements UserDetails {
         return true;
     }
 
-    @Override
-    public String toString(){
-        return  "User{" +
-                "userId=" + userId +
-                ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", status=" + status +
-                ", role=" + role +
-                '}';
-    }
+
 
 }

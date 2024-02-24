@@ -1,7 +1,7 @@
 package com.example.securityl.service;
 
-import ch.qos.logback.core.model.Model;
 import com.example.securityl.model.CartItem;
+
 
 import java.util.Collection;
 import java.util.List;
@@ -17,4 +17,8 @@ public interface ShoppingCartService {
     double getTotal();
 
     int getCount();
+
+
+
+
 }

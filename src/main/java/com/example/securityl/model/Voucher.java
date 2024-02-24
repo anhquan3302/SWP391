@@ -22,9 +22,8 @@ public class Voucher {
     @Column(name = "voucher_code")
     private String voucherCode;
 
-    @Column(name = "discount")
-    private int discount;
-
+    @Column(name = "discount_percentage")
+    private double discountPercentage;
     @Column(name = "start_date")
     private Date startDate;
 
@@ -34,7 +33,5 @@ public class Voucher {
     @Column(name = "active")
     private boolean active;
 
-    // mỗi voucher có thể áp dụng cho nhiều đơn hàng)
-    @OneToOne(mappedBy = "voucher")
-    private Orders order;
+
 }

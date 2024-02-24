@@ -1,39 +1,46 @@
 package com.example.securityl.controller;
 
 
-import com.example.securityl.model.CartItem;
-import com.example.securityl.model.Products;
-import com.example.securityl.request.UserRequest.SearchRequest;
-import com.example.securityl.response.ProductResponse.ResponseObject;
+import com.example.securityl.model.*;
+import com.example.securityl.request.CheckoutResquest.CheckoutRequest;
+import com.example.securityl.response.OrderResponse.OrderResponse;
 import com.example.securityl.response.ShoppingCartResponse.CartResponse;
 import com.example.securityl.response.ShoppingCartResponse.DeleteCartResponse;
-import com.example.securityl.response.UserResponse.ResponseUser;
+import com.example.securityl.service.OrderService;
 import com.example.securityl.service.ProductService;
 import com.example.securityl.service.ShoppingCartService;
-import com.example.securityl.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1/shoppingCart")
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('USER')")
+@CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
 public class UserController {
   private final ShoppingCartService shoppingCartService;
   private final ProductService productService;
+  private final OrderService orderService;
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
 
     @GetMapping("/viewCart")
-    public ResponseEntity<String> víewCart(Model model){
-         model.addAttribute("CART_ITEMS",shoppingCartService.getAllCart());
-         model.addAttribute("TOTAL",shoppingCartService.getTotal());
-        return ResponseEntity.ok("Success");
+    public ResponseEntity<List<CartItem>> viewCart(Model model) {
+        double total = shoppingCartService.getTotal();
+        List<CartItem> cartItems = (List<CartItem>) shoppingCartService.getAllCart();
+        model.addAttribute("CART_ITEMS", cartItems);
+        model.addAttribute("TOTAL", total);
+        return ResponseEntity.ok(cartItems);
     }
 
     @GetMapping("/deleteAll")
@@ -63,6 +70,7 @@ public class UserController {
                 cartItem.setProductName(product1.getProductName());
                 cartItem.setPrice(product1.getPrice());
                 cartItem.setQuantity(1);
+                cartItem.setDiscount(product1.getDiscount());
                 shoppingCartService.add(cartItem);
                 return ResponseEntity.ok().body(CartResponse.builder()
                         .status("Success")
@@ -90,5 +98,18 @@ public class UserController {
         CartItem cartItem = shoppingCartService.updateCart(id,quantity);
         return ResponseEntity.ok().body(new CartResponse("Success","UpdateSucees",cartItem));
     }
+
+    @PostMapping("/checkout")
+    public ResponseEntity<OrderResponse> checkout(@RequestBody CheckoutRequest checkoutRequest) {
+        try {
+            List<CartItem> cartItems = (List<CartItem>) shoppingCartService.getAllCart();
+            Orders order1 = orderService.checkout(checkoutRequest, cartItems);
+            return ResponseEntity.ok(new OrderResponse("Success", "Checkout success", order1));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new OrderResponse("Error", "Failed to checkout", null));
+        }
+    }
+
 
 }

@@ -42,9 +42,9 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ResponseEntity<ResponseObject> createProduct(String productName,String title, String description, Integer discount, String color, double size, double price, String material) {
+    public ResponseEntity<ResponseObject> createProduct(String productName, String title, String description, double discount, String color, double size, double price, String material) {
         try {
-            Products product = createNewProduct(productName,title, description, discount, color, size, price, material);
+            Products product = createNewProduct(productName, title, description, discount, color, size, price, material);
             if (product == null) {
                 return ResponseEntity.status(500).body(new ResponseObject("Fail", "Failed to create product", null));
             }
@@ -60,8 +60,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-
-    private Products createNewProduct(String productName,String title, String description, Integer discount, String color, double size, double price, String material) {
+    private Products createNewProduct(String productName, String title, String description, double discount, String color, double size, double price, String material) {
         try {
             Date date = new Date();
             String token = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
@@ -73,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
             if (requester == null || !(requester.getRole().equals(Role.STAFF) || requester.getRole().equals(Role.ADMIN))) {
                 return null;
             }
-            if (size <= 0 || productName ==null|| productName.trim().isEmpty() || description == null || description.trim().isEmpty() || title == null || title.trim().isEmpty() || price <= 0) {
+            if (size <= 0 || productName == null || productName.trim().isEmpty() || description == null || description.trim().isEmpty() || title == null || title.trim().isEmpty() || price <= 0) {
                 return null;
             }
             if (!(requester.getRole().equals(Role.ADMIN) || requester.getRole().equals(Role.STAFF))) {
@@ -180,8 +179,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-
-
     @Override
     public String uploadImage(MultipartFile file) throws IOException {
         Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
@@ -189,13 +186,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-
     @Override
     public void uploadProductImage(Integer productId, List<String> imageUrls) {
         try {
             Products product = productRepository.findById(productId)
                     .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId));
-
             List<ImageProduct> imageProducts = new ArrayList<>();
             for (String imageUrl : imageUrls) {
                 ImageProduct imageProduct = new ImageProduct();
@@ -203,7 +198,6 @@ public class ProductServiceImpl implements ProductService {
                 imageProduct.setProduct(product);
                 imageProducts.add(imageProduct);
             }
-
             product.setImageProducts(imageProducts);
             productRepository.save(product);
         } catch (Exception e) {
@@ -231,7 +225,6 @@ public class ProductServiceImpl implements ProductService {
             return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Not found product", null));
         }
     }
-
 
 
 }

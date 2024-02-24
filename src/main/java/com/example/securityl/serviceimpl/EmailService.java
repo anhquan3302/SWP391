@@ -1,4 +1,4 @@
-package com.example.securityl.service;
+package com.example.securityl.serviceimpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

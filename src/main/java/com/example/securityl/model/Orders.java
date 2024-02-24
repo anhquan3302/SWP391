@@ -30,14 +30,14 @@ public class Orders {
     @Column(name = "fullname")
     private String fullname;
 
+    @Column(name = "phone")
+    private String phone;
+
     @Column(name = "address")
     private String address;
 
     @Column(name = "note")
     private String note;
-
-    @Column(name = "create_date")
-    private Date createDate;
 
     @Column(name = "status")
     private boolean status;
@@ -53,24 +53,20 @@ public class Orders {
     @Column(name = "history")
     private Date history;
 
-    @Column(name = "designer_id")
-    private String desginer;
 
-    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Payment> payments = new ArrayList<>();
+//    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonManagedReference
+//    private List<Payment> payments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "designer", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Consultant> consultants = new ArrayList<>();
+//    @OneToMany(mappedBy = "designer", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonManagedReference
+//    private List<Consultant> consultants = new ArrayList<>();
+
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "voucher_id", referencedColumnName = "id")
+//    private Voucher voucher;
 
 
-    // mỗi đơn hàng chỉ có thể áp dụng một voucher)
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "voucher_id", referencedColumnName = "id")
-    private Voucher voucher;
-
-    // mỗi đơn hàng chỉ có một trạng thái)
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "order_status_id")

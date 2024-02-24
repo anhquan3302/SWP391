@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ProductService  {
-    ResponseEntity<ResponseObject> createProduct(String productName,String title, String description, Integer discount, String color, double size, double price, String material);
+    ResponseEntity<ResponseObject> createProduct(String productName,String title, String description, double discount, String color, double size, double price, String material);
     
 
     ResponseEntity<ResponseObject> deleteProduct(Integer productId);

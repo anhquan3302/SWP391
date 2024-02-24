@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 public class RequestObject {
     private String title;
-    private Integer discount;
+    private double discount;
     private String description;
     private Date createdAt;
     private Date updatedAt;
@@ -25,6 +25,6 @@ public class RequestObject {
     private String color;
     private double price;
     private String productName;
-//    private String category;
+
 
 }

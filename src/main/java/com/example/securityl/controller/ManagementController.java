@@ -25,6 +25,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/management")
+@CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
 public class ManagementController {
     private final ProductService productService;
     private final CategoryProductService categoryProductService;

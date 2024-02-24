@@ -27,7 +27,7 @@ public class Products {
     private String title;
 
     @Column(name = "discount",nullable = false)
-    private Integer discount;
+    private double discount;
 
     @Column(name = "description",nullable = false)
     private String description;
@@ -55,25 +55,28 @@ public class Products {
     @Column(name ="price",nullable = false)
     private double price;
 
+    @Column(name = "material",nullable = false)
+    private String materials;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<CategoryProduct> categoryProducts;
+
+
+//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//    private List<CategoryProduct> categoryProducts;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<ImageProduct> imageProducts;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<OrderDetail> orderDetails;
+//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//    private List<OrderDetail> orderDetails;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Notifications> notifications;
+//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//    private List<Notifications> notifications;
 
-    @Column(name = "material")
-    private String materials;
+
 
 
 }
