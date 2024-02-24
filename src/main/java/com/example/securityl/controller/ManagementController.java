@@ -44,7 +44,7 @@ public class ManagementController {
                                                         @RequestParam("productName") String productName,
                                                         @RequestParam("title") String title,
                                                         @RequestParam("description") String description,
-                                                        @RequestParam("discount") Integer discount,
+                                                        @RequestParam("discount") double discount,
                                                         @RequestParam("color") String color,
                                                         @RequestParam("size") double size,
                                                         @RequestParam("price") double price,
@@ -135,7 +135,7 @@ public class ManagementController {
         return blogService.deleteBlog(blogId);
     }
 
-    // Endpoint để tìm kiếm blog theo id
+
     @GetMapping("/findBlog/{blogId}")
     public ResponseEntity<ResponseObject> findBlogById(@PathVariable int blogId) {
         return blogService.findBlogById(blogId);
