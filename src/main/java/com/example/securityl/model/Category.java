@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,7 +21,7 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
-    private Long categoryId;
+    private Integer categoryId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -28,7 +29,9 @@ public class Category {
     @Column(name = "description")
     private String description;
 
-    @ManyToMany(mappedBy = "categories")
-    @JsonBackReference
-    private List<Products> products;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinTable(name = "product_category",
+//            joinColumns = { @JoinColumn(name = "category_id") },
+//            inverseJoinColumns = {@JoinColumn(name = "product_id") })
+    private List<Products> products = new ArrayList<>();
 }

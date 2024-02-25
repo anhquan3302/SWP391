@@ -62,18 +62,14 @@ public class Products {
     private String materials;
 
 
-
-//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-//    @JsonManagedReference
-//    private List<CategoryProduct> categoryProducts;
-
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "product_categories",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private List<Category> categories;
+
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference

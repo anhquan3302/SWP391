@@ -3,13 +3,11 @@ package com.example.securityl.serviceimpl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.securityl.model.Category;
+import com.example.securityl.model.CategoryProduct;
 import com.example.securityl.model.Enum.Role;
 import com.example.securityl.model.ImageProduct;
 import com.example.securityl.model.Products;
-import com.example.securityl.repository.CategoryRepository;
-import com.example.securityl.repository.ImageProductRepository;
-import com.example.securityl.repository.ProductRepository;
-import com.example.securityl.repository.UserRepository;
+import com.example.securityl.repository.*;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.request.ProductRequest.SearchProduct;
 import com.example.securityl.response.ProductResponse.ResponseObject;
@@ -40,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final JwtService jwtService;
     private final UserRepository userRepository;
-    private final ImageProductRepository imageProductRepository;
+    private final CategoryProductRepository categoryProductRepository;
     private final Cloudinary cloudinary;
     private final CategoryRepository categoryRepository;
 
@@ -82,8 +80,12 @@ public class ProductServiceImpl implements ProductService {
                     .categories(categoryList)
                     .user(userRepository.findUserIdByEmail(userEmail))
                     .build();
-
             Products savedProduct = productRepository.save(product);
+            CategoryProduct categoryProduct = CategoryProduct.builder()
+                    .product(product)
+                    .category(category)
+                    .build();
+            categoryProductRepository.save(categoryProduct);
             return ResponseEntity.ok(new ResponseObject("Success", "Product created successfully", savedProduct));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseObject("Fail", "Internal server error", null));
@@ -153,7 +155,15 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-
+    @Override
+    public ResponseEntity<ResponseObject> getProductByCategory(String categoryName) {
+        List<Products> productsList = productRepository.findAllByCategoryName(categoryName);
+        if (productsList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("Fail", "No products found for category: " + categoryName, null));
+        } else {
+            return ResponseEntity.ok(new ResponseObject("Success", "Products found for category: " + categoryName, productsList));
+        }
+    }
 
 
     @Override

@@ -27,4 +27,6 @@ public interface ProductService  {
     ResponseEntity<ResponseObject> updateProduct(Integer productId, RequestObject requestObject);
 
     Products getProductById(Integer productId);
+
+    ResponseEntity<ResponseObject> getProductByCategory(String categoryName);
 }

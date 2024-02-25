@@ -6,9 +6,15 @@ import com.example.securityl.response.ProductResponse.ResponseObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface CategoryService {
     Category createCategory(RequestCategory requestCategory);
 
     ResponseEntity<ResponseObject> findAllCategory();
+
+    List<Category> findCategoryById(Integer categoryId);
+
+    ResponseEntity<ResponseObject> updateCategory(Integer categoryId, RequestCategory requestCategory);
 }

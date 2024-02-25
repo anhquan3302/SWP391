@@ -27,7 +27,7 @@ import java.util.List;
 public class ManagementController {
     private final ProductService productService;
     private final CategoryProductService categoryProductService;
-    private final CategoryService categoryService;
+
     private final BlogService blogService;
 
     @GetMapping("/getAllProduct")
@@ -70,6 +70,11 @@ public class ManagementController {
         }
     }
 
+    @GetMapping("/getListProductByCategory")
+    private ResponseEntity<ResponseObject> getProductByCategoryName(@RequestParam String name) {
+        return productService.getProductByCategory(name);
+    }
+
     @PutMapping("/updateProduct/{productId}")
     public ResponseEntity<ResponseObject> updateProduct(
             @PathVariable Integer productId,
@@ -88,16 +93,9 @@ public class ManagementController {
         return blogService.createBlog(blogRequest);
     }
 
-    @GetMapping("/getAllCategory")
-    private ResponseEntity<ResponseObject> getAllCategory(){
-        return categoryService.findAllCategory();
-    }
 
-    @PostMapping("/createCategory")
-    private ResponseEntity<ResponseObject> createCategory(@RequestBody RequestCategory requestCategory){
-        var category = categoryService.createCategory(requestCategory);
-        return ResponseEntity.ok().body(new ResponseObject("Success","Create Category succes",category));
-    }
+
+
     @PostMapping("/getProduct")
     private ResponseEntity<ResponseObject> searchProducts(@RequestBody SearchProduct searchProduct){
         return productService.searchProduct(searchProduct);
