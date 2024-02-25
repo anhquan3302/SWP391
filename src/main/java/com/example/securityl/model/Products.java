@@ -62,7 +62,7 @@ public class Products {
     private String materials;
 
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "product_categories",
             joinColumns = @JoinColumn(name = "product_id"),

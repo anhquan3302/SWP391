@@ -13,15 +13,12 @@ import com.example.securityl.repository.ProductRepository;
 import com.example.securityl.request.UserRequest.RegisterRequest;
 import com.example.securityl.service.AuthenticationService;
 import com.example.securityl.service.UserService;
-import jakarta.persistence.EntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,8 +29,6 @@ public class SecurityLApplication {
         SpringApplication.run(SecurityLApplication.class, args);
     }
 
-    @Autowired
-    private EntityManager entityManager;
 
     @Bean
     public Cloudinary CloudinaryConfig(){
@@ -66,8 +61,6 @@ public class SecurityLApplication {
             service.register(adminRequest);
             User adminUser = userService.findByEmailForMail(adminRequest.getEmail());
 
-            // Lấy danh sách categories từ cơ sở dữ liệu
-            List<Category> categories = categoryRepository.findAll();
 
             Products product2 = Products.builder()
                     .productName("Bed")
@@ -82,7 +75,6 @@ public class SecurityLApplication {
                     .discount(20)
                     .user(adminUser)
                     .thumbnail("https://bizweb.dktcdn.net/100/467/207/products/screenshot-2023-09-22-121711.jpg?v=1696500727497")
-                    .categories(categories)
                     .build();
             productRepository.save(product2);
 
@@ -101,20 +93,9 @@ public class SecurityLApplication {
                     .thumbnail("http://res.cloudinary.com/dxorh7ue1/image/upload/v1708794717/qk4x9tvqxv0fjdtaio6k.jpg")
                     .build();
             productRepository.save(product);
-
-            // Lấy danh sách sản phẩm từ cơ sở dữ liệu
             List<Products> productList = productRepository.findAll();
 
-            // Tạo và lưu các đối tượng CategoryProduct
-            for (Products product1 : productList) {
-                for (Category category : categories) {
-                    CategoryProduct categoryProduct = CategoryProduct.builder()
-                            .product(product1)
-                            .category(category)
-                            .build();
-                    categoryProductRepository.save(categoryProduct);
-                }
-            }
+
         };
     }
 

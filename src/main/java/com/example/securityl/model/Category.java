@@ -30,8 +30,5 @@ public class Category {
     private String description;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinTable(name = "product_category",
-//            joinColumns = { @JoinColumn(name = "category_id") },
-//            inverseJoinColumns = {@JoinColumn(name = "product_id") })
     private List<Products> products = new ArrayList<>();
 }
