@@ -2,10 +2,11 @@ package com.example.securityl.controller;
 
 import com.example.securityl.model.Category;
 import com.example.securityl.request.CategoryRequest.RequestCategory;
-import com.example.securityl.response.ProductResponse.ResponseObject;
+import com.example.securityl.response.ObjectResponse.ResponseObject;
 import com.example.securityl.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/management")
+@PreAuthorize("hasAnyRole('USER','ADMIN','STAFF')")
 @CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
 public class CategoryController {
     private final CategoryService categoryService;

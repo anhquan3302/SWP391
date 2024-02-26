@@ -1,20 +1,13 @@
 package com.example.securityl.serviceimpl;
 
 import com.example.securityl.model.Blog;
-import com.example.securityl.model.Enum.Role;
-import com.example.securityl.model.User;
 import com.example.securityl.repository.BlogRepository;
 
-import com.example.securityl.repository.UserDTO;
 import com.example.securityl.repository.UserRepository;
 import com.example.securityl.request.BlogRequest.BlogRequest;
-import com.example.securityl.response.ProductResponse.ResponseObject;
+import com.example.securityl.response.ObjectResponse.ResponseObject;
 import com.example.securityl.service.BlogService;
 import com.example.securityl.service.JwtService;
-import lombok.RequiredArgsConstructor;
-import com.example.securityl.request.BlogRequest.BlogRequest;
-import com.example.securityl.response.ProductResponse.ResponseObject;
-import com.example.securityl.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

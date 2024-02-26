@@ -8,22 +8,24 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+@Entity
+@Table(name = "voucher")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "voucher")
-@Entity
 public class Voucher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "voucher_id")
+    private Integer id;
 
     @Column(name = "voucher_code")
     private String voucherCode;
 
     @Column(name = "discount_percentage")
     private double discountPercentage;
+
     @Column(name = "start_date")
     private Date startDate;
 
@@ -34,4 +36,8 @@ public class Voucher {
     private boolean active;
 
 
+
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
+//    private Orders orders;
 }

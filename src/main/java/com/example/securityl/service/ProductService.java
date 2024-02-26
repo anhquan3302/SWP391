@@ -1,10 +1,9 @@
 package com.example.securityl.service;
 
-import com.example.securityl.model.ImageProduct;
 import com.example.securityl.model.Products;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.request.ProductRequest.SearchProduct;
-import com.example.securityl.response.ProductResponse.ResponseObject;
+import com.example.securityl.response.ObjectResponse.ResponseObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 

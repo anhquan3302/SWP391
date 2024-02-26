@@ -5,12 +5,14 @@ import com.example.securityl.request.FeedBackRequest.FeedBackRequest;
 import com.example.securityl.service.FeedBackService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('USER','STAFF')")
 @RequestMapping("/api/v1/managementFeedBack")
 public class FeedBackController {
 

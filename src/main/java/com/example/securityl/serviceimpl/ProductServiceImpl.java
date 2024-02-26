@@ -10,8 +10,7 @@ import com.example.securityl.model.Products;
 import com.example.securityl.repository.*;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.request.ProductRequest.SearchProduct;
-import com.example.securityl.response.ProductResponse.ResponseObject;
-import com.example.securityl.response.UserResponse.ResponseUser;
+import com.example.securityl.response.ObjectResponse.ResponseObject;
 import com.example.securityl.service.JwtService;
 import com.example.securityl.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
@@ -19,18 +18,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

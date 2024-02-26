@@ -3,17 +3,16 @@ package com.example.securityl.controller;
 import com.example.securityl.model.Blog;
 import com.example.securityl.model.Products;
 import com.example.securityl.request.BlogRequest.BlogRequest;
-import com.example.securityl.request.CategoryRequest.RequestCategory;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.request.ProductRequest.SearchProduct;
-import com.example.securityl.response.ProductResponse.ResponseObject;
+import com.example.securityl.response.ObjectResponse.ResponseObject;
 import com.example.securityl.service.BlogService;
 import com.example.securityl.service.CategoryProductService;
-import com.example.securityl.service.CategoryService;
 import com.example.securityl.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +22,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/management")
+@PreAuthorize("hasAnyRole('USER','ADMIN','STAFF')")
 @CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
 public class ManagementController {
     private final ProductService productService;
@@ -92,9 +92,6 @@ public class ManagementController {
     public ResponseEntity<ResponseObject> createBlog(@RequestBody BlogRequest blogRequest) {
         return blogService.createBlog(blogRequest);
     }
-
-
-
 
     @PostMapping("/getProduct")
     private ResponseEntity<ResponseObject> searchProducts(@RequestBody SearchProduct searchProduct){
