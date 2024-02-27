@@ -2,7 +2,11 @@ package com.example.securityl.service;
 
 import com.example.securityl.model.Blog;
 import com.example.securityl.request.BlogRequest.BlogRequest;
-import com.example.securityl.response.ObjectResponse.ResponseObject;
+
+
+import com.example.securityl.response.BlogResponse.ResponseObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,7 +16,6 @@ import java.util.List;
 public interface BlogService {
 //    ResponseObject createBlog(String title, String content);
 
-    ResponseEntity<ResponseObject> createBlog(BlogRequest blogRequest);
 
     List<Blog> searchBlog(String createdAt, String searchValue, String orderBy);
 
@@ -29,4 +32,6 @@ public interface BlogService {
 
     void uploadBlogImage(Integer blogId, List<String> imageUrls);
     String uploadBImage(MultipartFile file) throws IOException;
+
+    ResponseEntity<ResponseObject> createBlog(BlogRequest blogRequest);
 }

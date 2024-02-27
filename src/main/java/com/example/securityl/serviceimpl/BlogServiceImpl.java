@@ -1,19 +1,30 @@
 package com.example.securityl.serviceimpl;
 
-import com.example.securityl.model.Blog;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import com.example.securityl.model.*;
 import com.example.securityl.repository.BlogRepository;
 
 import com.example.securityl.repository.UserRepository;
 import com.example.securityl.request.BlogRequest.BlogRequest;
-import com.example.securityl.response.ObjectResponse.ResponseObject;
+
+import com.example.securityl.response.BlogResponse.ResponseObject;
 import com.example.securityl.service.BlogService;
-import com.example.securityl.service.JwtService;
+import com.example.securityl.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import com.example.securityl.request.BlogRequest.BlogRequest;
+
+import com.example.securityl.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -21,48 +32,64 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 @Service
+
 public class BlogServiceImpl implements BlogService {
     private final BlogRepository blogRepository;
     private final UserRepository userRepository;
-    private final JwtService jwtService;
+    private final Cloudinary cloudinary;
+
+    private final UserService userService;
+
     @Autowired
-    public BlogServiceImpl(BlogRepository blogRepository, UserRepository userRepository, JwtService jwtService) {
+    public BlogServiceImpl(BlogRepository blogRepository, UserRepository userRepository, Cloudinary cloudinary, UserService userService) {
         this.blogRepository = blogRepository;
         this.userRepository = userRepository;
-        this.jwtService = jwtService;
+        this.cloudinary = cloudinary;
+        this.userService = userService;
     }
 
     @Override
     public ResponseEntity<ResponseObject> createBlog(BlogRequest blogRequest) {
         try {
-            String token = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
-                    .getRequest().getHeader("Authorization").substring(7);
-            String userEmail = jwtService.extractUsername(token);
 
-            // Truy vấn người dùng từ repository
-            var requester = userRepository.findUsersByEmail(userEmail);
+            if (blogRequest.getTitle() == null || blogRequest.getTitle().isEmpty() ||
+                    blogRequest.getContent() == null || blogRequest.getContent().isEmpty()) {
+                return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Title and content are required", null));
+            }
+            if (blogRepository.existsByTitle(blogRequest.getTitle())) {
+                return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Title already exists", null));
+            }
+            if (!isValidTitle(blogRequest.getTitle()) || !isValidContent(blogRequest.getContent())) {
+                return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Title and content must be at least 5 characters long and title must not exceed 50 characters, content must not exceed 1000 characters", null));
+            }
 
 
-            Blog blog = Blog.builder()
-                    .title(blogRequest.getTitle())
-                    .content(blogRequest.getContent())
-                    .createdAt(new Date())
-                    .updatedAt(new Date())
-                    .user(requester)
-                    .build();
+            Blog blog = new Blog();
+            blog.setTitle(blogRequest.getTitle());
+            blog.setContent(blogRequest.getContent());
+            blog.setCreatedAt(new Date());
+            blog.setUpdatedAt(new Date());
+            var user = userRepository.findUsersByUserId(blogRequest.getUserId());//huy code do
 
-            // Lưu đối tượng Blog vào cơ sở dữ liệu
+
             Blog savedBlog = blogRepository.save(blog);
 
-            // Trả về ResponseEntity thành công với thông điệp và payload
+
             return ResponseEntity.ok(new ResponseObject("Success", "Create blog success", savedBlog));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ResponseObject("Fail", "Internal Server Error", null));
         }
     }
 
+    private boolean isValidTitle(String title) {
+        return title != null && title.length() >= 5 && title.length() <= 50;
+    }
 
+    private boolean isValidContent(String content) {
+        return content != null && content.length() >= 5 && content.length() <= 1000;
+    }
 
 
     @Override
@@ -77,6 +104,13 @@ public class BlogServiceImpl implements BlogService {
 //            blogList = blogList.stream().filter(n -> n.getBlogId().trim().toLowerCase().contains(searchValue.trim().toLowerCase())
 //                    || n.getTopicCode().trim().toLowerCase().contains(searchValue.trim().toLowerCase())).collect(Collectors.toList());
 //        }
+        if (!Strings.isNullOrEmpty(searchValue)) {
+            String searchRegex = "(?i).*" + searchValue + ".*"; // Ignore case
+            blogList = blogList.stream()
+                    .filter(n -> n.getTitle().matches(searchRegex) || n.getContent().matches(searchRegex))
+                    .collect(Collectors.toList());
+        }
+
         return blogList;
     }
     @Override
@@ -126,16 +160,42 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public ResponseEntity<ResponseObject> findAllBlog() {
-        return null;
+        var blogAll = blogRepository.findAll();
+        return ResponseEntity.ok().body(new ResponseObject("Success","List blog",blogAll));
     }
+
+//    @Override
+//    public Page<Blog> findPaginated(int page, int size) {
+//        Pageable pageable = PageRequest.of(pageNo, pageSize);
+//        return this.blogRepository.findAll(pageable);
+//    }
 
     @Override
     public void uploadBlogImage(Integer blogId, List<String> imageUrls) {
+        try {
+            Blog blog = blogRepository.findById(blogId)
+                    .orElseThrow(() -> new EntityNotFoundException("Blog not found with id: " + blogId));
 
+            List<ImageBlog> imageBlogs = new ArrayList<>();
+            for (String imageUrl : imageUrls) {
+                ImageBlog imageBlog = new ImageBlog();
+                imageBlog.setImageUrl(imageUrl);
+                imageBlog.setBlog(blog);
+                imageBlogs.add(imageBlog);
+            }
+
+            blog.setImageBlogs(imageBlogs);
+            blogRepository.save(blog);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to upload product images: " + e.getMessage(), e);
+        }
     }
 
     @Override
     public String uploadBImage(MultipartFile file) throws IOException {
-        return null;
+        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+        return (String) uploadResult.get("url");
     }
+
+
 }

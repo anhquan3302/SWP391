@@ -1,7 +1,6 @@
 package com.example.securityl.controller;
 
 import com.example.securityl.model.Blog;
-import com.example.securityl.model.Products;
 import com.example.securityl.request.BlogRequest.BlogRequest;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.request.ProductRequest.SearchProduct;
@@ -86,7 +85,7 @@ public class ManagementController {
     }
 
     @PostMapping("/createBlog")
-    public ResponseEntity<ResponseObject> createBlog(@RequestBody BlogRequest blogRequest) {
+    public ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> createBlog(@RequestBody BlogRequest blogRequest) {
         return blogService.createBlog(blogRequest);
     }
 
@@ -111,25 +110,25 @@ public class ManagementController {
 
 
     @PutMapping("/updateBlog/{blogId}")
-    public ResponseEntity<ResponseObject> updateBlog(
+    public ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> updateBlog(
             @PathVariable int blogId,
             @RequestBody BlogRequest blogRequest) {
         return blogService.updateBlog(blogId, blogRequest);
     }
 
     @DeleteMapping("/deleteBlog/{blogId}")
-    public ResponseEntity<ResponseObject> deleteBlog(@PathVariable int blogId) {
+    public ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> deleteBlog(@PathVariable int blogId) {
         return blogService.deleteBlog(blogId);
     }
 
 
     @GetMapping("/findBlog/{blogId}")
-    public ResponseEntity<ResponseObject> findBlogById(@PathVariable int blogId) {
+    public ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> findBlogById(@PathVariable int blogId) {
         return blogService.findBlogById(blogId);
     }
 
     @GetMapping("/getAllBlog")
-    private ResponseEntity<ResponseObject> getAllBlog(){
+    private ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> getAllBlog(){
         return blogService.findAllBlog();
     }
 
