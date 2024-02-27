@@ -28,7 +28,7 @@ public class ManagementController {
     private final ProductService productService;
     private final CategoryProductService categoryProductService;
 
-    private final BlogService blogService;
+
 
 
 
@@ -86,7 +86,16 @@ public class ManagementController {
     }
 
 
-
+    @GetMapping("/products/search")
+    public ResponseEntity<?> searchProducts(
+            @RequestParam(name = "materials", required = false) String materials,
+            @RequestParam(name = "brand", required = false) String brand,
+            @RequestParam(name = "price", required = false) Double price,
+            @RequestParam(name = "color", required = false) String color
+    ) {
+        List<Products> productList = productService.searchProducts(materials, brand, price, color);
+        return ResponseEntity.ok(productList);
+    }
 
 
 

@@ -5,7 +5,7 @@ import com.example.securityl.model.CartItem;
 import com.example.securityl.model.Orders;
 import com.example.securityl.model.Products;
 import com.example.securityl.request.CheckoutResquest.CheckoutRequest;
-import com.example.securityl.request.CheckoutResquest.ShoppingRequest;
+//import com.example.securityl.request.CheckoutResquest.ShoppingRequest;
 import com.example.securityl.response.ObjectResponse.ResponseObject;
 import com.example.securityl.response.ShoppingCartResponse.CartResponse;
 import com.example.securityl.response.ShoppingCartResponse.DeleteCartResponse;
@@ -61,15 +61,15 @@ public class ShoppingController {
         }
     }
 
-    @PostMapping("/addtoCart")
-    private ResponseEntity<List<CartItem>> addToCart(@RequestBody List<ShoppingRequest> shoppingRequest) {
-        try {
-            List<CartItem> cartItems = shoppingCartService.addToCart(shoppingRequest);
-            return ResponseEntity.ok().body(cartItems);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
+//    @PostMapping("/addtoCart")
+//    private ResponseEntity<List<CartItem>> addToCart(@RequestBody List<ShoppingRequest> shoppingRequest) {
+//        try {
+//            List<CartItem> cartItems = shoppingCartService.addToCart(shoppingRequest);
+//            return ResponseEntity.ok().body(cartItems);
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//    }
 
 
 
