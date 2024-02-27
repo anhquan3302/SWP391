@@ -6,7 +6,7 @@ public class BlogRequest {
     private String title;
     private String content;
 
-    private  Integer userId;
+    private  int userId;
 
 
 

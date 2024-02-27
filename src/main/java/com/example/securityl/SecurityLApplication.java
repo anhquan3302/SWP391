@@ -60,7 +60,15 @@ public class SecurityLApplication {
                     .role(Role.STAFF)
                     .build();
             service.register(staff);
-
+            staff = RegisterRequest.builder()
+                    .name("Manager")
+                    .address("Viet Nam")
+                    .phone("0345120365")
+                    .email("anhquanpro332002@gmail.com")
+                    .password("123")
+                    .role(Role.STAFF)
+                    .build();
+            service.register(staff);
         };
     }
 

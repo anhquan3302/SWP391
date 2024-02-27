@@ -2,12 +2,12 @@ package com.example.securityl.controller;
 
 import com.example.securityl.model.Feedback;
 import com.example.securityl.request.FeedBackRequest.FeedBackRequest;
+import com.example.securityl.response.BlogResponse.ResponseObject;
 import com.example.securityl.service.FeedBackService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,31 +15,34 @@ import java.util.List;
 public class FeedBackController {
 
 
-
     private final FeedBackService feedbackService;
 
-    @PostMapping("/CreateFeedBack")
-    public Feedback createFeedback( @RequestBody FeedBackRequest feedBackRequest) {
-        return feedbackService.createFeedback(feedBackRequest);
+
+    @PostMapping("/createFeedback")
+    public ResponseEntity<ResponseObject> createFeedback(@RequestBody FeedBackRequest feedbackRequest) {
+        return feedbackService.createFeedback(feedbackRequest);
     }
 
-    @PutMapping("/updateFeedBack/{id}")
-    public Feedback updateFeedback(@PathVariable int id, @RequestBody Feedback feedback) {
-        return feedbackService.updateFeedback(id, feedback);
+    @PutMapping("/updateFeedback/{feedbackId}")
+    public ResponseEntity<ResponseObject> updateFeedback(
+            @PathVariable int feedbackId,
+            @RequestBody FeedBackRequest feedbackRequest) {
+        return feedbackService.updateFeedback(feedbackId, feedbackRequest);
     }
 
-    @DeleteMapping("/deleteFeedBack/{id}")
-    public void deleteFeedback(@PathVariable int id) {
-        feedbackService.deleteFeedback(id);
+    @DeleteMapping("/deleteFeedback/{feedbackId}")
+    public ResponseEntity<ResponseObject> deleteFeedback(@PathVariable int feedbackId) {
+        return feedbackService.deleteFeedback(feedbackId);
     }
 
-    @GetMapping("/FindAllFeedBack")
-    public List<Feedback> findAllFeedbacks() {
-        return feedbackService.findAllFeedbacks();
+    @GetMapping("/findFeedback/{feedbackId}")
+    public ResponseEntity<ResponseObject> findFeedbackById(@PathVariable int feedbackId) {
+        return feedbackService.findFeedbackById(feedbackId);
     }
 
-    @GetMapping("/findFeedBackById/{id}")
-    public Feedback findFeedbackById(@PathVariable int id) {
-        return feedbackService.findFeedbackById(id);
+    @GetMapping("/getAllFeedback")
+    public ResponseEntity<ResponseObject> getAllFeedback() {
+        return feedbackService.findAllFeedback();
     }
 }
+

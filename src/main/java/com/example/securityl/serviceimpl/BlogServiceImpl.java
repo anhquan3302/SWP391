@@ -70,11 +70,8 @@ public class BlogServiceImpl implements BlogService {
             blog.setContent(blogRequest.getContent());
             blog.setCreatedAt(new Date());
             blog.setUpdatedAt(new Date());
-            User user = userService.getUser(blogRequest.getUserId());
-            if (user == null) {
-                return ResponseEntity.badRequest().body(new ResponseObject("Fail", "User not found", null));
-            }
-            // Set user if necessary
+            var user = userRepository.findUsersByUserId(blogRequest.getUserId());//huy code do
+
 
             Blog savedBlog = blogRepository.save(blog);
 
@@ -106,6 +103,13 @@ public class BlogServiceImpl implements BlogService {
 //            blogList = blogList.stream().filter(n -> n.getBlogId().trim().toLowerCase().contains(searchValue.trim().toLowerCase())
 //                    || n.getTopicCode().trim().toLowerCase().contains(searchValue.trim().toLowerCase())).collect(Collectors.toList());
 //        }
+        if (!Strings.isNullOrEmpty(searchValue)) {
+            String searchRegex = "(?i).*" + searchValue + ".*"; // Ignore case
+            blogList = blogList.stream()
+                    .filter(n -> n.getTitle().matches(searchRegex) || n.getContent().matches(searchRegex))
+                    .collect(Collectors.toList());
+        }
+
         return blogList;
     }
     @Override

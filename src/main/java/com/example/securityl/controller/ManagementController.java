@@ -1,14 +1,12 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.model.Blog;
-import com.example.securityl.model.ImageProduct;
+import com.example.securityl.model.*;
 import com.example.securityl.request.BlogRequest.BlogRequest;
-import com.example.securityl.model.Category;
-import com.example.securityl.model.CategoryProduct;
 import com.example.securityl.request.BlogRequest.BlogRequest;
 import com.example.securityl.request.CategoryRequest.RequestCategory;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.request.ProductRequest.SearchProduct;
+import com.example.securityl.request.ProductRequest.SearchProductRequest;
 import com.example.securityl.response.ProductResponse.ResponseObject;
 import com.example.securityl.service.BlogService;
 import com.example.securityl.service.BlogService;
@@ -98,10 +96,7 @@ public class ManagementController {
         return productService.deleteProduct(productId);
     }
 
-    @PostMapping("/createBlog")
-    public ResponseEntity<ResponseObject> createBlog(@RequestBody BlogRequest blogRequest) {
-        return blogService.createBlog(blogRequest);
-    }
+
     @PostMapping("/upload-images/{blogId}")
     public ResponseEntity<?> uploadImagesBlog(@PathVariable Integer blogId,
                                           @RequestParam("files") MultipartFile[] files) {
@@ -177,5 +172,8 @@ public class ManagementController {
 //        Page<Blog> pageItems = blogService.findPaginated(page, size);
 //        return pageItems.getContent();
 //    }
+
+
+
 }
 
