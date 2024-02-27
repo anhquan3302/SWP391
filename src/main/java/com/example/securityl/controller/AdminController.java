@@ -27,7 +27,7 @@ public class AdminController {
     private final UserServiceimpl userService;
 
 
-    private static final Logger logger = Logger.getLogger(UserController.class.getName());
+    private static final Logger logger = Logger.getLogger(ShoppingController.class.getName());
 
     @GetMapping("/getAll")
     @PreAuthorize("hasAuthority('admin:read')")

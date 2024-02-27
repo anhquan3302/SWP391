@@ -7,7 +7,7 @@ import com.example.securityl.repository.CategoryProductRepository;
 import com.example.securityl.repository.CategoryRepository;
 import com.example.securityl.repository.ProductRepository;
 import com.example.securityl.request.CategoryRequest.RequestCategory;
-import com.example.securityl.response.ProductResponse.ResponseObject;
+import com.example.securityl.response.ObjectResponse.ResponseObject;
 import com.example.securityl.service.CategoryProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

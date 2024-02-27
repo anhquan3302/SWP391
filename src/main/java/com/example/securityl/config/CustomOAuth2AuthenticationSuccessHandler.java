@@ -37,7 +37,6 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
             String email = oAuth2User.getAttribute("email");
             String name = oAuth2User.getAttribute("name");
             String address = oAuth2User.getAttribute("address");
-
             User existingUser = userRepository.findByEmail(email).orElse(null);
             if (existingUser == null) {
                 User newUser = User.builder()

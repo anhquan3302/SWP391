@@ -1,14 +1,12 @@
 package com.example.securityl.request.BlogRequest;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-
 public class BlogRequest {
     private String title;
     private String content;
 
     private  int userId;
 
-
+    private String thumbnail;
 
     public BlogRequest() {
     }
@@ -42,5 +40,13 @@ public class BlogRequest {
     }
     public void setUserId(Integer userId){
         this.userId =userId;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

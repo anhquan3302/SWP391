@@ -27,7 +27,7 @@ public class Products {
     private String title;
 
     @Column(name = "discount",nullable = false)
-    private Integer discount;
+    private double discount;
 
     @Column(name = "description",nullable = false)
     private String description;
@@ -39,10 +39,17 @@ public class Products {
     private Date updatedAt;
 
     @Column(name="size",nullable = false)
-    private double size;
+    private String size;
 
     @Column(name = "product_name",nullable = false)
     private String productName;
+
+    @Column(name = "thumbnail")
+    private String thumbnail;
+
+
+    @Column(name ="quantity")
+    private Integer quantity;
 
     @ManyToOne
     @JsonBackReference
@@ -55,25 +62,34 @@ public class Products {
     @Column(name ="price",nullable = false)
     private double price;
 
+    @Column(name = "material",nullable = false)
+    private String materials;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<CategoryProduct> categoryProducts;
+    @Column(name ="brand")
+    private String brand;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "product_categories",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categories;
+
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<ImageProduct> imageProducts;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<OrderDetail> orderDetails;
+//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//    private List<OrderDetail> orderDetails;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Notifications> notifications;
+//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//    private List<Notifications> notifications;
 
-    @Column(name = "material")
-    private String materials;
+
 
 
 }

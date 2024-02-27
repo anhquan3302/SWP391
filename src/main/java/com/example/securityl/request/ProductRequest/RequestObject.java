@@ -16,15 +16,16 @@ import java.util.List;
 @Builder
 public class RequestObject {
     private String title;
-    private Integer discount;
+    private double discount;
     private String description;
     private Date createdAt;
     private Date updatedAt;
     private String material;
-    private double size;
+    private String size;
     private String color;
     private double price;
     private String productName;
-//    private String category;
-
+    private String thumbnail;
+    private int quantity;
+    private String brand;
 }

@@ -96,7 +96,10 @@ public class ManagementController {
         return productService.deleteProduct(productId);
     }
 
-
+    @PostMapping("/createBlog")
+    public ResponseEntity<ResponseObject> createBlog(@RequestBody BlogRequest blogRequest) {
+        return blogService.createBlog(blogRequest);
+    }
     @PostMapping("/upload-images/{blogId}")
     public ResponseEntity<?> uploadImagesBlog(@PathVariable Integer blogId,
                                           @RequestParam("files") MultipartFile[] files) {
@@ -172,8 +175,5 @@ public class ManagementController {
 //        Page<Blog> pageItems = blogService.findPaginated(page, size);
 //        return pageItems.getContent();
 //    }
-
-
-
 }
 

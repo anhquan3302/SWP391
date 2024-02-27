@@ -1,16 +1,17 @@
-package com.example.securityl.response.ProductResponse;
+package com.example.securityl.response.ShoppingCartResponse;
 
+import com.example.securityl.model.CartItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class ResponseObject {
+public class CartResponse {
     private String status;
     private String message;
-    private Object payload;
+    private CartItem payload;
 }

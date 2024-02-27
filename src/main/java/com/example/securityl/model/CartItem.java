@@ -12,6 +12,7 @@ public class CartItem {
    private Integer productId;
    private String productName;
    private double price;
-   private int quantity =1;
+   private int quantity;
+   private double discount;
 
 }
