@@ -15,4 +15,6 @@ public interface VoucherService {
 
 
     Voucher deleteVoucher(Integer voucherId);
+
+    ResponseEntity<ResponseObject> searchVoucher(String voucherCode);
 }

@@ -26,5 +26,6 @@ public class RequestObject {
     private double price;
     private String productName;
     private String thumbnail;
-
+    private int quantity;
+    private String brand;
 }

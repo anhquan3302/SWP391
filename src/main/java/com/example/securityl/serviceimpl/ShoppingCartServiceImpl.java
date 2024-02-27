@@ -45,7 +45,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public CartItem updateCart(int productId, int quantity) {
         CartItem cartItem = maps.get(productId);
         var product = productRepository.findProductByProductId(productId).orElse(null);
-        cartItem.setQuantity(quantity);
+        assert product != null;
+        Integer availableQuantity = productRepository.findQuantityById(productId);
+        if ( product.getQuantity() <= availableQuantity) {
+            cartItem.setQuantity(quantity);
+        } else {
+            throw new RuntimeException("Quantity is not existed ");
+        }
         if(cartItem.getQuantity() <= 0){
             throw new RuntimeException("Vui long dien lai so luong > 0");
         }

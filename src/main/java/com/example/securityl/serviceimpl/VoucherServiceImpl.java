@@ -19,7 +19,7 @@ public class VoucherServiceImpl implements VoucherService {
     private final VoucherRepository voucherRepository;
     @Override
     public ResponseEntity<ResponseObject> createVoucher(VoucherRequest voucherRequest) {
-        Voucher Voucher1 ;
+        Voucher voucher;
         try {
             LocalDate startDate = voucherRequest.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             LocalDate endDate = voucherRequest.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -31,26 +31,29 @@ public class VoucherServiceImpl implements VoucherService {
             if (voucherRepository.existsByVoucherCode(voucherRequest.getVoucherCode())) {
                 return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Duplicate voucher code", null));
             }
+
             double discountPercentage = 0;
-            if(voucherRequest.getTotalPrice() >= 500000){
-               discountPercentage = 10;
+            if(voucherRequest.getTotalPrice() >= 5000 && voucherRequest.getTotalPrice() < 10000){
+                discountPercentage = 10;
             }
-            if (voucherRequest.getTotalPrice() >= 1000000) {
+            else if (voucherRequest.getTotalPrice() >= 10000) {
                 discountPercentage = 20;
             }
-            Voucher voucher = Voucher.builder()
+
+            voucher = Voucher.builder()
                     .voucherCode(voucherRequest.getVoucherCode())
                     .discountPercentage(discountPercentage)
                     .startDate(voucherRequest.getStartDate())
                     .endDate(voucherRequest.getEndDate())
                     .active(isActive)
                     .build();
-            Voucher1 = voucherRepository.save(voucher);
+            voucher = voucherRepository.save(voucher);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Create voucher fail", null));
         }
-        return ResponseEntity.ok().body(new ResponseObject("Success", "Create voucher success", Voucher1));
+        return ResponseEntity.ok().body(new ResponseObject("Success", "Create voucher success", voucher));
     }
+
 
     @Override
     public ResponseEntity<ResponseObject> findAllVoucher() {
@@ -65,6 +68,16 @@ public class VoucherServiceImpl implements VoucherService {
         assert voucher != null;
         voucherRepository.delete(voucher);
         return null;
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> searchVoucher(String voucherCode) {
+        boolean exists = voucherRepository.existsByVoucherCode(voucherCode);
+        if (exists) {
+            return ResponseEntity.ok().body(new ResponseObject("Success", "Voucher found", null));
+        } else {
+            return ResponseEntity.status(404).body(new ResponseObject("Fail", "Voucher not found", null));
+        }
     }
 
 

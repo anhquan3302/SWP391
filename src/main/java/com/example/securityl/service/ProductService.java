@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ProductService  {
-    ResponseEntity<ResponseObject> createProduct(String productName,String title, String description, double discount, String color, String size, double price, String material,String thumbnail,Integer categoryId);
+    ResponseEntity<ResponseObject> createProduct(String productName, String title, String description, double discount, String color, String size, double price, String material, String thumbnail, Integer quantity, String brand, Integer categoryId);
 
     ResponseEntity<ResponseObject> deleteProduct(Integer productId);
 

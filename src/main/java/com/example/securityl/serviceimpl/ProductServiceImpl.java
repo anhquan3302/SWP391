@@ -35,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
     private final Cloudinary cloudinary;
     private final CategoryRepository categoryRepository;
 
-    public ResponseEntity<ResponseObject> createProduct(String productName, String title, String description, double discount, String color, String size, double price, String material, String thumbnail, Integer categoryId) {
+    public ResponseEntity<ResponseObject> createProduct(String productName, String title, String description, double discount, String color, String size, double price, String material, String thumbnail, Integer quantity, String brand, Integer categoryId) {
         try {
             Date date = new Date();
             String token = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
@@ -49,6 +49,9 @@ public class ProductServiceImpl implements ProductService {
             }
             if (size == null || size.trim().isEmpty() || productName == null || productName.trim().isEmpty() || description == null || description.trim().isEmpty() || title == null || title.trim().isEmpty() || price <= 0) {
                 return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Invalid request body", null));
+            }
+            if(quantity <= 0 || quantity > 10){
+                return ResponseEntity.status(400).body(new ResponseObject("Fail","Quantity does not exist",null));
             }
             if (!(requester.getRole().equals(Role.ADMIN) || requester.getRole().equals(Role.STAFF))) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ResponseObject("Fail", "Forbidden", null));
@@ -70,6 +73,8 @@ public class ProductServiceImpl implements ProductService {
                     .materials(material)
                     .size(size)
                     .price(price)
+                    .brand(brand)
+                    .quantity(quantity)
                     .categories(categoryList)
                     .user(userRepository.findUserIdByEmail(userEmail))
                     .build();
@@ -117,6 +122,13 @@ public class ProductServiceImpl implements ProductService {
             if (!(requester.getRole().equals(Role.ADMIN) || requester.getRole().equals(Role.STAFF))) {
                 return ResponseEntity.status(403).body(new ResponseObject("Fail", "You don't have permission", null));
             }
+            if(requestObject.getBrand()  == null || requestObject.getBrand().trim().isEmpty() ){
+                return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Brand is empty", null));
+
+            }
+            if (requestObject.getQuantity() <= 0 || requestObject.getQuantity() > 10) {
+                return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Quantity must be greater than 0 and < 10", null));
+            }
             var checkProduct = productRepository.findById(productId).orElse(null);
             if (checkProduct != null) {
                 checkProduct.setThumbnail(requestObject.getThumbnail());
@@ -125,6 +137,8 @@ public class ProductServiceImpl implements ProductService {
                 checkProduct.setTitle(requestObject.getTitle().trim());
                 checkProduct.setPrice(requestObject.getPrice());
                 checkProduct.setUpdatedAt(new Date());
+                checkProduct.setQuantity(requestObject.getQuantity());
+                checkProduct.setBrand(requestObject.getBrand());
                 var updateProduct = productRepository.save(checkProduct);
                 return ResponseEntity.ok(new ResponseObject("Success", "Update product success", updateProduct));
             }

@@ -47,6 +47,10 @@ public class Products {
     @Column(name = "thumbnail")
     private String thumbnail;
 
+
+    @Column(name ="quantity")
+    private Integer quantity;
+
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "user_id")
@@ -61,6 +65,8 @@ public class Products {
     @Column(name = "material",nullable = false)
     private String materials;
 
+    @Column(name ="brand")
+    private String brand;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(

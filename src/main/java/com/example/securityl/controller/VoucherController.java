@@ -31,4 +31,9 @@ public class VoucherController {
         voucherService.deleteVoucher(voucherId);
         return ResponseEntity.ok().body(new ResponseObject("Success","Delete success",null));
     }
+
+    @GetMapping("/{voucherCode}")
+    public ResponseEntity<ResponseObject> checkVoucherExistence(@PathVariable String voucherCode) {
+        return voucherService.searchVoucher(voucherCode);
+    }
 }

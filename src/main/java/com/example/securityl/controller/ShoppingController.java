@@ -100,6 +100,8 @@ public class ShoppingController {
         return ResponseEntity.ok().body(new CartResponse("Success","UpdateSucees",cartItem));
     }
 
+
+
     @PostMapping("/checkout")
     public ResponseEntity<ResponseObject> checkout(@RequestBody CheckoutRequest checkoutRequest) {
         try {
