@@ -34,19 +34,20 @@ public class ManagementController {
 
     @PostMapping("/createProduct")
     public ResponseEntity<ResponseObject> createProduct(
-            @RequestParam("productName") String productName,
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("discount") double discount,
-            @RequestParam("color") String color,
-            @RequestParam("size") String size,
-            @RequestParam("price") double price,
-            @RequestParam("material") String material,
-            @RequestParam("thumbnail") String thumbnail,
-            @RequestParam("quantity") Integer quantity,
-            @RequestParam("brand") String brand,
-            @RequestParam("categoryId")Integer categoryId) {
-        return productService.createProduct(productName,title, description, discount, color, size, price, material,thumbnail,quantity,brand,categoryId);
+                                                        @RequestParam("productName") String productName,
+                                                        @RequestParam("title") String title,
+                                                        @RequestParam("description") String description,
+                                                        @RequestParam("discount") double discount,
+                                                        @RequestParam("color") String color,
+                                                        @RequestParam("size") String size,
+                                                        @RequestParam("price") double price,
+                                                        @RequestParam("material") String material,
+                                                        @RequestParam("thumbnail") String thumbnail,
+                                                        @RequestParam("quantity") Integer quantity,
+                                                        @RequestParam("brand") String brand,
+                                                        @RequestParam("favorite") boolean favorite,
+                                                        @RequestParam("categoryId")Integer categoryId) {
+        return productService.createProduct(productName,title, description, discount, color, size, price, material,thumbnail,quantity,brand,favorite,categoryId);
     }
 
     @PostMapping("/upload-images/{productId}")
@@ -101,14 +102,4 @@ public class ManagementController {
 
 
 
-    @GetMapping("/products/search")
-    public ResponseEntity<?> searchProducts(
-            @RequestParam(name = "materials", required = false) String materials,
-            @RequestParam(name = "brand", required = false) String brand,
-            @RequestParam(name = "price", required = false) Double price,
-            @RequestParam(name = "color", required = false) String color
-    ) {
-        List<Products> productList = productService.searchProducts(materials, brand, price, color);
-        return ResponseEntity.ok(productList);
-    }
 }

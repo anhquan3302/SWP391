@@ -5,6 +5,7 @@ import com.example.securityl.model.CartItem;
 import com.example.securityl.model.Orders;
 import com.example.securityl.model.Products;
 import com.example.securityl.request.CheckoutResquest.CheckoutRequest;
+import com.example.securityl.request.CheckoutResquest.ShoppingRequest;
 import com.example.securityl.response.ObjectResponse.ResponseObject;
 import com.example.securityl.response.ShoppingCartResponse.CartResponse;
 import com.example.securityl.response.ShoppingCartResponse.DeleteCartResponse;
@@ -60,38 +61,17 @@ public class ShoppingController {
         }
     }
 
-    @GetMapping("/addtoCart/{productId}")
-    private ResponseEntity<CartResponse> addToCart(@PathVariable Integer productId) {
+    @PostMapping("/addtoCart")
+    private ResponseEntity<List<CartItem>> addToCart(@RequestBody List<ShoppingRequest> shoppingRequest) {
         try {
-            Products product1 = productService.getProductById(productId);
-            CartItem cartItem = null;
-            if (product1 != null) {
-                cartItem = new CartItem();
-                cartItem.setProductId(product1.getProductId());
-                cartItem.setProductName(product1.getProductName());
-                cartItem.setPrice(product1.getPrice());
-                cartItem.setQuantity(1);
-                cartItem.setDiscount(product1.getDiscount());
-                shoppingCartService.add(cartItem);
-                return ResponseEntity.ok().body(CartResponse.builder()
-                        .status("Success")
-                        .message("Add to cart success")
-                        .payload(cartItem)
-                        .build());
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(CartResponse.builder()
-                    .status("Fail")
-                    .message("Not found product")
-                    .payload(null)
-                    .build());
+            List<CartItem> cartItems = shoppingCartService.addToCart(shoppingRequest);
+            return ResponseEntity.ok().body(cartItems);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.badRequest().body(CartResponse.builder()
-                .status("Fail")
-                .message("Add to cart fail")
-                .payload(null)
-                .build());
     }
+
+
 
     @PutMapping("/updateCart")
     private ResponseEntity<CartResponse> updateCart (@RequestParam("id") Integer id,

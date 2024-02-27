@@ -47,6 +47,8 @@ public class Products {
     @Column(name = "thumbnail")
     private String thumbnail;
 
+    @Column(name = "favorite")
+    private boolean favorite;
 
     @Column(name ="quantity")
     private Integer quantity;
