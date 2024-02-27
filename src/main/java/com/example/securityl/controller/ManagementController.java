@@ -1,57 +1,51 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.model.*;
+import com.example.securityl.model.Blog;
 import com.example.securityl.request.BlogRequest.BlogRequest;
-import com.example.securityl.request.BlogRequest.BlogRequest;
-import com.example.securityl.request.CategoryRequest.RequestCategory;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.request.ProductRequest.SearchProduct;
-import com.example.securityl.request.ProductRequest.SearchProductRequest;
-import com.example.securityl.response.ProductResponse.ResponseObject;
-import com.example.securityl.service.BlogService;
+import com.example.securityl.response.ObjectResponse.ResponseObject;
 import com.example.securityl.service.BlogService;
 import com.example.securityl.service.CategoryProductService;
-import com.example.securityl.service.CategoryService;
 import com.example.securityl.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/management")
+@PreAuthorize("hasAnyRole('USER','ADMIN','STAFF')")
+@CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
 public class ManagementController {
     private final ProductService productService;
     private final CategoryProductService categoryProductService;
-    private final CategoryService categoryService;
+
     private final BlogService blogService;
 
 
 
-    @GetMapping("/getAllProduct")
-    public ResponseEntity<ResponseObject> getAllProduct(){
-        return productService.getAll();
-    }
-
     @PostMapping("/createProduct")
     public ResponseEntity<ResponseObject> createProduct(
-                                                        @RequestParam("productName") String productName,
-                                                        @RequestParam("title") String title,
-                                                        @RequestParam("description") String description,
-                                                        @RequestParam("discount") Integer discount,
-                                                        @RequestParam("color") String color,
-                                                        @RequestParam("size") double size,
-                                                        @RequestParam("price") double price,
-                                                        @RequestParam("material") String material) {
-        return productService.createProduct(productName,title, description, discount, color, size, price, material);
+            @RequestParam("productName") String productName,
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("discount") double discount,
+            @RequestParam("color") String color,
+            @RequestParam("size") String size,
+            @RequestParam("price") double price,
+            @RequestParam("material") String material,
+            @RequestParam("thumbnail") String thumbnail,
+            @RequestParam("quantity") Integer quantity,
+            @RequestParam("brand") String brand,
+            @RequestParam("categoryId")Integer categoryId) {
+        return productService.createProduct(productName,title, description, discount, color, size, price, material,thumbnail,quantity,brand,categoryId);
     }
 
     @PostMapping("/upload-images/{productId}")
@@ -67,19 +61,12 @@ public class ManagementController {
                 imageUrls.add(imageUrl);
             }
             productService.uploadProductImage(productId, imageUrls);
-
             return ResponseEntity.ok().body("Images uploaded successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to upload images: " + e.getMessage());
         }
     }
-
-
-
-
-
-
 
 
 
@@ -97,32 +84,8 @@ public class ManagementController {
     }
 
     @PostMapping("/createBlog")
-    public ResponseEntity<ResponseObject> createBlog(@RequestBody BlogRequest blogRequest) {
+    public ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> createBlog(@RequestBody BlogRequest blogRequest) {
         return blogService.createBlog(blogRequest);
-    }
-    @PostMapping("/upload-images/{blogId}")
-    public ResponseEntity<?> uploadImagesBlog(@PathVariable Integer blogId,
-                                          @RequestParam("files") MultipartFile[] files) {
-        try {
-            if (files == null || files.length == 0) {
-                return ResponseEntity.badRequest().body("No files uploaded");
-            }
-            List<String> imageUrls = new ArrayList<>();
-            for (MultipartFile file : files) {
-                String imageUrl = blogService.uploadBImage(file);
-                imageUrls.add(imageUrl);
-            }
-            blogService.uploadBlogImage(blogId, imageUrls);
-
-            return ResponseEntity.ok().body("Images uploaded successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to upload images: " + e.getMessage());
-        }
-    }
-    @GetMapping("/getAllCategory")
-    private ResponseEntity<ResponseObject> getAllCategory(){
-        return categoryService.findAllCategory();
     }
 
     @PostMapping("/getProduct")
@@ -131,14 +94,13 @@ public class ManagementController {
     }
 
 
-
     @GetMapping("/searchBlog")
     public ResponseEntity<?> searchBlog(@RequestParam(name = "createdAt",required = false)
-                                            String createdAt,
-                                            @RequestParam(name = "searchValue",required = false)
-                                            String searchValue,
-                                            @RequestParam(name = "orderBy",required = false)
-                                            String orderBy)
+                                        String createdAt,
+                                        @RequestParam(name = "searchValue",required = false)
+                                        String searchValue,
+                                        @RequestParam(name = "orderBy",required = false)
+                                        String orderBy)
     {
         List<Blog> syllabusList = blogService.searchBlog(createdAt, searchValue, orderBy);
         return ResponseEntity.ok(syllabusList);
@@ -147,33 +109,27 @@ public class ManagementController {
 
 
     @PutMapping("/updateBlog/{blogId}")
-    public ResponseEntity<ResponseObject> updateBlog(
+    public ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> updateBlog(
             @PathVariable int blogId,
             @RequestBody BlogRequest blogRequest) {
         return blogService.updateBlog(blogId, blogRequest);
     }
 
     @DeleteMapping("/deleteBlog/{blogId}")
-    public ResponseEntity<ResponseObject> deleteBlog(@PathVariable int blogId) {
+    public ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> deleteBlog(@PathVariable int blogId) {
         return blogService.deleteBlog(blogId);
     }
 
-    // Endpoint để tìm kiếm blog theo id
+
     @GetMapping("/findBlog/{blogId}")
-    public ResponseEntity<ResponseObject> findBlogById(@PathVariable int blogId) {
+    public ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> findBlogById(@PathVariable int blogId) {
         return blogService.findBlogById(blogId);
     }
 
     @GetMapping("/getAllBlog")
-    private ResponseEntity<ResponseObject> getAllBlog(){
+    private ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> getAllBlog(){
         return blogService.findAllBlog();
     }
 
-//    @GetMapping
-//    public List<Blog> getAllItems(@RequestParam(defaultValue = "0") int page,
-//                                  @RequestParam(defaultValue = "10") int size) {
-//        Page<Blog> pageItems = blogService.findPaginated(page, size);
-//        return pageItems.getContent();
-//    }
-}
 
+}

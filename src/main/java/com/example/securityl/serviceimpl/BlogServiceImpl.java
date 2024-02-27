@@ -7,13 +7,14 @@ import com.example.securityl.repository.BlogRepository;
 
 import com.example.securityl.repository.UserRepository;
 import com.example.securityl.request.BlogRequest.BlogRequest;
-import com.example.securityl.response.ProductResponse.ResponseObject;
+
+import com.example.securityl.response.BlogResponse.ResponseObject;
 import com.example.securityl.service.BlogService;
 import com.example.securityl.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import com.example.securityl.request.BlogRequest.BlogRequest;
-import com.example.securityl.response.ProductResponse.ResponseObject;
+
 import com.example.securityl.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
