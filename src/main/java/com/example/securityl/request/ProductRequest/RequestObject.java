@@ -28,4 +28,5 @@ public class RequestObject {
     private String thumbnail;
     private int quantity;
     private String brand;
+    private boolean favorite;
 }

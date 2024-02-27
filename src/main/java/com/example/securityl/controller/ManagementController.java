@@ -45,8 +45,9 @@ public class ManagementController {
                                                         @RequestParam("thumbnail") String thumbnail,
                                                         @RequestParam("quantity") Integer quantity,
                                                         @RequestParam("brand") String brand,
+                                                        @RequestParam("favorite") boolean favorite,
                                                         @RequestParam("categoryId")Integer categoryId) {
-        return productService.createProduct(productName,title, description, discount, color, size, price, material,thumbnail,quantity,brand,categoryId);
+        return productService.createProduct(productName,title, description, discount, color, size, price, material,thumbnail,quantity,brand,favorite,categoryId);
     }
 
     @PostMapping("/upload-images/{productId}")

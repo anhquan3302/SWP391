@@ -35,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
     private final Cloudinary cloudinary;
     private final CategoryRepository categoryRepository;
 
-    public ResponseEntity<ResponseObject> createProduct(String productName, String title, String description, double discount, String color, String size, double price, String material, String thumbnail, Integer quantity, String brand, Integer categoryId) {
+    public ResponseEntity<ResponseObject> createProduct(String productName, String title, String description, double discount, String color, String size, double price, String material, String thumbnail, Integer quantity, String brand,boolean favorite, Integer categoryId) {
         try {
             Date date = new Date();
             String token = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
@@ -75,6 +75,7 @@ public class ProductServiceImpl implements ProductService {
                     .price(price)
                     .brand(brand)
                     .quantity(quantity)
+                    .favorite(favorite)
                     .categories(categoryList)
                     .user(userRepository.findUserIdByEmail(userEmail))
                     .build();
