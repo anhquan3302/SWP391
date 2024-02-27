@@ -2,17 +2,20 @@ package com.example.securityl.service;
 
 import com.example.securityl.model.Feedback;
 import com.example.securityl.request.FeedBackRequest.FeedBackRequest;
+import com.example.securityl.response.BlogResponse.ResponseObject;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface FeedBackService {
-    Feedback createFeedback(FeedBackRequest feedback);
 
-    Feedback updateFeedback(int id, Feedback feedback);
+    ResponseEntity<ResponseObject> createFeedback(FeedBackRequest feedbackRequest);
 
-    void deleteFeedback(int id);
+    ResponseEntity<ResponseObject> updateFeedback(int feedbackId, FeedBackRequest feedbackRequest);
 
-    List<Feedback> findAllFeedbacks();
+    ResponseEntity<ResponseObject> deleteFeedback(int feedbackId);
 
-    Feedback findFeedbackById(int id);
+    ResponseEntity<ResponseObject> findFeedbackById(int feedbackId);
+
+    ResponseEntity<ResponseObject> findAllFeedback();
 }

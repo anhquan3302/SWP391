@@ -1,11 +1,13 @@
 package com.example.securityl.response.BlogResponse;
 
+import com.example.securityl.model.Feedback;
+
 public class ResponseObject {
     private String status;
     private String message;
     private Object payload;
 
-    public ResponseObject() {
+    public ResponseObject(String feedbackCreatedSuccessfully, Feedback feedback) {
     }
 
     public ResponseObject(String status, String message, Object payload) {

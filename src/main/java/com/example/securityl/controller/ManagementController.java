@@ -1,7 +1,6 @@
 package com.example.securityl.controller;
 
 import com.example.securityl.model.Blog;
-import com.example.securityl.model.Products;
 import com.example.securityl.request.BlogRequest.BlogRequest;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.request.ProductRequest.SearchProduct;
@@ -34,18 +33,18 @@ public class ManagementController {
 
     @PostMapping("/createProduct")
     public ResponseEntity<ResponseObject> createProduct(
-                                                        @RequestParam("productName") String productName,
-                                                        @RequestParam("title") String title,
-                                                        @RequestParam("description") String description,
-                                                        @RequestParam("discount") double discount,
-                                                        @RequestParam("color") String color,
-                                                        @RequestParam("size") String size,
-                                                        @RequestParam("price") double price,
-                                                        @RequestParam("material") String material,
-                                                        @RequestParam("thumbnail") String thumbnail,
-                                                        @RequestParam("quantity") Integer quantity,
-                                                        @RequestParam("brand") String brand,
-                                                        @RequestParam("categoryId")Integer categoryId) {
+            @RequestParam("productName") String productName,
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("discount") double discount,
+            @RequestParam("color") String color,
+            @RequestParam("size") String size,
+            @RequestParam("price") double price,
+            @RequestParam("material") String material,
+            @RequestParam("thumbnail") String thumbnail,
+            @RequestParam("quantity") Integer quantity,
+            @RequestParam("brand") String brand,
+            @RequestParam("categoryId")Integer categoryId) {
         return productService.createProduct(productName,title, description, discount, color, size, price, material,thumbnail,quantity,brand,categoryId);
     }
 
@@ -85,7 +84,7 @@ public class ManagementController {
     }
 
     @PostMapping("/createBlog")
-    public ResponseEntity<ResponseObject> createBlog(@RequestBody BlogRequest blogRequest) {
+    public ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> createBlog(@RequestBody BlogRequest blogRequest) {
         return blogService.createBlog(blogRequest);
     }
 
@@ -97,11 +96,11 @@ public class ManagementController {
 
     @GetMapping("/searchBlog")
     public ResponseEntity<?> searchBlog(@RequestParam(name = "createdAt",required = false)
-                                            String createdAt,
-                                            @RequestParam(name = "searchValue",required = false)
-                                            String searchValue,
-                                            @RequestParam(name = "orderBy",required = false)
-                                            String orderBy)
+                                        String createdAt,
+                                        @RequestParam(name = "searchValue",required = false)
+                                        String searchValue,
+                                        @RequestParam(name = "orderBy",required = false)
+                                        String orderBy)
     {
         List<Blog> syllabusList = blogService.searchBlog(createdAt, searchValue, orderBy);
         return ResponseEntity.ok(syllabusList);
@@ -110,28 +109,27 @@ public class ManagementController {
 
 
     @PutMapping("/updateBlog/{blogId}")
-    public ResponseEntity<ResponseObject> updateBlog(
+    public ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> updateBlog(
             @PathVariable int blogId,
             @RequestBody BlogRequest blogRequest) {
         return blogService.updateBlog(blogId, blogRequest);
     }
 
     @DeleteMapping("/deleteBlog/{blogId}")
-    public ResponseEntity<ResponseObject> deleteBlog(@PathVariable int blogId) {
+    public ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> deleteBlog(@PathVariable int blogId) {
         return blogService.deleteBlog(blogId);
     }
 
 
     @GetMapping("/findBlog/{blogId}")
-    public ResponseEntity<ResponseObject> findBlogById(@PathVariable int blogId) {
+    public ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> findBlogById(@PathVariable int blogId) {
         return blogService.findBlogById(blogId);
     }
 
     @GetMapping("/getAllBlog")
-    private ResponseEntity<ResponseObject> getAllBlog(){
+    private ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> getAllBlog(){
         return blogService.findAllBlog();
     }
 
 
 }
-
