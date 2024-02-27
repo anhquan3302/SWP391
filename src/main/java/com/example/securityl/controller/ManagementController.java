@@ -30,10 +30,7 @@ public class ManagementController {
 
     private final BlogService blogService;
 
-    @GetMapping("/getAllProduct")
-    public ResponseEntity<ResponseObject> getAllProduct(){
-        return productService.getAll();
-    }
+
 
     @PostMapping("/createProduct")
     public ResponseEntity<ResponseObject> createProduct(
@@ -72,10 +69,7 @@ public class ManagementController {
         }
     }
 
-    @GetMapping("/getListProductByCategory")
-    private ResponseEntity<ResponseObject> getProductByCategoryName(@RequestParam String name) {
-        return productService.getProductByCategory(name);
-    }
+
 
     @PutMapping("/updateProduct/{productId}")
     public ResponseEntity<ResponseObject> updateProduct(
@@ -100,10 +94,7 @@ public class ManagementController {
         return productService.searchProduct(searchProduct);
     }
 
-    @GetMapping("/getProductById/{productId}")
-    private Products getProductById(@PathVariable Integer productId){
-        return productService.getProductById(productId);
-    }
+
     @GetMapping("/searchBlog")
     public ResponseEntity<?> searchBlog(@RequestParam(name = "createdAt",required = false)
                                             String createdAt,

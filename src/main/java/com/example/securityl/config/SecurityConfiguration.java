@@ -28,7 +28,7 @@ public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final LogoutHandler logoutHandler;
-    private final CustomOAuth2AuthenticationSuccessHandler customOAuth2AuthenticationSuccessHandler;
+//    private final CustomOAuth2AuthenticationSuccessHandler customOAuth2AuthenticationSuccessHandler;
 
 
     @Bean
@@ -39,19 +39,19 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authentication -> authentication
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/shoppingCart").permitAll()
                         .requestMatchers("/api/v1/managemnet/**").hasAnyRole(ADMIN.name(), STAFF.name())
                         .requestMatchers(GET, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_VIEW.name(), STAFF_VIEW.name())
                         .requestMatchers(POST, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_CREATE.name(), STAFF_CREATE.name())
                         .requestMatchers(PUT, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_UPDATE.name(), STAFF_UPDATE.name())
                         .requestMatchers(DELETE, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_DELETE.name(), STAFF_DELETE.name())
-
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(o -> o
-                        .successHandler(customOAuth2AuthenticationSuccessHandler)
+//                        .successHandler(customOAuth2AuthenticationSuccessHandler)
                         .failureHandler((request, response, exception) -> {
                             request.getSession().setAttribute("error.message", exception.getMessage());
                         })
