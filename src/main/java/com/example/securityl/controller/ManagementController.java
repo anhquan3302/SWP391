@@ -84,53 +84,22 @@ public class ManagementController {
         return productService.deleteProduct(productId);
     }
 
-    @PostMapping("/createBlog")
-    public ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> createBlog(@RequestBody BlogRequest blogRequest) {
-        return blogService.createBlog(blogRequest);
-    }
-
-    @PostMapping("/getProduct")
-    private ResponseEntity<ResponseObject> searchProducts(@RequestBody SearchProduct searchProduct){
-        return productService.searchProduct(searchProduct);
-    }
-
-
-    @GetMapping("/searchBlog")
-    public ResponseEntity<?> searchBlog(@RequestParam(name = "createdAt",required = false)
-                                        String createdAt,
-                                        @RequestParam(name = "searchValue",required = false)
-                                        String searchValue,
-                                        @RequestParam(name = "orderBy",required = false)
-                                        String orderBy)
-    {
-        List<Blog> syllabusList = blogService.searchBlog(createdAt, searchValue, orderBy);
-        return ResponseEntity.ok(syllabusList);
-    }
 
 
 
-    @PutMapping("/updateBlog/{blogId}")
-    public ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> updateBlog(
-            @PathVariable int blogId,
-            @RequestBody BlogRequest blogRequest) {
-        return blogService.updateBlog(blogId, blogRequest);
-    }
-
-    @DeleteMapping("/deleteBlog/{blogId}")
-    public ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> deleteBlog(@PathVariable int blogId) {
-        return blogService.deleteBlog(blogId);
-    }
 
 
-    @GetMapping("/findBlog/{blogId}")
-    public ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> findBlogById(@PathVariable int blogId) {
-        return blogService.findBlogById(blogId);
-    }
 
-    @GetMapping("/getAllBlog")
-    private ResponseEntity<com.example.securityl.response.BlogResponse.ResponseObject> getAllBlog(){
-        return blogService.findAllBlog();
-    }
+
+
+
+
+
+
+
+
+
+
 
     @GetMapping("/products/search")
     public ResponseEntity<?> searchProducts(

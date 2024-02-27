@@ -94,24 +94,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public List<Blog> searchBlog(String createdAt, String searchValue, String orderBy) {
-        List<Blog> blogList = blogRepository.findAll();
-        if(!Strings.isNullOrEmpty(createdAt)){
-            blogList = blogList.stream().filter(n -> {
-                return new SimpleDateFormat("yyyy-MM-dd").format(n.getCreatedAt()).equals(createdAt);
-            }).collect(Collectors.toList());
-        }
-//        if(!Strings.isNullOrEmpty(searchValue)){
-//            blogList = blogList.stream().filter(n -> n.getBlogId().trim().toLowerCase().contains(searchValue.trim().toLowerCase())
-//                    || n.getTopicCode().trim().toLowerCase().contains(searchValue.trim().toLowerCase())).collect(Collectors.toList());
-//        }
-        if (!Strings.isNullOrEmpty(searchValue)) {
-            String searchRegex = "(?i).*" + searchValue + ".*"; // Ignore case
-            blogList = blogList.stream()
-                    .filter(n -> n.getTitle().matches(searchRegex) || n.getContent().matches(searchRegex))
-                    .collect(Collectors.toList());
-        }
-
-        return blogList;
+        return blogRepository.findBlogsByFilter(createdAt, searchValue, orderBy);
     }
     @Override
     public ResponseEntity<ResponseObject> updateBlog(int blogId, BlogRequest blogRequest) {

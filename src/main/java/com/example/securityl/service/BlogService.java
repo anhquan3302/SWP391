@@ -17,7 +17,7 @@ public interface BlogService {
 //    ResponseObject createBlog(String title, String content);
 
 
-    List<Blog> searchBlog(String createdAt, String searchValue, String orderBy);
+    
 
     ResponseEntity<ResponseObject> updateBlog(int blogId, BlogRequest blogRequest);
 
@@ -34,4 +34,6 @@ public interface BlogService {
     String uploadBImage(MultipartFile file) throws IOException;
 
     ResponseEntity<ResponseObject> createBlog(BlogRequest blogRequest);
+
+    List<Blog> searchBlog(String createdAt, String searchValue, String orderBy);
 }

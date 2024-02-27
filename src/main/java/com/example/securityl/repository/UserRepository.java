@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,4 +22,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 
     User findUsersByEmail(String email);
+
+
+    @Query("SELECT u FROM User u WHERE " +
+            "(:searchValue IS NULL OR LOWER(u.name) LIKE %:searchValue% OR LOWER(u.email) LIKE %:searchValue%) AND " +
+            "(:address IS NULL OR LOWER(u.address) LIKE %:address%) AND " +
+            "(:userId IS NULL OR u.userId = :userId)")
+    List<User> findUsersByFilter(String searchValue, String address, Integer userId);
 }

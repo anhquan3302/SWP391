@@ -214,5 +214,10 @@ public class UserServiceimpl implements UserService {
     public User saveUserForMail(User user) {
         return userRepository.save(user);
     }
+
+    @Override
+    public List<User> searchUserFilter(String searchValue, String address, Integer userId) {
+        return userRepository.findUsersByFilter(searchValue, address, userId);
+    }
 }
 

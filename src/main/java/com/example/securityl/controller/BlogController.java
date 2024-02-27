@@ -26,14 +26,13 @@ public class BlogController {
     }
 
     @GetMapping("/searchBlog")
-    public ResponseEntity<?> searchBlog(@RequestParam(name = "createdAt", required = false)
-                                        String createdAt,
-                                        @RequestParam(name = "searchValue", required = false)
-                                        String searchValue,
-                                        @RequestParam(name = "orderBy", required = false)
-                                        String orderBy) {
-        List<Blog> syllabusList = blogService.searchBlog(createdAt, searchValue, orderBy);
-        return ResponseEntity.ok(syllabusList);
+    public ResponseEntity<?> searchBlog(
+            @RequestParam(name = "createdAt", required = false) String createdAt,
+            @RequestParam(name = "searchValue", required = false) String searchValue,
+            @RequestParam(name = "orderBy", required = false) String orderBy) {
+
+        List<Blog> blogList = blogService.searchBlog(createdAt, searchValue, orderBy);
+        return ResponseEntity.ok(blogList);
     }
 
 

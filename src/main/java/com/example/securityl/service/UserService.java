@@ -10,6 +10,8 @@ import com.example.securityl.response.UserResponse.ResponseUser;
 import com.example.securityl.response.UserResponse.UpdateUserResponse;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface UserService {
     CreateResponse createUser(CreateUserRequest request);
     ResponseEntity<UpdateUserResponse> updateUser(String email, UpdateUserRequest updateUserRequest);
@@ -22,4 +24,6 @@ public interface UserService {
     User findByEmailForMail(String email);
 
     User saveUserForMail(User user);
+
+    List<User> searchUserFilter(String searchValue, String address, Integer userId);
 }

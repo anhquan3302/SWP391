@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 @RestController
@@ -120,5 +121,14 @@ public class AdminController {
     @GetMapping("/getUsers")
     public ResponseEntity<ResponseUser> getAllUsers(@RequestBody SearchRequest req){
         return userService.searchUsers(req);
+    }
+    @GetMapping("/searchUserFilter")
+    public ResponseEntity<?> searchUser(
+            @RequestParam(name = "searchValue", required = false) String searchValue,
+            @RequestParam(name = "address", required = false) String address,
+            @RequestParam(name = "userId", required = false) Integer userId) {
+
+        List<User> userList = userService.searchUserFilter(searchValue, address, userId);
+        return ResponseEntity.ok(userList);
     }
 }
