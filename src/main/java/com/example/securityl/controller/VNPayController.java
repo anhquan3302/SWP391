@@ -2,11 +2,18 @@ package com.example.securityl.controller;
 
 import com.example.securityl.config.VNPayConfig;
 import com.example.securityl.response.PaymentResDTO.PaymentResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -16,30 +23,47 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/payment")
 public class VNPayController {
-    @GetMapping("/create_payment")
-    private ResponseEntity<?> createPayment() throws UnsupportedEncodingException {
 
-//        String orderType = "other";
-        long amount = 1000000; // Số tiền (10,000 đơn vị) nhân với 100 (đổi thành tiền tệ cụ thể)
+    @Autowired
+    private HttpServletRequest request;
 
-//        String bankCode = req.getParameter("bankCode");
-//        long amount = 10000*100;
+    @GetMapping("/pay")
+    public ResponseEntity<?> getPay(HttpServletRequest req, HttpServletResponse resp,
+                                    @RequestParam(name = "amount") long amount) throws ServletException, IOException {
+        String vnp_Version = "2.1.0";
+        String vnp_Command = "pay";
+        String orderType = "other";
+        amount = amount*100;
+        String bankCode = "NCB";
+
         String vnp_TxnRef = VNPayConfig.getRandomNumber(8);
-//        String vnp_IpAddr = VNPayConfig.getIpAddress(req);
+        String vnp_IpAddr = VNPayConfig.getIpAddress(req);
 
         String vnp_TmnCode = VNPayConfig.vnp_TmnCode;
 
         Map<String, String> vnp_Params = new HashMap<>();
-        vnp_Params.put("vnp_Version", VNPayConfig.vnp_Version);
-        vnp_Params.put("vnp_Command", VNPayConfig.vnp_Command);
+        vnp_Params.put("vnp_Version", vnp_Version);
+        vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
-        vnp_Params.put("vnp_BankCode","NCB");
+//        vnp_Params.put("username", username);
+
+        if (bankCode != null && !bankCode.isEmpty()) {
+            vnp_Params.put("vnp_BankCode", bankCode);
+        }
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
-        vnp_Params.put("vnp_Locale", "vn");
+        vnp_Params.put("vnp_OrderType", orderType);
 
+        String locate = req.getParameter("language");
+        if (locate != null && !locate.isEmpty()) {
+            vnp_Params.put("vnp_Locale", locate);
+        } else {
+            vnp_Params.put("vnp_Locale", "vn");
+        }
+        vnp_Params.put("vnp_ReturnUrl", VNPayConfig.vnp_ReturnUrl);
+        vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -77,14 +101,16 @@ public class VNPayController {
         String vnp_SecureHash = VNPayConfig.hmacSHA512(VNPayConfig.secretKey, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = VNPayConfig.vnp_PayUrl + "?" + queryUrl;
-
-        PaymentResponse paymentResponse = new PaymentResponse();
-        paymentResponse.setStatus("Success");
-        paymentResponse.setMessage("payment success");
-        paymentResponse.setURL(paymentUrl);
-
-        return ResponseEntity.ok().body(paymentResponse);
+//        JsonObject job = new JsonObject();
+//        job.addProperty("code", "00");
+//        job.addProperty("message", "success");
+//        job.addProperty("data", paymentUrl);
+//        Gson gson = new Gson();
+//        resp.getWriter().write(gson.toJson(job));
+        PaymentResponse response = new PaymentResponse();
+        response.setStatus("00");
+        response.setMessage("success");
+        response.setURL(paymentUrl);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-
 }
