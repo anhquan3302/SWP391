@@ -244,6 +244,15 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-
+    @Override
+    public List<Products> searchProducts(String materials, String brand, Double price, String color) {
+        if (materials == null && brand == null && price == null && color == null) {
+            // Trả về toàn bộ danh sách sản phẩm nếu không có bộ lọc được áp dụng
+            return productRepository.findAll();
+        } else {
+            // Thực hiện tìm kiếm và áp dụng các bộ lọc
+            return productRepository.findProductsByFilter(materials, brand, price, color);
+        }
+    }
 }
 

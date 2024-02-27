@@ -28,4 +28,6 @@ public interface ProductService  {
     Products getProductById(Integer productId);
 
     ResponseEntity<ResponseObject> getProductByCategory(String categoryName);
+
+    List<Products> searchProducts(String materials, String brand, Double price, String color);
 }

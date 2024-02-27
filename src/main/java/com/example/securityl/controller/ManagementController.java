@@ -1,6 +1,7 @@
 package com.example.securityl.controller;
 
 import com.example.securityl.model.Blog;
+import com.example.securityl.model.Products;
 import com.example.securityl.request.BlogRequest.BlogRequest;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.request.ProductRequest.SearchProduct;
@@ -131,5 +132,14 @@ public class ManagementController {
         return blogService.findAllBlog();
     }
 
-
+    @GetMapping("/products/search")
+    public ResponseEntity<?> searchProducts(
+            @RequestParam(name = "materials", required = false) String materials,
+            @RequestParam(name = "brand", required = false) String brand,
+            @RequestParam(name = "price", required = false) Double price,
+            @RequestParam(name = "color", required = false) String color
+    ) {
+        List<Products> productList = productService.searchProducts(materials, brand, price, color);
+        return ResponseEntity.ok(productList);
+    }
 }
