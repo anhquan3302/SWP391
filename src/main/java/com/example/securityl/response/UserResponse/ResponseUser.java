@@ -15,5 +15,5 @@ import java.util.List;
 public class ResponseUser {
     private String status;
     private String message;
-    private List<User> userList;
+    private List<UserResponse> userList;
 }

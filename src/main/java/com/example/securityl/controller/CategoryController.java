@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/management")
+@RequestMapping("/api/v1/category")
 @PreAuthorize("hasAnyRole('USER','ADMIN','STAFF')")
 @CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
 public class CategoryController {
@@ -43,5 +43,10 @@ public class CategoryController {
     private ResponseEntity<ResponseObject> updateCategory(@PathVariable Integer categoryId,
                                                           @RequestBody RequestCategory requestCategory){
        return categoryService.updateCategory(categoryId,requestCategory);
+    }
+
+    @DeleteMapping("/deleteCategory/{categoryId}")
+    private ResponseEntity<ResponseObject> deleteCategory(@PathVariable Integer categoryId){
+        return categoryService.deleteCategory(categoryId);
     }
 }

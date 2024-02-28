@@ -1,5 +1,6 @@
 package com.example.securityl.response.UserResponse;
 
+import com.example.securityl.model.Enum.Role;
 import com.example.securityl.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,5 +14,7 @@ import lombok.NoArgsConstructor;
 public class CreateResponse {
     private String status;
     private String message;
-    private User user;
+    private UserResponse userResponse;
 }
+
+

@@ -43,14 +43,14 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
                         .name(name)
                         .email(email)
                         .address(address)
-                        .role(Role.USER)
+                        .role(Role.user)
                         .build();
 
                 User savedUser = userRepository.save(newUser);
                 String jwtToken = jwtService.generateToken(savedUser);
 
                 AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
-                        .staus("Success")
+                        .status("Success")
                         .messages("Register success")
                         .token(jwtToken)
                         .build();
@@ -62,7 +62,7 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
                 String jwtToken = jwtService.generateToken(existingUser);
 
                 AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
-                        .staus("Success")
+                        .status("Success")
                         .messages("Login success")
                         .token(jwtToken)
                         .build();

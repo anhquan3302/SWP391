@@ -12,7 +12,7 @@ import static com.example.securityl.model.Enum.Permission.*;
 
 @RequiredArgsConstructor
 public enum Role {
-    USER(
+    user(
             Set.of(
                     USER_VIEW,
                     USER_CREATE,
@@ -21,7 +21,7 @@ public enum Role {
 
             )
     ),
-    ADMIN(
+    admin(
             Set.of(
                     ADMIN_VIEW,
                     ADMIN_CREATE,
@@ -34,7 +34,7 @@ public enum Role {
 
             )
     ),
-    STAFF(
+    staff(
             Set.of(
                     STAFF_VIEW,
                     STAFF_CREATE,

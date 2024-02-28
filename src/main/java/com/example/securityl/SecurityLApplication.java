@@ -54,9 +54,20 @@ public class SecurityLApplication {
                     .phone("0937534654")
                     .email("admin@gmail.com")
                     .password("admin")
-                    .role(Role.ADMIN)
+                    .role(Role.admin)
                     .build();
             service.register(adminRequest);
+
+
+            RegisterRequest staff = RegisterRequest.builder()
+                    .name("Staff")
+                    .address("Viet Nam")
+                    .phone("0937534654")
+                    .email("staff@gmail.com")
+                    .password("staff")
+                    .role(Role.admin)
+                    .build();
+            service.register(staff);
             User adminUser = userService.findByEmailForMail(adminRequest.getEmail());
 
 

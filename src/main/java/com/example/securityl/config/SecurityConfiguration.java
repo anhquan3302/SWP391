@@ -15,8 +15,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 
 import static com.example.securityl.model.Enum.Permission.*;
-import static com.example.securityl.model.Enum.Role.ADMIN;
-import static com.example.securityl.model.Enum.Role.STAFF;
+import static com.example.securityl.model.Enum.Role.*;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -40,11 +39,21 @@ public class SecurityConfiguration {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/shoppingCart").permitAll()
-                        .requestMatchers("/api/v1/managemnet/**").hasAnyRole(ADMIN.name(), STAFF.name())
-                        .requestMatchers(GET, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_VIEW.name(), STAFF_VIEW.name())
-                        .requestMatchers(POST, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_CREATE.name(), STAFF_CREATE.name())
-                        .requestMatchers(PUT, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_UPDATE.name(), STAFF_UPDATE.name())
-                        .requestMatchers(DELETE, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_DELETE.name(), STAFF_DELETE.name())
+                        .requestMatchers("/api/v1/home/**").permitAll()
+                        .requestMatchers("/api/v1/feedBack/**").permitAll()
+                        .requestMatchers("api/v1/vnpay/**").permitAll()
+
+                        .requestMatchers("/api/v1/blog/**").hasAnyRole(admin.name(), staff.name())
+                        .requestMatchers("/api/v1/category/**").hasAnyRole(admin.name(), staff.name())
+                        .requestMatchers("/api/v1/product/**").hasAnyRole(admin.name(),staff.name())
+                        .requestMatchers("/api/v1/voucher/**").hasAnyRole(admin.name(),staff.name())
+
+
+//                        .requestMatchers("/api/v1/managemnet/**").hasAnyRole(admin.name(), staff.name())
+//                        .requestMatchers(GET, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_VIEW.name(), STAFF_VIEW.name())
+//                        .requestMatchers(POST, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_CREATE.name(), STAFF_CREATE.name())
+//                        .requestMatchers(PUT, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_UPDATE.name(), STAFF_UPDATE.name())
+//                        .requestMatchers(DELETE, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_DELETE.name(), STAFF_DELETE.name())
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

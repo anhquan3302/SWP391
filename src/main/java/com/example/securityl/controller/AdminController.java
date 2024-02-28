@@ -2,7 +2,7 @@ package com.example.securityl.controller;
 
 
 import com.example.securityl.model.User;
-import com.example.securityl.request.UserRequest.CreateUserRequest;
+import com.example.securityl.request.UserRequest.UserRequest;
 import com.example.securityl.request.UserRequest.SearchRequest;
 import com.example.securityl.request.UserRequest.UpdateUserRequest;
 import com.example.securityl.response.UserResponse.*;
@@ -35,14 +35,14 @@ public class AdminController {
 
     @PostMapping("/createUser")
     @PreAuthorize("hasAuthority('admin:create')")
-    public ResponseEntity<CreateResponse> create(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<CreateResponse> create(@RequestBody UserRequest request) {
         try {
             return ResponseEntity.ok(userService.createUser(request));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(CreateResponse.builder()
                     .status("Create staff fail")
                     .message(e.getMessage())
-                    .user(null)
+                    .userResponse(null)
                     .build());
         }
     }
@@ -99,7 +99,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<ResponseObject> geUserById(@PathVariable Integer id) {
         try {
-            User user = userService.getUser(id);
+            UserResponse user = userService.getUser(id);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status("Success")
                     .message("Find user")

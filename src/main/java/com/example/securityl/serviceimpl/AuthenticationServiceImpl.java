@@ -114,9 +114,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         revokeAllUsserTokens(user);
         saveToken(user, jwtToken);
         return AuthenticationResponse.builder()
-                .staus("Success")
+                .status("Success")
                 .messages("Login success")
-                .userLogin(user)
+                .userId(user.getUserId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .role(user.getRole())
                 .token(jwtToken)
                 .refeshToken(refreshToken)
                 .build();
@@ -142,7 +145,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 revokeAllUsserTokens(user);
                 saveToken(user, newToken);
                 var authResponse = AuthenticationResponse.builder()
-                        .staus("Success")
+                        .status("Success")
                         .messages("New token")
                         .token(newToken)
                         .refeshToken(refreshToken)

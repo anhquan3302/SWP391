@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 
 public class LoginGoogleResponse {
-    private String staus;
+    private String status;
     private String messages;
     @JsonProperty("token")
     private String token;

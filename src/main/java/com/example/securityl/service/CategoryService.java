@@ -17,4 +17,6 @@ public interface CategoryService {
     List<Category> findCategoryById(Integer categoryId);
 
     ResponseEntity<ResponseObject> updateCategory(Integer categoryId, RequestCategory requestCategory);
+
+    ResponseEntity<ResponseObject> deleteCategory(Integer categoryId);
 }

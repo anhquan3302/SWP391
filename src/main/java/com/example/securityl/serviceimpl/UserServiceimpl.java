@@ -4,12 +4,9 @@ import com.example.securityl.request.UserRequest.SearchRequest;
 import com.example.securityl.model.Enum.Role;
 import com.example.securityl.model.User;
 import com.example.securityl.repository.UserRepository;
-import com.example.securityl.request.UserRequest.CreateUserRequest;
+import com.example.securityl.request.UserRequest.UserRequest;
 import com.example.securityl.request.UserRequest.UpdateUserRequest;
-import com.example.securityl.response.UserResponse.CreateResponse;
-import com.example.securityl.response.UserResponse.DeleteResponse;
-import com.example.securityl.response.UserResponse.ResponseUser;
-import com.example.securityl.response.UserResponse.UpdateUserResponse;
+import com.example.securityl.response.UserResponse.*;
 import com.example.securityl.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,24 +32,24 @@ public class UserServiceimpl implements UserService {
     Pattern pattern = Pattern.compile(emailRegex);
 
     @Override
-    public CreateResponse createUser(CreateUserRequest request) {
+    public CreateResponse createUser(UserRequest request) {
         String token = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
                 .getRequest().getHeader("Authorization").substring(7);
         String userEmail = jwtService.extractUsername(token);
         var requester = userRepository.findUserByEmail(userEmail).orElse(null);
         assert requester != null;
-        if (!requester.getRole().equals(Role.ADMIN)) {
+        if (!requester.getRole().equals(Role.admin)) {
             return CreateResponse.builder()
                     .status("Create fail")
                     .message("You are not authorized as an admin ")
-                    .user(null)
+                    .userResponse(null)
                     .build();
         }
         if (request.getPhone() == null || request.getPhone().length() != 10) {
             return CreateResponse.builder()
                     .status("Create fail")
                     .message("Phone is not valid. Please provide a valid 10-digit phone number.")
-                    .user(null)
+                    .userResponse(null)
                     .build();
         }
         Matcher matcher = pattern.matcher(request.getEmail());
@@ -61,7 +58,7 @@ public class UserServiceimpl implements UserService {
                     .builder()
                     .status("Create fail")
                     .message("Email is not valid")
-                    .user(null)
+                    .userResponse(null)
                     .build();
         }
 
@@ -71,7 +68,7 @@ public class UserServiceimpl implements UserService {
                 .address(request.getAddress())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
+                .role(Role.staff)
                 .status(true)
                 .build();
         var existedEmail = userRepository.findByEmail(user.getEmail()).orElse(null);
@@ -80,16 +77,30 @@ public class UserServiceimpl implements UserService {
             return CreateResponse.builder()
                     .status("Success")
                     .message("Create success")
-                    .user(user)
+                    .userResponse(convertToUserResponse(user))
                     .build();
         } else {
             return CreateResponse.builder()
                     .status("Create fail")
                     .message("Account existed")
-                    .user(null)
+                    .userResponse(null)
                     .build();
         }
     }
+
+    private UserResponse convertToUserResponse(User user) {
+        return UserResponse.builder()
+                .userId(user.getUserId())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .name(user.getName())
+                .address(user.getAddress())
+                .role(user.getRole())
+                .status(user.isStatus())
+                .build();
+
+    }
+
 
     @Override
     public ResponseEntity<UpdateUserResponse> updateUser(String email, UpdateUserRequest updateUserRequest) {
@@ -116,7 +127,7 @@ public class UserServiceimpl implements UserService {
             String userEmail = jwtService.extractUsername(token);
             var requester = userRepository.findUserByEmail(userEmail).orElse(null);
             assert requester != null;
-            if (requester.getRole().equals(Role.ADMIN)) {
+            if (requester.getRole().equals(Role.admin)) {
                 user.setRole(updateUserRequest.getRole());
             }
             user.setStatus(updateUserRequest.isStatus());
@@ -155,25 +166,23 @@ public class UserServiceimpl implements UserService {
     }
 
     @Override
-    public User getUser(Integer userId) {
-        // Thực hiện truy vấn để lấy thông tin người dùng từ cơ sở dữ liệu
-        Optional<User> userOptional = userRepository.findById(userId);
-
-        // Kiểm tra xem người dùng có tồn tại không
-        if (userOptional.isPresent()) {
-            return userOptional.get();
-        } else {
-            // Nếu không tìm thấy người dùng, trả về null hoặc xử lý theo cách phù hợp
-            return null;
+    public UserResponse getUser(Integer userId) {
+        var userOptional = userRepository.findById(userId).orElse(null);
+        if (userOptional != null) {
+            return convertToUserResponse(userOptional);
         }
+        return null;
     }
+
 
 
     @Override
     public ResponseEntity<ResponseUser> findAllUser() {
         try {
             List<User> userList = userRepository.findAll();
-            return ResponseEntity.ok(new ResponseUser("Success","List users", userList));
+            List<UserResponse> userResponseList = convertToUserResponseList(userList);
+
+            return ResponseEntity.ok(new ResponseUser("Success","List users", userResponseList));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseUser.builder()
                             .status("Fail")
@@ -184,6 +193,15 @@ public class UserServiceimpl implements UserService {
 
 
     }
+
+    private List<UserResponse> convertToUserResponseList(List<User> userList) {
+        List<UserResponse> userResponseList = new ArrayList<>();
+        for (User user : userList) {
+            userResponseList.add(convertToUserResponse(user));
+        }
+        return userResponseList;
+    }
+
 
     @Override
     public ResponseEntity<ResponseUser> searchUsers(SearchRequest req) {
@@ -200,7 +218,7 @@ public class UserServiceimpl implements UserService {
             if(req.getEmail() != null && !req.getEmail().trim().isEmpty()){
                 userList = userList.stream().filter(n -> n.getEmail().contains(req.getEmail())).toList();
             }
-            return ResponseEntity.ok(new ResponseUser("Success","List users", userList));
+            return ResponseEntity.ok(new ResponseUser("Success","List users", convertToUserResponseList(userList)));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseUser.builder()
                     .status("Fail")

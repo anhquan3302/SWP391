@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/managementFeedBack")
+@RequestMapping("/api/v1/feedBack")
 public class FeedBackController {
 
 

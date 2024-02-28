@@ -54,4 +54,9 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.save(category);
         return ResponseEntity.ok(new ResponseObject("Success", "Category updated successfully", category));
     }
+
+    @Override
+    public ResponseEntity<ResponseObject> deleteCategory(Integer categoryId) {
+        return null;
+    }
 }
