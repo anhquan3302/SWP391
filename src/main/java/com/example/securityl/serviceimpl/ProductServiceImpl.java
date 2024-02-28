@@ -46,20 +46,20 @@ public class ProductServiceImpl implements ProductService {
             String userEmail = jwtService.extractUsername(token);
             var requester = userRepository.findUserByEmail(userEmail).orElse(null);
             if (requester == null || !(requester.getRole().equals(Role.STAFF) || requester.getRole().equals(Role.ADMIN))) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new CreateProductResponse("Fail", "Unauthorized"));
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new CreateProductResponse("Fail", "Unauthorized",null));
             }
             if (size == null || size.trim().isEmpty() || productName == null || productName.trim().isEmpty() || description == null || description.trim().isEmpty() || title == null || title.trim().isEmpty() || price <= 0) {
-                return ResponseEntity.badRequest().body(new CreateProductResponse("Fail", "Invalid request body"));
+                return ResponseEntity.badRequest().body(new CreateProductResponse("Fail", "Invalid request body",null));
             }
             if(quantity <= 0 || quantity > 10){
-                return ResponseEntity.status(400).body(new CreateProductResponse("Fail","Quantity does not exist"));
+                return ResponseEntity.status(400).body(new CreateProductResponse("Fail","Quantity does not exist",null));
             }
             if (!(requester.getRole().equals(Role.ADMIN) || requester.getRole().equals(Role.STAFF))) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new CreateProductResponse("Fail", "Forbidden"));
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new CreateProductResponse("Fail", "Forbidden",null));
             }
             Category category = categoryRepository.findById(categoryId).orElse(null);
             if (category == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CreateProductResponse("Fail", "Category not found"));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CreateProductResponse("Fail", "Category not found",null));
             }
             Category category1 = categoryRepository.findById(categoryId).orElse(null);
             List<Category> categoryList = new ArrayList<>();
@@ -83,9 +83,9 @@ public class ProductServiceImpl implements ProductService {
                     .user(userRepository.findUserIdByEmail(userEmail))
                     .build();
             Product savedProduct = productRepository.save(product);
-            return ResponseEntity.ok(new CreateProductResponse("Success", "Product created successfully"));
+            return ResponseEntity.ok(new CreateProductResponse("Success", "Product created successfully",savedProduct));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CreateProductResponse("Fail", "Internal server error"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CreateProductResponse("Fail", "Internal server error",null));
         }
     }
 
