@@ -3,14 +3,15 @@ package com.example.securityl.serviceimpl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.securityl.model.Category;
-import com.example.securityl.model.CategoryProduct;
+
 import com.example.securityl.model.Enum.Role;
 import com.example.securityl.model.ImageProduct;
-import com.example.securityl.model.Products;
+import com.example.securityl.model.Product;
 import com.example.securityl.repository.*;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.request.ProductRequest.SearchProduct;
 import com.example.securityl.response.ObjectResponse.ResponseObject;
+import com.example.securityl.response.ProductResponse.CreateProductResponse;
 import com.example.securityl.service.JwtService;
 import com.example.securityl.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
@@ -31,11 +32,11 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final JwtService jwtService;
     private final UserRepository userRepository;
-    private final CategoryProductRepository categoryProductRepository;
     private final Cloudinary cloudinary;
     private final CategoryRepository categoryRepository;
 
-    public ResponseEntity<ResponseObject> createProduct(String productName, String title, String description, double discount, String color, String size, double price, String material, String thumbnail, Integer quantity, String brand,boolean favorite, Integer categoryId) {
+    @Override
+    public ResponseEntity<CreateProductResponse> createProduct(String productName, String title, String description, double discount, String color, String size, double price, String material, String thumbnail, Integer quantity, String brand, boolean favorite, Integer categoryId) {
         try {
             Date date = new Date();
             String token = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
@@ -45,23 +46,25 @@ public class ProductServiceImpl implements ProductService {
             String userEmail = jwtService.extractUsername(token);
             var requester = userRepository.findUserByEmail(userEmail).orElse(null);
             if (requester == null || !(requester.getRole().equals(Role.STAFF) || requester.getRole().equals(Role.ADMIN))) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseObject("Fail", "Unauthorized", null));
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new CreateProductResponse("Fail", "Unauthorized"));
             }
             if (size == null || size.trim().isEmpty() || productName == null || productName.trim().isEmpty() || description == null || description.trim().isEmpty() || title == null || title.trim().isEmpty() || price <= 0) {
-                return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Invalid request body", null));
+                return ResponseEntity.badRequest().body(new CreateProductResponse("Fail", "Invalid request body"));
             }
             if(quantity <= 0 || quantity > 10){
-                return ResponseEntity.status(400).body(new ResponseObject("Fail","Quantity does not exist",null));
+                return ResponseEntity.status(400).body(new CreateProductResponse("Fail","Quantity does not exist"));
             }
             if (!(requester.getRole().equals(Role.ADMIN) || requester.getRole().equals(Role.STAFF))) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ResponseObject("Fail", "Forbidden", null));
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new CreateProductResponse("Fail", "Forbidden"));
             }
             Category category = categoryRepository.findById(categoryId).orElse(null);
             if (category == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("Fail", "Category not found", null));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CreateProductResponse("Fail", "Category not found"));
             }
-            List<Category> categoryList = Collections.singletonList(category);
-            Products product = Products.builder()
+            Category category1 = categoryRepository.findById(categoryId).orElse(null);
+            List<Category> categoryList = new ArrayList<>();
+            categoryList.add(category1);
+            Product product = Product.builder()
                     .thumbnail(thumbnail)
                     .productName(productName.trim())
                     .description(description.trim())
@@ -76,18 +79,13 @@ public class ProductServiceImpl implements ProductService {
                     .brand(brand)
                     .quantity(quantity)
                     .favorite(favorite)
-                    .categories(categoryList)
+                    .categories(categoryList.stream().toList())
                     .user(userRepository.findUserIdByEmail(userEmail))
                     .build();
-            Products savedProduct = productRepository.save(product);
-            CategoryProduct categoryProduct = CategoryProduct.builder()
-                    .product(product)
-                    .category(category)
-                    .build();
-            categoryProductRepository.save(categoryProduct);
-            return ResponseEntity.ok(new ResponseObject("Success", "Product created successfully", savedProduct));
+            Product savedProduct = productRepository.save(product);
+            return ResponseEntity.ok(new CreateProductResponse("Success", "Product created successfully"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseObject("Fail", "Internal server error", null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CreateProductResponse("Fail", "Internal server error"));
         }
     }
 
@@ -154,7 +152,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Products getProductById(Integer productId) {
+    public Product getProductById(Integer productId) {
         try {
             return productRepository.findProductByProductId(productId).orElse(null);
         } catch (Exception e) {
@@ -163,15 +161,15 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-    @Override
-    public ResponseEntity<ResponseObject> getProductByCategory(String categoryName) {
-        List<Products> productsList = productRepository.findAllByCategoryName(categoryName);
-        if (productsList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("Fail", "No products found for category: " + categoryName, null));
-        } else {
-            return ResponseEntity.ok(new ResponseObject("Success", "Products found for category: " + categoryName, productsList));
-        }
-    }
+//    @Override
+//    public ResponseEntity<ResponseObject> getProductByCategory(String categoryName) {
+//        List<Products> productsList = productRepository.findAllByCategoryName(categoryName);
+//        if (productsList.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("Fail", "No products found for category: " + categoryName, null));
+//        } else {
+//            return ResponseEntity.ok(new ResponseObject("Success", "Products found for category: " + categoryName, productsList));
+//        }
+//    }
 
 
     @Override
@@ -208,7 +206,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void uploadProductImage(Integer productId, List<String> imageUrls) {
         try {
-            Products product = productRepository.findById(productId)
+            Product product = productRepository.findById(productId)
                     .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId));
             List<ImageProduct> imageProducts = new ArrayList<>();
             for (String imageUrl : imageUrls) {
@@ -227,8 +225,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResponseEntity<ResponseObject> searchProduct(SearchProduct searchProduct) {
         try {
-            List<Products> productsList = productRepository.findAll();
-            List<Products> showProduct = new ArrayList<>();
+            List<Product> productsList = productRepository.findAll();
+            List<Product> showProduct = new ArrayList<>();
             if (searchProduct.getProductId() != null) {
                 showProduct = productsList.stream()
                         .filter(n -> n.getProductId() == searchProduct.getProductId())
@@ -246,7 +244,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Products> searchProducts(String materials, String brand, Double price, String color) {
+    public List<Product> searchProducts(String materials, String brand, Double price, String color) {
         if (materials == null && brand == null && price == null && color == null) {
             // Trả về toàn bộ danh sách sản phẩm nếu không có bộ lọc được áp dụng
             return productRepository.findAll();
@@ -256,7 +254,7 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    public List<Products> searchProductsVer2(String materials, String brand, Double minPrice, Double maxPrice, String color) {
+    public List<Product> searchProductsVer2(String materials, String brand, Double minPrice, Double maxPrice, String color) {
 
             return productRepository.findProductsByFilter2(materials, brand, minPrice, maxPrice, color);
 

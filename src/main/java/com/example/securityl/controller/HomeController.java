@@ -1,6 +1,6 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.model.Products;
+import com.example.securityl.model.Product;
 import com.example.securityl.request.ProductRequest.SearchProduct;
 import com.example.securityl.response.ObjectResponse.ResponseObject;
 import com.example.securityl.service.ProductService;
@@ -18,13 +18,13 @@ public class HomeController {
         return productService.getAll();
     }
 
-    @GetMapping("/getListProductByCategory")
-    private ResponseEntity<ResponseObject> getProductByCategoryName(@RequestParam String name) {
-        return productService.getProductByCategory(name);
-    }
+//    @GetMapping("/getListProductByCategory")
+//    private ResponseEntity<ResponseObject> getProductByCategoryName(@RequestParam String name) {
+//        return productService.getProductByCategory(name);
+//    }
 
     @GetMapping("/getProductById/{productId}")
-    private Products getProductById(@PathVariable Integer productId){
+    private Product getProductById(@PathVariable Integer productId){
         return productService.getProductById(productId);
     }
 

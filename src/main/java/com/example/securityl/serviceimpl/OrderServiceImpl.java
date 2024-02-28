@@ -64,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
         // Lưu chi tiết đơn hàng
         for (CartItem cartItem : cartItems) {
             Integer productId = cartItem.getProductId();
-            Products product = productRepository.findById(productId).orElse(null);
+            Product product = productRepository.findById(productId).orElse(null);
             if (product == null) {
                 throw new RuntimeException("Product with ID " + productId + " is not found");
             }

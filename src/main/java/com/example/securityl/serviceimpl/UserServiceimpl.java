@@ -45,12 +45,14 @@ public class UserServiceimpl implements UserService {
             return CreateResponse.builder()
                     .status("Create fail")
                     .message("You are not authorized as an admin ")
+                    .user(null)
                     .build();
         }
         if (request.getPhone() == null || request.getPhone().length() != 10) {
             return CreateResponse.builder()
                     .status("Create fail")
                     .message("Phone is not valid. Please provide a valid 10-digit phone number.")
+                    .user(null)
                     .build();
         }
         Matcher matcher = pattern.matcher(request.getEmail());
@@ -59,6 +61,7 @@ public class UserServiceimpl implements UserService {
                     .builder()
                     .status("Create fail")
                     .message("Email is not valid")
+                    .user(null)
                     .build();
         }
 
@@ -77,11 +80,13 @@ public class UserServiceimpl implements UserService {
             return CreateResponse.builder()
                     .status("Success")
                     .message("Create success")
+                    .user(user)
                     .build();
         } else {
             return CreateResponse.builder()
                     .status("Create fail")
                     .message("Account existed")
+                    .user(null)
                     .build();
         }
     }

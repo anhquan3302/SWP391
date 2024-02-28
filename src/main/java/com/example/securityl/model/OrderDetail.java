@@ -34,7 +34,7 @@ public class OrderDetail {
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "product_id")
-    private Products product;
+    private Product product;
 
     @ManyToOne
     @JsonBackReference

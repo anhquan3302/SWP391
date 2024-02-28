@@ -5,11 +5,7 @@ import com.example.securityl.model.User;
 import com.example.securityl.request.UserRequest.CreateUserRequest;
 import com.example.securityl.request.UserRequest.SearchRequest;
 import com.example.securityl.request.UserRequest.UpdateUserRequest;
-import com.example.securityl.response.UserResponse.ResponseObject;
-import com.example.securityl.response.UserResponse.CreateResponse;
-import com.example.securityl.response.UserResponse.DeleteResponse;
-import com.example.securityl.response.UserResponse.ResponseUser;
-import com.example.securityl.response.UserResponse.UpdateUserResponse;
+import com.example.securityl.response.UserResponse.*;
 import com.example.securityl.serviceimpl.UserServiceimpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +42,7 @@ public class AdminController {
             return ResponseEntity.badRequest().body(CreateResponse.builder()
                     .status("Create staff fail")
                     .message(e.getMessage())
+                    .user(null)
                     .build());
         }
     }
@@ -119,9 +116,10 @@ public class AdminController {
     }
 
     @GetMapping("/getUsers")
-    public ResponseEntity<ResponseUser> getAllUsers(@RequestBody SearchRequest req){
+    public ResponseEntity<ResponseUser> getAllUsers(@RequestBody SearchRequest req) {
         return userService.searchUsers(req);
     }
+
     @GetMapping("/searchUserFilter")
     public ResponseEntity<?> searchUser(
             @RequestParam(name = "searchValue", required = false) String searchValue,

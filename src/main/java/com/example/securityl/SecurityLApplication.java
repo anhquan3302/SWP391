@@ -3,11 +3,9 @@ package com.example.securityl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.securityl.model.Category;
-import com.example.securityl.model.CategoryProduct;
 import com.example.securityl.model.Enum.Role;
-import com.example.securityl.model.Products;
+import com.example.securityl.model.Product;
 import com.example.securityl.model.User;
-import com.example.securityl.repository.CategoryProductRepository;
 import com.example.securityl.repository.CategoryRepository;
 import com.example.securityl.repository.ProductRepository;
 import com.example.securityl.request.UserRequest.RegisterRequest;
@@ -19,6 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,7 +44,6 @@ public class SecurityLApplication {
             AuthenticationService service,
             ProductRepository productRepository,
             CategoryRepository categoryRepository,
-            CategoryProductRepository categoryProductRepository,
             UserService userService
     ) {
         return args -> {
@@ -62,7 +60,7 @@ public class SecurityLApplication {
             User adminUser = userService.findByEmailForMail(adminRequest.getEmail());
 
 
-            Products product2 = Products.builder()
+            Product product2 = Product.builder()
                     .productName("Bed")
                     .title("Japanese-style box bed GN-26")
                     .price(240000)
@@ -80,8 +78,43 @@ public class SecurityLApplication {
                     .thumbnail("https://bizweb.dktcdn.net/100/467/207/products/screenshot-2023-09-22-121711.jpg?v=1696500727497")
                     .build();
             productRepository.save(product2);
-
-            Products product = Products.builder()
+            Product product4 = Product.builder()
+                    .productName("Bon tam")
+                    .title("Bon tam thong minh 2024")
+                    .price(210000)
+                    .size("693Dx380Wx765D")
+                    .color("white")
+                    .materials("Su")
+                    .description("THE INSIDE Traditional Accent Sofa,Espresso")
+                    .createdAt(dateFormat.parse("2024-03-24"))
+                    .updatedAt(new Date())
+                    .discount(0)
+                    .quantity(7)
+                    .brand("USA")
+                    .favorite(false)
+                    .user(adminUser)
+                    .thumbnail("http://res.cloudinary.com/dxorh7ue1/image/upload/v1708794717/qk4x9tvqxv0fjdtaio6k.jpg")
+                    .build();
+            productRepository.save(product4);
+            Product product3 = Product.builder()
+                    .productName("Toilet")
+                    .title("Toilet thong minh 2024")
+                    .price(110000)
+                    .size("693Dx380Wx765D")
+                    .color("white")
+                    .materials("Su")
+                    .description("THE INSIDE Traditional Accent Sofa,Espresso")
+                    .createdAt(dateFormat.parse("2024-02-24"))
+                    .updatedAt(new Date())
+                    .discount(10)
+                    .quantity(7)
+                    .brand("USA")
+                    .favorite(true)
+                    .user(adminUser)
+                    .thumbnail("http://res.cloudinary.com/dxorh7ue1/image/upload/v1708794717/qk4x9tvqxv0fjdtaio6k.jpg")
+                    .build();
+            productRepository.save(product3);
+            Product product = Product.builder()
                     .productName("DOUBLE SOFA")
                     .title("Sofa phong khach 2024")
                     .price(120000)
@@ -99,9 +132,23 @@ public class SecurityLApplication {
                     .thumbnail("http://res.cloudinary.com/dxorh7ue1/image/upload/v1708794717/qk4x9tvqxv0fjdtaio6k.jpg")
                     .build();
             productRepository.save(product);
-            List<Products> productList = productRepository.findAll();
-
-
+            List<Product> listNhaTam = new ArrayList<>();
+            listNhaTam.add(product3);
+            listNhaTam.add(product4);
+            productRepository.saveAll(listNhaTam);
+            List<Product> productList = productRepository.findAll();
+            Category category = Category.builder()
+                    .name("Noi that phong khach")
+                    .description("Noi that phong khach")
+                    .products(productList)
+                    .build();
+            categoryRepository.save(category);
+            Category category2 = Category.builder()
+                    .name("Noi that nha tam")
+                    .description("Noi that nha tam 2024")
+                    .products(listNhaTam)
+                    .build();
+            categoryRepository.save(category2);
         };
     }
 

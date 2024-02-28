@@ -1,13 +1,9 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.model.Blog;
-import com.example.securityl.model.Products;
-import com.example.securityl.request.BlogRequest.BlogRequest;
+import com.example.securityl.model.Product;
 import com.example.securityl.request.ProductRequest.RequestObject;
-import com.example.securityl.request.ProductRequest.SearchProduct;
 import com.example.securityl.response.ObjectResponse.ResponseObject;
-import com.example.securityl.service.BlogService;
-import com.example.securityl.service.CategoryProductService;
+import com.example.securityl.response.ProductResponse.CreateProductResponse;
 import com.example.securityl.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,14 +22,13 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
 public class ManagementController {
     private final ProductService productService;
-    private final CategoryProductService categoryProductService;
 
 
 
 
 
     @PostMapping("/createProduct")
-    public ResponseEntity<ResponseObject> createProduct(
+    public ResponseEntity<CreateProductResponse> createProduct(
                                                         @RequestParam("productName") String productName,
                                                         @RequestParam("title") String title,
                                                         @RequestParam("description") String description,
@@ -93,7 +88,7 @@ public class ManagementController {
             @RequestParam(name = "price", required = false) Double price,
             @RequestParam(name = "color", required = false) String color
     ) {
-        List<Products> productList = productService.searchProducts(materials, brand, price, color);
+        List<Product> productList = productService.searchProducts(materials, brand, price, color);
         return ResponseEntity.ok(productList);
     }
 
@@ -106,7 +101,7 @@ public class ManagementController {
             @RequestParam(name = "maxPrice", required = false) Double maxPrice,
             @RequestParam(name = "color", required = false) String color
     ) {
-        List<Products> productList = productService.searchProductsVer2(materials, brand, minPrice, maxPrice, color);
+        List<Product> productList = productService.searchProductsVer2(materials, brand, minPrice, maxPrice, color);
         return ResponseEntity.ok(productList);
     }
 
