@@ -255,5 +255,14 @@ public class ProductServiceImpl implements ProductService {
             return productRepository.findProductsByFilter(materials, brand, price, color);
         }
     }
+
+    public List<Products> searchProductsVer2(String materials, String brand, Double minPrice, Double maxPrice, String color) {
+
+            return productRepository.findProductsByFilter2(materials, brand, minPrice, maxPrice, color);
+
+
+    }
+
+
 }
 

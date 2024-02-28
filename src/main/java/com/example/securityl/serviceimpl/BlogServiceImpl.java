@@ -147,11 +147,7 @@ public class BlogServiceImpl implements BlogService {
         return ResponseEntity.ok().body(new ResponseObject("Success","List blog",blogAll));
     }
 
-//    @Override
-//    public Page<Blog> findPaginated(int page, int size) {
-//        Pageable pageable = PageRequest.of(pageNo, pageSize);
-//        return this.blogRepository.findAll(pageable);
-//    }
+
 
     @Override
     public void uploadBlogImage(Integer blogId, List<String> imageUrls) {
