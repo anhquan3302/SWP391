@@ -116,6 +116,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return AuthenticationResponse.builder()
                 .staus("Success")
                 .messages("Login success")
+                .userLogin(user)
                 .token(jwtToken)
                 .refeshToken(refreshToken)
                 .build();
