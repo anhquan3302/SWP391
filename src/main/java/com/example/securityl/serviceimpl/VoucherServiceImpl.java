@@ -31,7 +31,6 @@ public class VoucherServiceImpl implements VoucherService {
             if (voucherRepository.existsByVoucherCode(voucherRequest.getVoucherCode())) {
                 return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Duplicate voucher code", null));
             }
-
             double discountPercentage = 0;
             if(voucherRequest.getTotalPrice() >= 5000 && voucherRequest.getTotalPrice() < 10000){
                 discountPercentage = 10;
@@ -39,7 +38,6 @@ public class VoucherServiceImpl implements VoucherService {
             else if (voucherRequest.getTotalPrice() >= 10000) {
                 discountPercentage = 20;
             }
-
             voucher = Voucher.builder()
                     .voucherCode(voucherRequest.getVoucherCode())
                     .discountPercentage(discountPercentage)

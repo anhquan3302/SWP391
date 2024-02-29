@@ -76,24 +76,6 @@ public class AdminController {
         }
     }
 
-//    @GetMapping("/findAll/{email}")
-//    @PreAuthorize("hasAuthority('admin:read')")
-//    public ResponseEntity<ResponseUser> getAll(@PathVariable String email) {
-//        try {
-//            List<User> list = userService.getList(email);
-//            return ResponseEntity.ok(ResponseUser.builder()
-//                    .status("Success")
-//                    .message("Get All User")
-//                    .userList(list)
-//                    .build());
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(ResponseUser.builder()
-//                    .status("Fail")
-//                    .message(e.getMessage())
-//                    .userList(null)
-//                    .build());
-//        }
-//    }
 
     @GetMapping("/findUserById/{id}")
     @PreAuthorize("hasAuthority('admin:read')")

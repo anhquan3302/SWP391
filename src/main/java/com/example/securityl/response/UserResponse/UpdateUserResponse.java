@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class UpdateUserResponse {
     private String status;
     private String message;
-    private User updateUser;
+    private UserResponse updateUser;
 }

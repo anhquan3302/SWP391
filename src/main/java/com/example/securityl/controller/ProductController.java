@@ -2,8 +2,8 @@ package com.example.securityl.controller;
 
 import com.example.securityl.model.Product;
 import com.example.securityl.request.ProductRequest.RequestObject;
-import com.example.securityl.response.ObjectResponse.ResponseObject;
-import com.example.securityl.response.ProductResponse.CreateProductResponse;
+import com.example.securityl.response.ProductResponse.ResponseObject;
+import com.example.securityl.service.FireBaseService;
 import com.example.securityl.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,23 +12,21 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/product")
-@PreAuthorize("hasAnyRole('USER','ADMIN','STAFF')")
+@PreAuthorize("hasAnyRole('ADMIN','STAFF')")
 @CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
 public class ProductController {
     private final ProductService productService;
-
-
-
-
+    private final FireBaseService fireBaseService;
 
     @PostMapping("/createProduct")
-    public ResponseEntity<CreateProductResponse> createProduct(
+    public ResponseEntity<ResponseObject> createProduct(
                                                         @RequestParam("productName") String productName,
                                                         @RequestParam("title") String title,
                                                         @RequestParam("description") String description,
@@ -41,8 +39,8 @@ public class ProductController {
                                                         @RequestParam("quantity") Integer quantity,
                                                         @RequestParam("brand") String brand,
                                                         @RequestParam("favorite") boolean favorite,
-                                                        @RequestParam("categoryId")Integer categoryId) {
-        return productService.createProduct(productName,title, description, discount, color, size, price, material,thumbnail,quantity,brand,favorite,categoryId);
+                                                        @RequestParam("categoryName")String categoryName) {
+        return productService.createProduct(productName,title, description, discount, color, size, price, material,thumbnail,quantity,brand,favorite,categoryName);
     }
 
     @PostMapping("/upload-images/{productId}")
@@ -65,6 +63,21 @@ public class ProductController {
         }
     }
 
+    @PostMapping("/upload_firebase/{productId}")
+    public ResponseEntity<?> uploadProductImages(@PathVariable Integer productId,
+                                                 @RequestParam("files") MultipartFile[] files) {
+        if (files == null || files.length == 0) {
+            return ResponseEntity.badRequest().body("No files uploaded");
+        }
+
+        // Upload images to Firebase Storage
+        List<String> imageUrls = fireBaseService.uploadImages(files);
+
+        // Update product with image URLs
+        productService.uploadProductImage(productId, imageUrls);
+
+        return ResponseEntity.ok("Images uploaded successfully");
+    }
 
 
     @PutMapping("/updateProduct/{productId}")
@@ -81,7 +94,7 @@ public class ProductController {
     }
 
 
-    @GetMapping("/products/search")
+    @GetMapping("/search")
     public ResponseEntity<?> searchProducts(
             @RequestParam(name = "materials", required = false) String materials,
             @RequestParam(name = "brand", required = false) String brand,
@@ -93,7 +106,7 @@ public class ProductController {
     }
 
 
-    @GetMapping("/products/searchProductsVer2")
+    @GetMapping("/searchProductsVer2")
     public ResponseEntity<?> searchProductsVer2(
             @RequestParam(name = "materials", required = false) String materials,
             @RequestParam(name = "brand", required = false) String brand,

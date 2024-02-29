@@ -7,6 +7,7 @@ import com.example.securityl.repository.ProductRepository;
 import com.example.securityl.repository.VoucherRepository;
 import com.example.securityl.request.CheckoutResquest.CheckoutRequest;
 //import com.example.securityl.request.CheckoutResquest.ShoppingRequest;
+import com.example.securityl.request.CheckoutResquest.ShoppingRequest;
 import com.example.securityl.service.ShoppingCartService;
 import jakarta.persistence.criteria.Order;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,7 @@ import java.util.*;
 public class ShoppingCartServiceImpl implements ShoppingCartService {
     Map<Integer, CartItem> maps = new HashMap<>();
 
-
     private final ProductRepository productRepository;
-
     @Override
     public void remove(int id) {
         maps.remove(id);
@@ -80,28 +79,30 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return maps.values().size();
     }
 
-//    @Override
-//    public List<CartItem> addToCart(List<ShoppingRequest> shoppingRequests) {
-//        List<CartItem> cartItems = new ArrayList<>();
-//        for (ShoppingRequest shoppingRequest : shoppingRequests) {
-//            Integer productId = shoppingRequest.getProductId();
-//            Optional<Products> productOpt = productRepository.findById(productId);
-//            if (productOpt.isPresent()) {
-//                Products product = productOpt.get();
-//                CartItem cartItem = new CartItem();
-//                cartItem.setProductId(product.getProductId());
-//                cartItem.setProductName(product.getProductName());
-//                cartItem.setPrice(product.getPrice());
-//                cartItem.setQuantity(shoppingRequest.getQuantity());
-//                cartItem.setDiscount(product.getDiscount());
-//                maps.put(productId, cartItem);
-//                cartItems.add(cartItem);
-//            } else {
-//                throw new RuntimeException("Product with ID " + productId + " not found");
-//            }
-//        }
-//        return cartItems;
-//    }
+
+
+    @Override
+    public List<CartItem> addToCart(List<ShoppingRequest> shoppingRequests) {
+        List<CartItem> cartItems = new ArrayList<>();
+        for (ShoppingRequest shoppingRequest : shoppingRequests) {
+            Integer productId = shoppingRequest.getProductId();
+            Optional<Product> productOpt = productRepository.findById(productId);
+            if (productOpt.isPresent()) {
+                Product product = productOpt.get();
+                CartItem cartItem = new CartItem();
+                cartItem.setProductId(product.getProductId());
+                cartItem.setProductName(product.getProductName());
+                cartItem.setPrice(product.getPrice());
+                cartItem.setQuantity(shoppingRequest.getQuantity());
+                cartItem.setDiscount(product.getDiscount());
+                maps.put(productId, cartItem);
+                cartItems.add(cartItem);
+            } else {
+                throw new RuntimeException("Product with ID " + productId + " not found");
+            }
+        }
+        return cartItems;
+    }
 
 
 

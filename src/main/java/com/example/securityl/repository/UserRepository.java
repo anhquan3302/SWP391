@@ -29,4 +29,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "(:address IS NULL OR LOWER(u.address) LIKE %:address%) AND " +
             "(:userId IS NULL OR u.userId = :userId)")
     List<User> findUsersByFilter(String searchValue, String address, Integer userId);
+
+
 }

@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class DeleteResponse {
     private String status;
     private String message;
-    private User deleteUser;
+    private UserResponse deleteUser;
 }

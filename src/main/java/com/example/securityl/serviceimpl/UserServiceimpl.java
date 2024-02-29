@@ -98,7 +98,6 @@ public class UserServiceimpl implements UserService {
                 .role(user.getRole())
                 .status(user.isStatus())
                 .build();
-
     }
 
 
@@ -130,36 +129,37 @@ public class UserServiceimpl implements UserService {
             if (requester.getRole().equals(Role.admin)) {
                 user.setRole(updateUserRequest.getRole());
             }
-            user.setStatus(updateUserRequest.isStatus());
+            user.setStatus(true);
             return ResponseEntity.ok(UpdateUserResponse.builder()
                     .status("Success")
                     .message("Update User Success")
-                    .updateUser(user)
+                    .updateUser(convertToUserResponse(user))
                     .build());
         } else {
             return ResponseEntity.badRequest().body(UpdateUserResponse.builder()
                     .status("Fail")
                     .message("Email not available")
+                    .updateUser(null)
                     .build());
         }
     }
 
     @Override
     public ResponseEntity<DeleteResponse> deleteUser(String email) {
-        var userEmail = userRepository.findByEmail(email).orElse(null);
+        var userEmail = userRepository.findUsersByEmail(email);
         if (userEmail != null) {
             userEmail.setStatus(false);
             userRepository.save(userEmail);
             return ResponseEntity.ok(DeleteResponse.builder()
                     .status("Success")
                     .message("Ban success")
-                    .deleteUser(userEmail)
+                    .deleteUser(convertToUserResponse(userEmail))
                     .build());
         }
         return ResponseEntity.badRequest().body(DeleteResponse.builder()
                 .status("Fail")
                 .message("Ban fail")
-                .deleteUser(userEmail)
+                .deleteUser(null)
                 .build());
 
 

@@ -6,12 +6,18 @@ import com.example.securityl.repository.OrderRepository;
 import com.example.securityl.repository.ProductRepository;
 import com.example.securityl.repository.VoucherRepository;
 import com.example.securityl.request.CheckoutResquest.CheckoutRequest;
+import com.example.securityl.response.OrderResponse.ListOrderResponse;
+import com.example.securityl.response.OrderResponse.OrderResponse;
+import com.example.securityl.response.OrderResponse.OrderResponseWrapper;
 import com.example.securityl.service.OrderService;
 import com.example.securityl.service.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 @Service
@@ -30,8 +36,6 @@ public class OrderServiceImpl implements OrderService {
         if (cartItems == null || cartItems.isEmpty()) {
             throw new IllegalArgumentException("Cart is empty");
         }
-
-        // Tạo đơn hàng mới
         Orders order = Orders.builder()
                 .phone(checkoutRequest.getPhone())
                 .email(checkoutRequest.getEmail())
@@ -41,8 +45,6 @@ public class OrderServiceImpl implements OrderService {
                 .history(date)
                 .status(true)
                 .build();
-
-        // Tính tổng giá trị đơn hàng
         double totalPrice = shoppingCartService.getTotal();
 
         // Kiểm tra và áp dụng mã giảm giá
@@ -56,8 +58,6 @@ public class OrderServiceImpl implements OrderService {
                 throw new RuntimeException("Mã voucher không hợp lệ hoặc đã hết hạn");
             }
         }
-
-        // Lưu tổng giá trị đơn hàng vào đơn hàng
         order.setTotalMoney(totalPrice);
         orderRepository.save(order);
 
@@ -84,6 +84,14 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
+    @Override
+    public ResponseEntity<ListOrderResponse> viewOder() {
+        List<Orders> list = orderRepository.findAll();
+
+        return ResponseEntity.ok().body(new ListOrderResponse("Sucees","List Order",list));
+    }
+
+
     private double calculateDiscount(double totalPrice, Voucher voucher) {
         double discountPercentage = voucher.getDiscountPercentage();
         if (totalPrice >= 10000) {
@@ -93,14 +101,23 @@ public class OrderServiceImpl implements OrderService {
         } else {
             discountPercentage = 0;
         }
-
         double discountAmount = (totalPrice * discountPercentage) / 100;
         return totalPrice - discountAmount;
     }
 
 
 
-
+    private OrderResponse convertToOrderResponse(Orders orderRequest) {
+        return OrderResponse.builder()
+                .orderId(orderRequest.getOrderId())
+                .phone(orderRequest.getPhone())
+                .orderStatus(orderRequest.getOrderStatus())
+                .address(orderRequest.getAddress())
+                .totalMoney(orderRequest.getTotalMoney())
+                .history(orderRequest.getHistory())
+                .note(orderRequest.getNote())
+                .build();
+    }
 
 
 

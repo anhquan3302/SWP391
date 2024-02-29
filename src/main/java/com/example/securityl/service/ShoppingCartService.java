@@ -1,6 +1,7 @@
 package com.example.securityl.service;
 
 import com.example.securityl.model.CartItem;
+import com.example.securityl.request.CheckoutResquest.ShoppingRequest;
 //import com.example.securityl.request.CheckoutResquest.ShoppingRequest;
 
 
@@ -20,5 +21,7 @@ public interface ShoppingCartService {
     int getCount();
 
 
-//    List<CartItem> addToCart(List<ShoppingRequest> shoppingRequest);
+
+
+    List<CartItem> addToCart(List<ShoppingRequest> shoppingRequest);
 }

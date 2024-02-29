@@ -24,8 +24,7 @@ import java.util.*;
 @RequestMapping("/api/vnpay")
 public class VNPayController {
 
-    @Autowired
-    private HttpServletRequest request;
+
 
     @GetMapping("/pay")
     public ResponseEntity<?> getPay(HttpServletRequest req, HttpServletResponse resp,
@@ -47,8 +46,6 @@ public class VNPayController {
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
-//        vnp_Params.put("username", username);
-
         if (bankCode != null && !bankCode.isEmpty()) {
             vnp_Params.put("vnp_BankCode", bankCode);
         }

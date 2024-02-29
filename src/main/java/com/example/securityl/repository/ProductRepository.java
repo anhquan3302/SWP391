@@ -34,4 +34,6 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
             "(:color IS NULL OR p.color = :color)")
     List<Product> findProductsByFilter2(String materials, String brand, Double minPrice, Double maxPrice, String color);
 
+
+    List<Product> findByFavorite(boolean favorite);
 }

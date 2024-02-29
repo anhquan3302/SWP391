@@ -1,8 +1,10 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.model.Product;
 import com.example.securityl.request.ProductRequest.SearchProduct;
-import com.example.securityl.response.ObjectResponse.ResponseObject;
+import com.example.securityl.response.OrderResponse.ListOrderResponse;
+import com.example.securityl.response.ProductResponse.ListProductResponse;
+import com.example.securityl.response.ProductResponse.ProductResponse;
+import com.example.securityl.service.OrderService;
 import com.example.securityl.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,23 +15,30 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class HomeController {
     private final ProductService productService;
+    private final OrderService orderService;
     @GetMapping("/getAllProduct")
-    public ResponseEntity<ResponseObject> getAllProduct(){
+    public ResponseEntity<ListProductResponse> getAllProduct(){
         return productService.getAll();
     }
 
-//    @GetMapping("/getListProductByCategory")
-//    private ResponseEntity<ResponseObject> getProductByCategoryName(@RequestParam String name) {
-//        return productService.getProductByCategory(name);
-//    }
 
     @GetMapping("/getProductById/{productId}")
-    private Product getProductById(@PathVariable Integer productId){
+    private ProductResponse getProductById(@PathVariable Integer productId){
         return productService.getProductById(productId);
     }
 
     @PostMapping("/getProduct")
-    private ResponseEntity<ResponseObject> searchProducts(@RequestBody SearchProduct searchProduct){
+    private ResponseEntity<ListProductResponse> searchProducts(@RequestBody SearchProduct searchProduct){
         return productService.searchProduct(searchProduct);
+    }
+
+    @GetMapping("/getAllWishlist")
+    private ResponseEntity<ListProductResponse> viewWishList(boolean favorite) {
+        return productService.viewWishList(favorite);
+    }
+
+    @GetMapping("/getAllOrder")
+    private ResponseEntity<ListOrderResponse> listOrder(){
+        return  orderService.viewOder();
     }
 }
