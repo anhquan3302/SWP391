@@ -60,6 +60,7 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(o -> o
+                        .loginPage("/login")
                         .successHandler(customOAuth2AuthenticationSuccessHandler)
                         .failureHandler((request, response, exception) -> {
                             request.getSession().setAttribute("error.message", exception.getMessage());

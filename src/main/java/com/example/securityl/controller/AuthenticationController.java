@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,8 +42,18 @@ public class AuthenticationController {
                     .message("Register fail")
                     .build());
         }
+    }
 
-
+    @GetMapping("/google")
+    public ResponseEntity<String> googleLogin(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .header(HttpHeaders.LOCATION, "/oauth2/authorization/google")
+                    .build();
+        } catch (Exception e) {
+            // Xử lý lỗi nếu có
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
     }
 
     @PostMapping("/authenticate")
