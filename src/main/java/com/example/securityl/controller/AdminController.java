@@ -49,7 +49,7 @@ public class AdminController {
 
     @PutMapping("/updateUser/{email}")
     @PreAuthorize("hasAuthority('admin:update')")
-    public ResponseEntity<UpdateUserResponse> updateStaff(
+    public ResponseEntity<UpdateUserResponse> updateUser(
             @PathVariable String email,
             @RequestBody UpdateUserRequest updateUserRequest) {
         try {

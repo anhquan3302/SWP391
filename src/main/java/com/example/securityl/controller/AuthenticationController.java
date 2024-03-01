@@ -51,14 +51,12 @@ public class AuthenticationController {
                     .header(HttpHeaders.LOCATION, "/oauth2/authorization/google")
                     .build();
         } catch (Exception e) {
-            // Xử lý lỗi nếu có
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
         }
     }
 
     @PostMapping("/authenticate")
-
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
         try {
             return ResponseEntity.ok(service.authenticate(request));
         } catch (Exception e) {

@@ -29,6 +29,8 @@ public class UserServiceimpl implements UserService {
     private final JwtServiceImpl jwtService;
     private final String emailRegex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
             + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+    private static final int MAX_NAME_LENGTH = 15;
+    private static final int MAX_PASSWORD_LENGTH = 6;
     Pattern pattern = Pattern.compile(emailRegex);
 
     @Override
@@ -45,11 +47,32 @@ public class UserServiceimpl implements UserService {
                     .userResponse(null)
                     .build();
         }
-        if (request.getPhone() == null || request.getPhone().length() != 10) {
+        if (request.getPhone() == null || request.getPhone().length() != 10 ) {
             return CreateResponse.builder()
                     .status("Create fail")
                     .message("Phone is not valid. Please provide a valid 10-digit phone number.")
                     .userResponse(null)
+                    .build();
+        }
+        if (request.getName() == null || request.getName().length() > 15) {
+            return CreateResponse.builder()
+                    .status("Create fail")
+                    .message("Please provide a valid name with maximum length of 15 characters.")
+                    .userResponse(null)
+                    .build();
+        }
+        if(request.getPassword() == null || request.getPassword().length() > 5 ){
+            return CreateResponse.builder()
+                    .status("Create fail")
+                    .message("Password with maximum length of 5 characters.")
+                    .userResponse(null)
+                    .build();
+        }
+        var checkPhone = userRepository.existsByPhone(request.getPhone());
+        if(checkPhone){
+            return CreateResponse.builder()
+                    .status("Create fail")
+                    .message("Phone is valid")
                     .build();
         }
         Matcher matcher = pattern.matcher(request.getEmail());
@@ -61,14 +84,13 @@ public class UserServiceimpl implements UserService {
                     .userResponse(null)
                     .build();
         }
-
         var user = User.builder()
                 .name(request.getName())
                 .phone(request.getPhone())
                 .address(request.getAddress())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.staff)
+                .role(Role.user)
                 .status(true)
                 .build();
         var existedEmail = userRepository.findByEmail(user.getEmail()).orElse(null);
@@ -105,17 +127,25 @@ public class UserServiceimpl implements UserService {
     public ResponseEntity<UpdateUserResponse> updateUser(String email, UpdateUserRequest updateUserRequest) {
         var user = userRepository.findByEmail(email).orElse(null);
         if (user != null) {
-            if (updateUserRequest != null && updateUserRequest.getName() != null && !updateUserRequest.getName().isEmpty()) {
+            if (updateUserRequest != null && updateUserRequest.getName() != null && !updateUserRequest.getName().isEmpty() && updateUserRequest.getName().length() <= MAX_NAME_LENGTH) {
                 user.setName(updateUserRequest.getName());
             }
             Matcher matcher = pattern.matcher(updateUserRequest.getEmail());
             if (matcher.matches()) {
                 user.setEmail(updateUserRequest.getEmail());
             }
-            if ((updateUserRequest.getPhone() != null && updateUserRequest.getPhone().length() == 10)) {
-                user.setPhone(user.getPhone());
+            if (updateUserRequest.getPhone() != null && updateUserRequest.getPhone().length() == 10) {
+                if (userRepository.existsByPhone(updateUserRequest.getPhone())) {
+                    return ResponseEntity.badRequest().body(UpdateUserResponse.builder()
+                            .status("Fail")
+                            .message("Phone already exists")
+                            .updateUser(null)
+                            .build());
+                } else {
+                    user.setPhone(updateUserRequest.getPhone());
+                }
             }
-            if (updateUserRequest.getPassword() != null && !updateUserRequest.getPassword().isEmpty()) {
+            if (updateUserRequest.getPassword() != null && !updateUserRequest.getPassword().isEmpty() && updateUserRequest.getPassword().length() <= MAX_PASSWORD_LENGTH) {
                 user.setPassword(updateUserRequest.getPassword());
             }
             if (updateUserRequest.getAddress() != null && !updateUserRequest.getAddress().isEmpty()) {
