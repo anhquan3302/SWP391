@@ -73,7 +73,7 @@ public class SecurityLApplication {
                     .phone("0937534654")
                     .email("staff@gmail.com")
                     .password("staff")
-                    .role(Role.admin)
+                    .role(Role.staff)
                     .build();
             service.register(staff);
             User adminUser = userService.findByEmailForMail(adminRequest.getEmail());

@@ -30,6 +30,7 @@ public class Category {
     private String description;
 
     @ManyToMany
+    @JsonBackReference
     @JoinTable(name = "category_product",
             joinColumns = @JoinColumn(name = "category_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderResponseWrapper {
+public class ObjectRepose {
     private String status;
     private String message;
     private OrderResponse orderResponse;

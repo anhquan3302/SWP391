@@ -41,6 +41,14 @@ public enum Role {
                     STAFF_UPDATE,
                     STAFF_DELETE
             )
+    ),
+    deliveryStaff(
+            Set.of(
+                    DELIVERY_STAFF_VIEW,
+                    DELIVERY_STAFF_CREATE,
+                    DELIVERY_STAFF_UPDATE,
+                    DELIVERY_STAFF_DELETE
+            )
     )
     ;
 

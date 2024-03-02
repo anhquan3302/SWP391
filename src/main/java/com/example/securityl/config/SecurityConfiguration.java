@@ -41,11 +41,20 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/shoppingCart").permitAll()
                         .requestMatchers("/api/v1/home/**").permitAll()
                         .requestMatchers("/api/v1/feedBack/**").permitAll()
-                        .requestMatchers("api/v1/vnpay/**").permitAll()
+                        .requestMatchers("/api/v1/vnpay/**").permitAll()
+                        .requestMatchers("/api/v1/feedBack/**").hasAnyRole(staff.name())
 
-                        .requestMatchers("/api/v1/blog/**").hasAnyRole(admin.name(), staff.name())
+                        .requestMatchers("/api/v1/order/**").hasAnyRole(deliveryStaff.name())
+
+                        .requestMatchers("/api/v1/blog/**").hasAnyRole(admin.name())
                         .requestMatchers("/api/v1/category/**").hasAnyRole(admin.name(), staff.name())
+
                         .requestMatchers("/api/v1/product/**").hasAnyRole(admin.name(),staff.name())
+                        .requestMatchers(GET, "/api/v1/product/**").hasAnyAuthority(ADMIN_VIEW.name())
+                        .requestMatchers(POST, "/api/v1/product/**").hasAnyAuthority(ADMIN_CREATE.name())
+                        .requestMatchers(PUT, "/api/v1/product/**").hasAnyAuthority(ADMIN_UPDATE.name())
+                        .requestMatchers(DELETE, "/api/v1/product/**").hasAnyAuthority(ADMIN_DELETE.name())
+
                         .requestMatchers("/api/v1/voucher/**").hasAnyRole(admin.name(),staff.name())
 
 

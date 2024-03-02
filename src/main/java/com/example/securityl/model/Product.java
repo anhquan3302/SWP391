@@ -72,8 +72,8 @@ public class Product {
     private String brand;
 
     @ManyToMany(mappedBy = "products")
+    @JsonBackReference
     private List<Category> categories ;
-
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference

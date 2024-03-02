@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/vnpay")
+@RequestMapping("/api/v1/vnpay")
 public class VNPayController {
 
 

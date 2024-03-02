@@ -27,11 +27,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/shoppingCart")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('USER','ADMIN','STAFF')")
 @CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
 public class ShoppingController {
   private final ShoppingCartService shoppingCartService;
-  private final ProductService productService;
   private final OrderService orderService;
     private static final Logger logger = LoggerFactory.getLogger(ShoppingController.class);
 

@@ -12,8 +12,6 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product,Integer> {
     Optional<Product> findProductByProductId(int productId);
 
-//    @Query("SELECT p FROM Products p JOIN p.categories c WHERE c.name = :categoryName")
-//    List<Products> findAllByCategoryName(String categoryName);
 
     @Query("SELECT p.quantity FROM Product p WHERE p.productId = :productId")
     Integer findQuantityById(Integer productId);
@@ -36,4 +34,8 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
 
 
     List<Product> findByFavorite(boolean favorite);
+
+    boolean existsProductByProductName(String productName);
+    Product findProductsByProductName(String productName);
+
 }

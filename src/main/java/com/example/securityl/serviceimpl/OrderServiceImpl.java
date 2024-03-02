@@ -7,8 +7,8 @@ import com.example.securityl.repository.ProductRepository;
 import com.example.securityl.repository.VoucherRepository;
 import com.example.securityl.request.CheckoutResquest.CheckoutRequest;
 import com.example.securityl.response.OrderResponse.ListOrderResponse;
+import com.example.securityl.response.OrderResponse.ObjectRepose;
 import com.example.securityl.response.OrderResponse.OrderResponse;
-import com.example.securityl.response.OrderResponse.OrderResponseWrapper;
 import com.example.securityl.service.OrderService;
 import com.example.securityl.service.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 @Service
 @SessionScope
 @RequiredArgsConstructor
@@ -39,15 +37,16 @@ public class OrderServiceImpl implements OrderService {
         Orders order = Orders.builder()
                 .phone(checkoutRequest.getPhone())
                 .email(checkoutRequest.getEmail())
-                .fullname(checkoutRequest.getFullname())
+                .code(checkoutRequest.getCode())
+                .custormer(checkoutRequest.getFullname())
                 .address(checkoutRequest.getAddress())
                 .note(checkoutRequest.getNote())
                 .history(date)
-                .status(true)
+                .status("Dang cho xu ky")
                 .build();
         double totalPrice = shoppingCartService.getTotal();
 
-        // Kiểm tra và áp dụng mã giảm giá
+        // apply voucher vao
         if (checkoutRequest.getVoucherCode() != null) {
             Voucher voucher = voucherRepository.findByVoucherCode(checkoutRequest.getVoucherCode());
             if (voucher != null && voucher.isActive()) {
@@ -61,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalMoney(totalPrice);
         orderRepository.save(order);
 
-        // Lưu chi tiết đơn hàng
+        // luu order
         for (CartItem cartItem : cartItems) {
             Integer productId = cartItem.getProductId();
             Product product = productRepository.findById(productId).orElse(null);
@@ -91,6 +90,15 @@ public class OrderServiceImpl implements OrderService {
         return ResponseEntity.ok().body(new ListOrderResponse("Sucees","List Order",list));
     }
 
+    @Override
+    public ResponseEntity<ObjectRepose> getInfor(Integer orderId) {
+        Orders orders = orderRepository.findOrdersByOrderId(orderId);
+        if(orders != null){
+            return ResponseEntity.ok().body(new ObjectRepose("Success","InforOrder",convertToOrderResponse(orders)));
+        }
+        return ResponseEntity.badRequest().body(new ObjectRepose("Fail","Not found order",null));
+    }
+
 
     private double calculateDiscount(double totalPrice, Voucher voucher) {
         double discountPercentage = voucher.getDiscountPercentage();
@@ -111,7 +119,8 @@ public class OrderServiceImpl implements OrderService {
         return OrderResponse.builder()
                 .orderId(orderRequest.getOrderId())
                 .phone(orderRequest.getPhone())
-                .orderStatus(orderRequest.getOrderStatus())
+                .email(orderRequest.getEmail())
+                .code(orderRequest.getCode())
                 .address(orderRequest.getAddress())
                 .totalMoney(orderRequest.getTotalMoney())
                 .history(orderRequest.getHistory())

@@ -2,6 +2,7 @@ package com.example.securityl.controller;
 
 import com.example.securityl.model.Product;
 import com.example.securityl.request.ProductRequest.RequestObject;
+import com.example.securityl.response.ProductResponse.ProductResponse;
 import com.example.securityl.response.ProductResponse.ResponseObject;
 import com.example.securityl.service.FireBaseService;
 import com.example.securityl.service.ProductService;
@@ -19,7 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/product")
-@PreAuthorize("hasAnyRole('ADMIN','STAFF')")
+@PreAuthorize("hasAnyRole('admin')")
 @CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
 public class ProductController {
     private final ProductService productService;
@@ -70,10 +71,8 @@ public class ProductController {
             return ResponseEntity.badRequest().body("No files uploaded");
         }
 
-        // Upload images to Firebase Storage
         List<String> imageUrls = fireBaseService.uploadImages(files);
 
-        // Update product with image URLs
         productService.uploadProductImage(productId, imageUrls);
 
         return ResponseEntity.ok("Images uploaded successfully");
@@ -101,7 +100,7 @@ public class ProductController {
             @RequestParam(name = "price", required = false) Double price,
             @RequestParam(name = "color", required = false) String color
     ) {
-        List<Product> productList = productService.searchProducts(materials, brand, price, color);
+        List<ProductResponse> productList = productService.searchProducts(materials, brand, price, color);
         return ResponseEntity.ok(productList);
     }
 

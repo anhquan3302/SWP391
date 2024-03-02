@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/feedBack")
 public class FeedBackController {
-
-
     private final FeedBackService feedbackService;
 
 

@@ -15,12 +15,13 @@ import java.util.Date;
 public class OrderResponse {
     private Integer orderId;
     private String email;
-    private String fullName;
+    private String code;
+    private String customer;
     private String phone;
     private String address;
     private String note;
-    private boolean status;
+    private String status;
     private Double totalMoney;
     private Date history;
-    private OrderStatus orderStatus;
+
 }

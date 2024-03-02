@@ -34,9 +34,6 @@ public class BookingDesign {
         @Column(name = "meeting_date")
         private String meetingDate;
 
-        @ManyToOne
-        @JoinColumn(name = "designer_id")
-        private Designer designer;
 
         @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
         private List<DesignProjects> designProjects;

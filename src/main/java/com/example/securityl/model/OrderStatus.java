@@ -22,6 +22,9 @@ public class OrderStatus {
     @Column(name = "order_status_id")
     private int orderStatusId;
 
+    @Column(name ="status_name")
+    private String status_name;
+
     @Column(name = "create_date")
     private Date createDate;
 

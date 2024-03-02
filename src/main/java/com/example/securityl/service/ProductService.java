@@ -3,6 +3,7 @@ package com.example.securityl.service;
 import com.example.securityl.model.Product;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.request.ProductRequest.SearchProduct;
+import com.example.securityl.response.Inventory.QuantityResponse;
 import com.example.securityl.response.ProductResponse.ListProductResponse;
 import com.example.securityl.response.ProductResponse.ProductResponse;
 import com.example.securityl.response.ProductResponse.ResponseObject;
@@ -29,10 +30,11 @@ public interface ProductService  {
 
     ProductResponse getProductById(Integer productId);
     
-    List<Product> searchProducts(String materials, String brand, Double price, String color);
+    List<ProductResponse> searchProducts(String materials, String brand, Double price, String color);
 
     List<Product> searchProductsVer2(String materials, String brand, Double minPrice, Double maxPrice, String color);
 
     ResponseEntity<ListProductResponse> viewWishList(boolean favorite);
 
+    ResponseEntity<QuantityResponse> trackInventory(String productName);
 }

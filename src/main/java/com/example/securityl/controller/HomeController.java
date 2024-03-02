@@ -21,7 +21,6 @@ public class HomeController {
         return productService.getAll();
     }
 
-
     @GetMapping("/getProductById/{productId}")
     private ProductResponse getProductById(@PathVariable Integer productId){
         return productService.getProductById(productId);

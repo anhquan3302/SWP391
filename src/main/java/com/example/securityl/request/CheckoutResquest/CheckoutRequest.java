@@ -19,6 +19,7 @@ import java.util.Map;
 public class CheckoutRequest {
     private CartItem cartItem;
     private String email;
+    private String code;
     private String fullname;
     private String phone;
     private String address;
