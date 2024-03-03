@@ -20,7 +20,7 @@ public class BookingDesign {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "booking_id")
-        private int bookingId;
+        private Integer bookingId;
 
         @Column(name = "date_time")
         private LocalDateTime dateTime;
