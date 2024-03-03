@@ -49,11 +49,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/blog/**").hasAnyRole(admin.name())
                         .requestMatchers("/api/v1/category/**").hasAnyRole(admin.name(), staff.name())
 
-                        .requestMatchers("/api/v1/product/**").hasAnyRole(admin.name(),staff.name())
-                        .requestMatchers(GET, "/api/v1/product/**").hasAnyAuthority(ADMIN_VIEW.name())
-                        .requestMatchers(POST, "/api/v1/product/**").hasAnyAuthority(ADMIN_CREATE.name())
-                        .requestMatchers(PUT, "/api/v1/product/**").hasAnyAuthority(ADMIN_UPDATE.name())
-                        .requestMatchers(DELETE, "/api/v1/product/**").hasAnyAuthority(ADMIN_DELETE.name())
+                        .requestMatchers("/api/v1/product/**").hasAnyRole(admin.name())
+
 
                         .requestMatchers("/api/v1/voucher/**").hasAnyRole(admin.name(),staff.name())
 

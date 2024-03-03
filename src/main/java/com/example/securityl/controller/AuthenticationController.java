@@ -55,7 +55,7 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
         try {
             return ResponseEntity.ok(service.authenticate(request));
@@ -73,7 +73,7 @@ public class AuthenticationController {
         service.refreshToken(request, response);
     }
 
-    @PostMapping("/forgetpass")
+    @PostMapping("/forgot-password")
     public ResponseEntity<?> register(@RequestParam String email) {
         try {
             User user = userService.findByEmailForMail(email);

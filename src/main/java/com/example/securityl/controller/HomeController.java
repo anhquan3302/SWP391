@@ -16,15 +16,9 @@ import org.springframework.web.bind.annotation.*;
 public class HomeController {
     private final ProductService productService;
     private final OrderService orderService;
-    @GetMapping("/getAllProduct")
-    public ResponseEntity<ListProductResponse> getAllProduct(){
-        return productService.getAll();
-    }
 
-    @GetMapping("/getProductById/{productId}")
-    private ProductResponse getProductById(@PathVariable Integer productId){
-        return productService.getProductById(productId);
-    }
+
+
 
     @PostMapping("/getProduct")
     private ResponseEntity<ListProductResponse> searchProducts(@RequestBody SearchProduct searchProduct){

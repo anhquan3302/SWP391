@@ -2,6 +2,7 @@ package com.example.securityl.controller;
 
 import com.example.securityl.model.Product;
 import com.example.securityl.request.ProductRequest.RequestObject;
+import com.example.securityl.response.ProductResponse.ListProductResponse;
 import com.example.securityl.response.ProductResponse.ProductResponse;
 import com.example.securityl.response.ProductResponse.ResponseObject;
 import com.example.securityl.service.FireBaseService;
@@ -26,7 +27,7 @@ public class ProductController {
     private final ProductService productService;
     private final FireBaseService fireBaseService;
 
-    @PostMapping("/createProduct")
+    @PostMapping("")
     public ResponseEntity<ResponseObject> createProduct(
                                                         @RequestParam("productName") String productName,
                                                         @RequestParam("title") String title,
@@ -64,6 +65,11 @@ public class ProductController {
         }
     }
 
+    @GetMapping("")
+    public ResponseEntity<ListProductResponse> getAllProduct(){
+        return productService.getAll();
+    }
+
     @PostMapping("/upload_firebase/{productId}")
     public ResponseEntity<?> uploadProductImages(@PathVariable Integer productId,
                                                  @RequestParam("files") MultipartFile[] files) {
@@ -79,14 +85,17 @@ public class ProductController {
     }
 
 
-    @PutMapping("/updateProduct/{productId}")
+    @PutMapping("/{productId}")
     public ResponseEntity<ResponseObject> updateProduct(
             @PathVariable Integer productId,
             @RequestBody RequestObject requestObject) {
         return productService.updateProduct(productId, requestObject);
     }
-
-    @DeleteMapping("/deleteProduct/{productId}")
+    @GetMapping("/{productId}")
+    private ProductResponse getProductById(@PathVariable Integer productId){
+        return productService.getProductById(productId);
+    }
+    @DeleteMapping("/{productId}")
     private ResponseEntity<ResponseObject> deleteProduct(
             @PathVariable Integer productId){
         return productService.deleteProduct(productId);

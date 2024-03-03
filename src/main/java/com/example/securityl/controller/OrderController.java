@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @PreAuthorize("hasAnyRole('deliverystaff')")
 public class OrderController {
     private final OrderService orderService;
-    @GetMapping("/shipping-order/detail")
+    @GetMapping("/get-orders")
     private ResponseEntity<ObjectRepose> getInFor(@RequestParam("orderId")Integer orderId){
         return orderService.getInfor(orderId);
     }
 
-    @GetMapping("/getAllOrder")
+    @GetMapping("/getallorders")
     private ResponseEntity<ListOrderResponse> listOrder(){
         return  orderService.viewOder();
     }

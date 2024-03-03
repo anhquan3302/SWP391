@@ -26,7 +26,7 @@ public class UserController {
 
     private static final Logger logger = Logger.getLogger(ShoppingController.class.getName());
 
-    @GetMapping("/getAll")
+    @GetMapping("/all-users")
     @PreAuthorize("hasAuthority('admin:read')")
     private ResponseEntity<ResponseUser> getAll() {
         return userService.findAllUser();
