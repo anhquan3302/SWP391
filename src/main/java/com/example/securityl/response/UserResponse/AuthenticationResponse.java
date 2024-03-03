@@ -1,5 +1,6 @@
 package com.example.securityl.response.UserResponse;
 
+import com.example.securityl.model.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class AuthenticationResponse {
     private String staus;
     private String messages;
+    private User userLogin;
     @JsonProperty("token")
     private String token;
 

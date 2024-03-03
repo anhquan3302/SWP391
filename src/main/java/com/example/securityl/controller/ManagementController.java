@@ -98,17 +98,16 @@ public class ManagementController {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+    @GetMapping("/products/searchProductsVer2")
+    public ResponseEntity<?> searchProductsVer2(
+            @RequestParam(name = "materials", required = false) String materials,
+            @RequestParam(name = "brand", required = false) String brand,
+            @RequestParam(name = "minPrice", required = false) Double minPrice,
+            @RequestParam(name = "maxPrice", required = false) Double maxPrice,
+            @RequestParam(name = "color", required = false) String color
+    ) {
+        List<Products> productList = productService.searchProductsVer2(materials, brand, minPrice, maxPrice, color);
+        return ResponseEntity.ok(productList);
+    }
 
 }

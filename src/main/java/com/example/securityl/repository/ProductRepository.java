@@ -26,4 +26,13 @@ public interface ProductRepository extends JpaRepository<Products,Integer> {
             "(:color IS NULL OR p.color = :color)")
     List<Products> findProductsByFilter(String materials, String brand, Double price, String color);
 
+
+    @Query("SELECT p FROM Products p WHERE " +
+            "(:materials IS NULL OR p.materials = :materials) AND " +
+            "(:brand IS NULL OR p.brand = :brand) AND " +
+            "(:minPrice IS NULL OR p.price >= :minPrice) AND " +
+            "(:maxPrice IS NULL OR p.price <= :maxPrice) AND " +
+            "(:color IS NULL OR p.color = :color)")
+    List<Products> findProductsByFilter2(String materials, String brand, Double minPrice, Double maxPrice, String color);
+
 }

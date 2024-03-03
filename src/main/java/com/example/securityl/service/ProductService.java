@@ -30,4 +30,6 @@ public interface ProductService  {
     ResponseEntity<ResponseObject> getProductByCategory(String categoryName);
 
     List<Products> searchProducts(String materials, String brand, Double price, String color);
+
+    List<Products> searchProductsVer2(String materials, String brand, Double minPrice, Double maxPrice, String color);
 }
