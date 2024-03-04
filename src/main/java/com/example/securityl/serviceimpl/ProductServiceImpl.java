@@ -8,6 +8,7 @@ import com.example.securityl.model.Enum.Role;
 import com.example.securityl.model.ImageProduct;
 import com.example.securityl.model.Product;
 import com.example.securityl.repository.*;
+import com.example.securityl.request.ProductRequest.WishlistRequest;
 import com.example.securityl.response.Inventory.QuantityResponse;
 import com.example.securityl.response.ProductResponse.ListProductResponse;
 import com.example.securityl.response.ProductResponse.ProductResponse;
@@ -40,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public ResponseEntity<ResponseObject> createProduct(String productName, String title, String description, double discount, String color, String size, double price, String material, String thumbnail, Integer quantity, String brand, boolean favorite, String categoryName) {
+    public ResponseEntity<ResponseObject> createProduct(String productName, String title, String description, double discount, String color, String size, double price, String material, String thumbnail, Integer quantity, String brand, String categoryName) {
         try {
             Date date = new Date();
             String token = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
@@ -50,22 +51,22 @@ public class ProductServiceImpl implements ProductService {
             String userEmail = jwtService.extractUsername(token);
             var requester = userRepository.findUserByEmail(userEmail).orElse(null);
             if (requester == null || !(requester.getRole().equals(Role.staff) || requester.getRole().equals(Role.admin))) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseObject("Fail", "Unauthorized",null));
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseObject("Fail", "Unauthorized", null));
             }
             if (size == null || size.trim().isEmpty() || productName == null || productName.trim().isEmpty() || description == null || description.trim().isEmpty() || title == null || title.trim().isEmpty() || price <= 0) {
-                return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Invalid request body",null));
+                return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Invalid request body", null));
             }
-            if (!productRepository.existsProductByProductName(productName)) {
-                return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Product existed",null));
+            if (productRepository.existsProductByProductName(productName)) {
+                return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Product existed", null));
             }
-            if(quantity <= 0 ){
-                return ResponseEntity.status(400).body(new ResponseObject("Fail","Quantity does not exist",null));
+            if (quantity <= 0) {
+                return ResponseEntity.status(400).body(new ResponseObject("Fail", "Quantity does not exist", null));
             }
             if (!(requester.getRole().equals(Role.admin) || requester.getRole().equals(Role.staff))) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ResponseObject("Fail", "Forbidden",null));
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ResponseObject("Fail", "Forbidden", null));
             }
             Category category1 = categoryRepository.findByName(categoryName);
-            if (category1 != null) {
+            if (category1 == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("Fail", "Category not found", null));
             }
             List<Category> categories = new ArrayList<>();
@@ -85,13 +86,13 @@ public class ProductServiceImpl implements ProductService {
                     .brand(brand)
                     .quantity(quantity)
                     .categories(categories)
-                    .favorite(favorite)
+                    .favorite(false)
                     .user(userRepository.findUserIdByEmail(userEmail))
                     .build();
             Product savedProduct = productRepository.save(product);
             return ResponseEntity.ok(new ResponseObject("Success", "Product created successfully", convertToProductResponse(savedProduct)));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseObject("Fail", "Internal server error",null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseObject("Fail", "Internal server error", null));
         }
     }
 
@@ -135,11 +136,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-
-
-
-
-
     @Override
     public ResponseEntity<ResponseObject> updateProduct(
             Integer productId, RequestObject requestObject) {
@@ -168,7 +164,7 @@ public class ProductServiceImpl implements ProductService {
             if (!(requester.getRole().equals(Role.admin) || requester.getRole().equals(Role.staff))) {
                 return ResponseEntity.status(403).body(new ResponseObject("Fail", "You don't have permission", null));
             }
-            if(requestObject.getBrand()  == null || requestObject.getBrand().trim().isEmpty() ){
+            if (requestObject.getBrand() == null || requestObject.getBrand().trim().isEmpty()) {
                 return ResponseEntity.badRequest().body(new ResponseObject("Fail", "Brand is empty", null));
 
             }
@@ -214,20 +210,25 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-
-
-
-
-
     @Override
     public ResponseEntity<ResponseObject> deleteProduct(Integer productId) {
+        String token = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
+                .getRequest()
+                .getHeader("Authorization")
+                .substring(7);
+        String userEmail = jwtService.extractUsername(token);
+        var requester = userRepository.findUserByEmail(userEmail).orElse(null);
+        assert requester != null;
+        if (!(requester.getRole().equals(Role.admin) || requester.getRole().equals(Role.staff))) {
+            return ResponseEntity.status(403).body(new ResponseObject("Fail", "You don't have permission", null));
+        }
         var checkProduct = productRepository.findProductByProductId(productId).orElse(null);
         if (checkProduct != null) {
-                for (Category category : checkProduct.getCategories()) {
-                    category.getProducts().remove(checkProduct);
-                    categoryRepository.save(category);
-                }
-                productRepository.delete(checkProduct);
+            for (Category category : checkProduct.getCategories()) {
+                category.getProducts().remove(checkProduct);
+                categoryRepository.save(category);
+            }
+            productRepository.delete(checkProduct);
             return ResponseEntity.ok().body(new ResponseObject("Success", "Delete success", convertToProductResponse(checkProduct)));
         } else {
             return ResponseEntity.status(404).body(new ResponseObject("Fail", "Delete fail", null));
@@ -246,8 +247,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-
-
     private List<ProductResponse> convertToProductResponseList(List<Product> productList) {
         List<ProductResponse> productResponseList = new ArrayList<>();
         for (Product product : productList) {
@@ -256,9 +255,6 @@ public class ProductServiceImpl implements ProductService {
         }
         return productResponseList;
     }
-
-
-
 
 
     @Override
@@ -323,30 +319,67 @@ public class ProductServiceImpl implements ProductService {
 
     public List<Product> searchProductsVer2(String materials, String brand, Double minPrice, Double maxPrice, String color) {
 
-            return productRepository.findProductsByFilter2(materials, brand, minPrice, maxPrice, color);
+        return productRepository.findProductsByFilter2(materials, brand, minPrice, maxPrice, color);
 
 
     }
 
     @Override
-    public ResponseEntity<ListProductResponse> viewWishList(boolean favorite) {
-        List<Product> wishlistProducts = productRepository.findByFavorite(favorite);
+    public ResponseEntity<ListProductResponse> viewWishList() {
+        List<Product> wishlistProducts = productRepository.findProductsByFavoriteTrue();
+
+
+
+
+
+
         List<ProductResponse> response = convertToProductResponseList(wishlistProducts);
-        return ResponseEntity.ok().body(new ListProductResponse("Success","List wish list",response));
+        return ResponseEntity.ok().body(new ListProductResponse("Success", "List wishlist", response));
     }
+
+
 
     @Override
     public ResponseEntity<QuantityResponse> trackInventory(String productName) {
         Product product = productRepository.findProductsByProductName(productName);
-        if(product != null){
+        if (product != null) {
             String Name = product.getProductName();
             int Quantity = product.getQuantity();
-            return ResponseEntity.ok().body(new QuantityResponse(Name,Quantity));
+            return ResponseEntity.ok().body(new QuantityResponse(Name, Quantity));
         }
-        return ResponseEntity.ok().body(new QuantityResponse(null,null));
+        return ResponseEntity.ok().body(new QuantityResponse(null, null));
 
     }
 
-
+    @Override
+    public ResponseEntity<ResponseObject> addWishList(Integer productId, WishlistRequest wishlistRequest) {
+        try {
+            String token = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
+                    .getRequest()
+                    .getHeader("Authorization")
+                    .substring(7);
+            String userEmail = jwtService.extractUsername(token);
+            var requester = userRepository.findUserByEmail(userEmail).orElse(null);
+            if (requester == null) {
+                return ResponseEntity.status(404).body(new ResponseObject("Fail", "User not found", null));
+            }
+            var checkProduct = productRepository.findById(productId).orElse(null);
+            if (checkProduct != null) {
+                checkProduct.setFavorite(true);
+                var updateProduct = productRepository.save(checkProduct);
+                return ResponseEntity.ok(new ResponseObject("Success", "Add wish list success", convertToProductResponse(updateProduct)));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new ResponseObject("Fail", "Internal Server Error", null));
+        }
+        return ResponseEntity.status(500).body(ResponseObject.builder()
+                .status("Fail")
+                .message("Internal sever error ")
+                .productResponse(null)
+                .build());
+    }
 }
+
+
+
 

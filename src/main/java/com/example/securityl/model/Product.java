@@ -88,6 +88,29 @@ public class Product {
 //    private List<Notifications> notifications;
 
 
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productId=" + productId +
+                ", title='" + title + '\'' +
+                ", discount=" + discount +
+                ", description='" + description + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", size='" + size + '\'' +
+                ", productName='" + productName + '\'' +
+                ", thumbnail='" + thumbnail + '\'' +
+                ", favorite=" + favorite +
+                ", quantity=" + quantity +
+                ", user=" + user +
+                ", color='" + color + '\'' +
+                ", price=" + price +
+                ", materials='" + materials + '\'' +
+                ", brand='" + brand + '\'' +
+                ", categories=" + categories +
+                ", imageProducts=" + imageProducts +
+                '}';
+    }
 
 
 

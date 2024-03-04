@@ -13,7 +13,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class VoucherRequest {
     private String voucherCode;
-    private double discountPercentage;
     private Date startDate;
     private Date endDate;
     private boolean active;

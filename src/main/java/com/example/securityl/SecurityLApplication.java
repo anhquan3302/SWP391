@@ -92,7 +92,7 @@ public class SecurityLApplication {
                     .discount(20)
                     .quantity(7)
                     .brand("Japan")
-                    .favorite(true)
+                    .favorite(false)
                     .user(adminUser)
                     .thumbnail("https://bizweb.dktcdn.net/100/467/207/products/screenshot-2023-09-22-121711.jpg?v=1696500727497")
                     .build();
@@ -128,7 +128,7 @@ public class SecurityLApplication {
                     .discount(10)
                     .quantity(7)
                     .brand("USA")
-                    .favorite(true)
+                    .favorite(false)
                     .user(adminUser)
                     .thumbnail("http://res.cloudinary.com/dxorh7ue1/image/upload/v1708794717/qk4x9tvqxv0fjdtaio6k.jpg")
                     .build();

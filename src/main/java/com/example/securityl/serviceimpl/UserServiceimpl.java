@@ -72,7 +72,7 @@ public class UserServiceimpl implements UserService {
         if(checkPhone){
             return CreateResponse.builder()
                     .status("Create fail")
-                    .message("Phone is valid")
+                    .message("Phone invalid")
                     .build();
         }
         Matcher matcher = pattern.matcher(request.getEmail());

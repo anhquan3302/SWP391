@@ -3,6 +3,7 @@ package com.example.securityl.repository;
 import com.example.securityl.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,7 +34,9 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     List<Product> findProductsByFilter2(String materials, String brand, Double minPrice, Double maxPrice, String color);
 
 
-    List<Product> findByFavorite(boolean favorite);
+
+
+    List<Product> findProductsByFavoriteTrue();
 
     boolean existsProductByProductName(String productName);
     Product findProductsByProductName(String productName);

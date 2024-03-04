@@ -2,6 +2,8 @@ package com.example.securityl.controller;
 
 import com.example.securityl.model.Product;
 import com.example.securityl.request.ProductRequest.RequestObject;
+import com.example.securityl.request.ProductRequest.SearchProduct;
+import com.example.securityl.request.ProductRequest.WishlistRequest;
 import com.example.securityl.response.ProductResponse.ListProductResponse;
 import com.example.securityl.response.ProductResponse.ProductResponse;
 import com.example.securityl.response.ProductResponse.ResponseObject;
@@ -14,7 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +23,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/product")
 @PreAuthorize("hasAnyRole('admin')")
-@CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:5173/", maxAge = 3600)
 public class ProductController {
     private final ProductService productService;
     private final FireBaseService fireBaseService;
 
     @PostMapping("")
+    @PreAuthorize("hasAuthority('admin:create')")
     public ResponseEntity<ResponseObject> createProduct(
                                                         @RequestParam("productName") String productName,
                                                         @RequestParam("title") String title,
@@ -40,12 +42,12 @@ public class ProductController {
                                                         @RequestParam("thumbnail") String thumbnail,
                                                         @RequestParam("quantity") Integer quantity,
                                                         @RequestParam("brand") String brand,
-                                                        @RequestParam("favorite") boolean favorite,
                                                         @RequestParam("categoryName")String categoryName) {
-        return productService.createProduct(productName,title, description, discount, color, size, price, material,thumbnail,quantity,brand,favorite,categoryName);
+        return productService.createProduct(productName,title, description, discount, color, size, price, material,thumbnail,quantity,brand,categoryName);
     }
 
     @PostMapping("/upload-images/{productId}")
+    @PreAuthorize("hasAuthority('admin:create')")
     public ResponseEntity<?> uploadImages(@PathVariable Integer productId,
                                           @RequestParam("files") MultipartFile[] files) {
         try {
@@ -64,6 +66,8 @@ public class ProductController {
                     .body("Failed to upload images: " + e.getMessage());
         }
     }
+
+
 
     @GetMapping("")
     public ResponseEntity<ListProductResponse> getAllProduct(){
@@ -86,16 +90,26 @@ public class ProductController {
 
 
     @PutMapping("/{productId}")
+    @PreAuthorize("hasAuthority('admin:update')")
     public ResponseEntity<ResponseObject> updateProduct(
             @PathVariable Integer productId,
             @RequestBody RequestObject requestObject) {
         return productService.updateProduct(productId, requestObject);
+    }
+
+    @PutMapping("/wishlist/{productId}")
+    @PreAuthorize("hasAuthority('admin:update')")
+    public ResponseEntity<ResponseObject> addWishlist(
+            @PathVariable Integer productId,
+            @RequestBody WishlistRequest wishlistRequest) {
+        return productService.addWishList(productId, wishlistRequest);
     }
     @GetMapping("/{productId}")
     private ProductResponse getProductById(@PathVariable Integer productId){
         return productService.getProductById(productId);
     }
     @DeleteMapping("/{productId}")
+    @PreAuthorize("hasAuthority('admin:delete')")
     private ResponseEntity<ResponseObject> deleteProduct(
             @PathVariable Integer productId){
         return productService.deleteProduct(productId);
@@ -126,4 +140,13 @@ public class ProductController {
         return ResponseEntity.ok(productList);
     }
 
+    @GetMapping("/searchProduct")
+    private ResponseEntity<ListProductResponse> searchProducts(@RequestBody SearchProduct searchProduct){
+        return productService.searchProduct(searchProduct);
+    }
+
+    @GetMapping("/viewWishList")
+    private ResponseEntity<ListProductResponse> viewWishlist(){
+        return productService.viewWishList();
+    }
 }

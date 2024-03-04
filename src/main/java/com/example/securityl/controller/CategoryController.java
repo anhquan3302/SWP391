@@ -19,18 +19,18 @@ import java.util.List;
 public class CategoryController {
     private final CategoryService categoryService;
 
-    @GetMapping("/getAllCategory")
+    @GetMapping()
     private ResponseEntity<ResponseObject> getAllCategory(){
         return categoryService.findAllCategory();
     }
 
-    @PostMapping("/createCategory")
+    @PostMapping()
     private ResponseEntity<ResponseObject> createCategory(@RequestBody RequestCategory requestCategory){
         var category = categoryService.createCategory(requestCategory);
         return ResponseEntity.ok().body(new ResponseObject("Success","Create Category succes",category));
     }
 
-    @GetMapping("/getCategory/{categoryId}")
+    @GetMapping("{categoryId}")
     private ResponseEntity<ResponseObject> getCategoryById(@PathVariable Integer categoryId){
         List<Category> category=  categoryService.findCategoryById(categoryId);
         if(category!= null){
@@ -39,13 +39,13 @@ public class CategoryController {
         return  ResponseEntity.badRequest().body(new ResponseObject("Fail","Not found category",null));
     }
 
-    @PutMapping("/updateCategory/{categoryId}")
+    @PutMapping("{categoryId}")
     private ResponseEntity<ResponseObject> updateCategory(@PathVariable Integer categoryId,
                                                           @RequestBody RequestCategory requestCategory){
        return categoryService.updateCategory(categoryId,requestCategory);
     }
 
-    @DeleteMapping("/deleteCategory/{categoryId}")
+    @DeleteMapping("{categoryId}")
     private ResponseEntity<ResponseObject> deleteCategory(@PathVariable Integer categoryId){
         return categoryService.deleteCategory(categoryId);
     }

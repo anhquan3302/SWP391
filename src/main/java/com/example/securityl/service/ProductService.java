@@ -3,6 +3,7 @@ package com.example.securityl.service;
 import com.example.securityl.model.Product;
 import com.example.securityl.request.ProductRequest.RequestObject;
 import com.example.securityl.request.ProductRequest.SearchProduct;
+import com.example.securityl.request.ProductRequest.WishlistRequest;
 import com.example.securityl.response.Inventory.QuantityResponse;
 import com.example.securityl.response.ProductResponse.ListProductResponse;
 import com.example.securityl.response.ProductResponse.ProductResponse;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ProductService  {
-    ResponseEntity<ResponseObject> createProduct(String productName, String title, String description, double discount, String color, String size, double price, String material, String thumbnail, Integer quantity, String brand, boolean favorite, String categoryName);
+    ResponseEntity<ResponseObject> createProduct(String productName, String title, String description, double discount, String color, String size, double price, String material, String thumbnail, Integer quantity, String brand,  String categoryName);
 
     ResponseEntity<ResponseObject> deleteProduct(Integer productId);
 
@@ -34,7 +35,9 @@ public interface ProductService  {
 
     List<Product> searchProductsVer2(String materials, String brand, Double minPrice, Double maxPrice, String color);
 
-    ResponseEntity<ListProductResponse> viewWishList(boolean favorite);
+    ResponseEntity<ListProductResponse> viewWishList();
 
     ResponseEntity<QuantityResponse> trackInventory(String productName);
+
+    ResponseEntity<ResponseObject> addWishList(Integer productId, WishlistRequest wishlistRequest);
 }

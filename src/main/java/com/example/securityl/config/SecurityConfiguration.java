@@ -47,19 +47,27 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/order/**").hasAnyRole(deliveryStaff.name())
 
                         .requestMatchers("/api/v1/blog/**").hasAnyRole(admin.name())
-                        .requestMatchers("/api/v1/category/**").hasAnyRole(admin.name(), staff.name())
 
-                        .requestMatchers("/api/v1/product/**").hasAnyRole(admin.name())
+                        .requestMatchers("/api/v1/category/**").permitAll()
+                        .requestMatchers(GET, "/api/v1/category/**").permitAll()
+                        .requestMatchers(POST, "/api/v1/category/**").hasAnyAuthority(ADMIN_CREATE.name())
+                        .requestMatchers(PUT, "/api/v1/category/**").hasAnyAuthority(ADMIN_UPDATE.name())
+                        .requestMatchers(DELETE, "/api/v1/category/**").hasAnyAuthority(ADMIN_DELETE.name())
+
+                        .requestMatchers("/api/v1/product/**").permitAll()
+                        .requestMatchers(GET, "/api/v1/product/**").permitAll()
+                        .requestMatchers(POST, "/api/v1/product/**").hasAnyAuthority(ADMIN_CREATE.name())
+                        .requestMatchers(PUT, "/api/v1/product/**").hasAnyAuthority(ADMIN_UPDATE.name())
+                        .requestMatchers(DELETE, "/api/v1/product/**").hasAnyAuthority(ADMIN_DELETE.name())
 
 
-                        .requestMatchers("/api/v1/voucher/**").hasAnyRole(admin.name(),staff.name())
+                        .requestMatchers( "/api/v1/coupon/**").permitAll()
+                        .requestMatchers(GET, "/api/v1/coupon/**").permitAll()
+                        .requestMatchers(POST, "/api/v1/coupon/**").hasAnyAuthority(ADMIN_CREATE.name())
+                        .requestMatchers(PUT, "/api/v1/coupon/**").hasAnyAuthority(ADMIN_UPDATE.name())
+                        .requestMatchers(DELETE, "/api/v1/coupon/**").hasAnyAuthority(ADMIN_DELETE.name())
 
 
-//                        .requestMatchers("/api/v1/managemnet/**").hasAnyRole(admin.name(), staff.name())
-//                        .requestMatchers(GET, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_VIEW.name(), STAFF_VIEW.name())
-//                        .requestMatchers(POST, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_CREATE.name(), STAFF_CREATE.name())
-//                        .requestMatchers(PUT, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_UPDATE.name(), STAFF_UPDATE.name())
-//                        .requestMatchers(DELETE, "/api/v1/managemnet/**").hasAnyAuthority(ADMIN_DELETE.name(), STAFF_DELETE.name())
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

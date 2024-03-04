@@ -12,21 +12,21 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/coupon")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ADMIN','STAFF')")
+@PreAuthorize("hasAnyRole('admin')")
 public class VoucherController {
     private final VoucherService voucherService;
 
-    @PostMapping("/createVoucher")
+    @PostMapping()
     private ResponseEntity<ResponseObject> createVoucher(@RequestBody VoucherRequest voucherRequest){
         return voucherService.createVoucher(voucherRequest);
     }
 
-    @GetMapping("/getAllVoucher")
+    @GetMapping()
     private ResponseEntity<ResponseObject> getAll(){
         return  voucherService.findAllVoucher();
     }
 
-    @DeleteMapping("/deleteVoucher/{voucherId}")
+    @DeleteMapping("{voucherId}")
     private ResponseEntity<ResponseObject> deleteVoucherById(@PathVariable Integer voucherId){
         voucherService.deleteVoucher(voucherId);
         return ResponseEntity.ok().body(new ResponseObject("Success","Delete success",null));
