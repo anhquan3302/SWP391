@@ -6,11 +6,13 @@ import com.example.securityl.repository.OrderRepository;
 import com.example.securityl.repository.ProductRepository;
 import com.example.securityl.repository.VoucherRepository;
 import com.example.securityl.request.CheckoutResquest.CheckoutRequest;
+import com.example.securityl.response.ObjectResponse.ResponseObject;
 import com.example.securityl.response.OrderResponse.ListOrderResponse;
 import com.example.securityl.response.OrderResponse.ObjectRepose;
 import com.example.securityl.response.OrderResponse.OrderResponse;
 import com.example.securityl.service.OrderService;
 import com.example.securityl.service.ShoppingCartService;
+import com.example.securityl.service.VoucherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,7 +25,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
-    private final VoucherRepository voucherRepository;
+    private final VoucherService voucherService;
     private final ProductRepository productRepository;
     private final OrderDetailRepository orderDetailRepository;
     private final ShoppingCartService shoppingCartService;
@@ -46,21 +48,20 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         double totalPrice = shoppingCartService.getTotal();
 
-        // apply voucher vao
+        // apply voucher vào nếu có
         if (checkoutRequest.getVoucherCode() != null) {
-            Voucher voucher = voucherRepository.findByVoucherCode(checkoutRequest.getVoucherCode());
-            if (voucher != null && voucher.isActive()) {
-                totalPrice = calculateDiscount(totalPrice, voucher);
-                voucher.setActive(false);
-                voucherRepository.save(voucher);
+            ResponseEntity<ResponseObject> voucherResponse = voucherService.applyVoucher(checkoutRequest.getVoucherCode());
+            if (voucherResponse.getStatusCode().is2xxSuccessful()) {
+                totalPrice = (double) voucherResponse.getBody().getPayload();
             } else {
-                throw new RuntimeException("Mã voucher không hợp lệ hoặc đã hết hạn");
+                throw new RuntimeException("Failed to apply voucher: " + voucherResponse.getBody().getMessage());
             }
         }
+
         order.setTotalMoney(totalPrice);
         orderRepository.save(order);
 
-        // luu order
+        // Lưu thông tin chi tiết đơn hàng
         for (CartItem cartItem : cartItems) {
             Integer productId = cartItem.getProductId();
             Product product = productRepository.findById(productId).orElse(null);
@@ -83,6 +84,8 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
+
+
     @Override
     public ResponseEntity<ListOrderResponse> viewOder() {
         List<Orders> list = orderRepository.findAll();
@@ -100,18 +103,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-    private double calculateDiscount(double totalPrice, Voucher voucher) {
-        double discountPercentage = voucher.getDiscountPercentage();
-        if (totalPrice >= 10000) {
-            discountPercentage = 20;
-        } else if (totalPrice >= 5000) {
-            discountPercentage = 10;
-        } else {
-            discountPercentage = 0;
-        }
-        double discountAmount = (totalPrice * discountPercentage) / 100;
-        return totalPrice - discountAmount;
-    }
+
 
 
 

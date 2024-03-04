@@ -1,6 +1,7 @@
 package com.example.securityl.service;
 
 import com.example.securityl.model.Voucher;
+import com.example.securityl.request.VoucherRequest.RequestVoucher;
 import com.example.securityl.request.VoucherRequest.VoucherRequest;
 import com.example.securityl.response.ObjectResponse.ResponseObject;
 import org.springframework.http.ResponseEntity;
@@ -17,4 +18,6 @@ public interface VoucherService {
     Voucher deleteVoucher(Integer voucherId);
 
     ResponseEntity<ResponseObject> searchVoucher(String voucherCode);
+
+    ResponseEntity<ResponseObject> applyVoucher(String voucherCode);
 }

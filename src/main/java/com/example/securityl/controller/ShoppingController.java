@@ -6,18 +6,18 @@ import com.example.securityl.model.Orders;
 import com.example.securityl.request.CheckoutResquest.CheckoutRequest;
 //import com.example.securityl.request.CheckoutResquest.ShoppingRequest;
 import com.example.securityl.request.CheckoutResquest.ShoppingRequest;
+import com.example.securityl.request.VoucherRequest.RequestVoucher;
 import com.example.securityl.response.ObjectResponse.ResponseObject;
 import com.example.securityl.response.ShoppingCartResponse.CartResponse;
 import com.example.securityl.response.ShoppingCartResponse.DeleteCartResponse;
 import com.example.securityl.service.OrderService;
-import com.example.securityl.service.ProductService;
 import com.example.securityl.service.ShoppingCartService;
+import com.example.securityl.service.VoucherService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +31,7 @@ import java.util.List;
 public class ShoppingController {
   private final ShoppingCartService shoppingCartService;
   private final OrderService orderService;
+  private final VoucherService voucherService;
     private static final Logger logger = LoggerFactory.getLogger(ShoppingController.class);
 
 
@@ -89,6 +90,11 @@ public class ShoppingController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseObject("Error", "Failed to checkout", null));
         }
+    }
+
+    @GetMapping("/applyVoucher")
+    public ResponseEntity<?> applyVoucherToCart(@RequestParam String voucherCode) {
+            return voucherService.applyVoucher(voucherCode);
     }
 
 
