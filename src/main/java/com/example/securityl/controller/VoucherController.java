@@ -36,4 +36,9 @@ public class VoucherController {
     public ResponseEntity<ResponseObject> checkVoucherExistence(@PathVariable String voucherCode) {
         return voucherService.searchVoucher(voucherCode);
     }
+
+    @PutMapping("/{voucherId}")
+    public ResponseEntity<ResponseObject> updateVoucher(@PathVariable Integer voucherId,@RequestBody VoucherRequest voucherRequest){
+        return voucherService.updateVoucher(voucherId,voucherRequest);
+    }
 }

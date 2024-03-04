@@ -26,6 +26,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -128,11 +129,16 @@ public class VoucherServiceImpl implements VoucherService {
             if (voucher.isActive()) {
                 Date currentDate = new Date();
                 if (currentDate.after(voucher.getStartDate()) && currentDate.before(voucher.getEndDate())) {
-                    double discountedPrice = calculateDiscount(totalPrice, voucher);
-                    updateTotalPriceInCart(cartItems, discountedPrice);
+                    if (isTotalPriceQualified(totalPrice, voucher)) {
+                        double discountedPrice = calculateDiscount(totalPrice, voucher);
+                        updateTotalPriceInCart(cartItems, discountedPrice);
 
-                    return ResponseEntity.ok()
-                            .body(new ResponseObject("Success", "Voucher applied successfully", discountedPrice));
+                        return ResponseEntity.ok()
+                                .body(new ResponseObject("Success", "Voucher applied successfully", discountedPrice));
+                    } else {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(new ResponseObject("Fail", "Total price does not meet voucher conditions", null));
+                    }
                 } else {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                             .body(new ResponseObject("Fail", "Voucher inactive or expired", null));
@@ -144,6 +150,49 @@ public class VoucherServiceImpl implements VoucherService {
         }
         return null;
     }
+
+
+    @Override
+    public ResponseEntity<ResponseObject> updateVoucher(Integer voucherId, VoucherRequest voucherRequest) {
+        try {
+            String token = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
+                    .getRequest()
+                    .getHeader("Authorization")
+                    .substring(7);
+            String userEmail = jwtService.extractUsername(token);
+            var requester = userRepository.findUserByEmail(userEmail).orElse(null);
+            if (requester == null || !(requester.getRole().equals(Role.staff) || requester.getRole().equals(Role.admin))) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseObject("Fail", "Unauthorized", null));
+            }
+            Optional<Voucher> optionalVoucher = voucherRepository.findById(voucherId);
+            if (!optionalVoucher.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+            Voucher voucher = optionalVoucher.get();
+            voucher.setVoucherCode(voucherRequest.getVoucherCode());
+            voucher.setStartDate(voucherRequest.getStartDate());
+            voucher.setEndDate(voucherRequest.getEndDate());
+            voucher.setActive(voucherRequest.isActive());
+            voucherRepository.save(voucher);
+
+            return ResponseEntity.ok().body(new ResponseObject("Success", "Voucher updated successfully", voucher));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("Fail", "Failed to update voucher", null));
+        }
+    }
+
+
+
+    private boolean isTotalPriceQualified(double totalPrice, Voucher voucher) {
+        if (totalPrice >= 100000 && voucher.getDiscountPercentage() == 20) {
+            return true;
+        } else if (totalPrice >= 50000 && voucher.getDiscountPercentage() == 10) {
+            return true;
+        }
+        return false;
+    }
+
 
     private void updateTotalPriceInCart(List<CartItem> cartItems, double discountedPrice) {
         double totalOriginalPrice = shoppingCartService.getTotal();

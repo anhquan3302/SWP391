@@ -20,4 +20,6 @@ public interface VoucherService {
     ResponseEntity<ResponseObject> searchVoucher(String voucherCode);
 
     ResponseEntity<ResponseObject> applyVoucher(String voucherCode);
+
+    ResponseEntity<ResponseObject> updateVoucher(Integer voucherId, VoucherRequest voucherRequest);
 }

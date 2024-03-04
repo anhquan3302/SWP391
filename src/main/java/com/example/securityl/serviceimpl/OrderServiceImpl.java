@@ -1,10 +1,12 @@
 package com.example.securityl.serviceimpl;
 
-import com.example.securityl.model.*;
+import com.example.securityl.model.CartItem;
+import com.example.securityl.model.OrderDetail;
+import com.example.securityl.model.Orders;
+import com.example.securityl.model.Product;
 import com.example.securityl.repository.OrderDetailRepository;
 import com.example.securityl.repository.OrderRepository;
 import com.example.securityl.repository.ProductRepository;
-import com.example.securityl.repository.VoucherRepository;
 import com.example.securityl.request.CheckoutResquest.CheckoutRequest;
 import com.example.securityl.response.ObjectResponse.ResponseObject;
 import com.example.securityl.response.OrderResponse.ListOrderResponse;
@@ -18,7 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @SessionScope
@@ -46,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
                 .history(date)
                 .status("Dang cho xu ky")
                 .build();
-        double totalPrice = shoppingCartService.getTotal();
+        double totalPrice = 0;
 
         // apply voucher vào nếu có
         if (checkoutRequest.getVoucherCode() != null) {
@@ -56,8 +59,12 @@ public class OrderServiceImpl implements OrderService {
             } else {
                 throw new RuntimeException("Failed to apply voucher: " + voucherResponse.getBody().getMessage());
             }
+        } else {
+            // Nếu không có voucher, sử dụng tổng giá tiền của giỏ hàng
+            totalPrice = shoppingCartService.getTotal();
         }
 
+        // Thiết lập tổng giá tiền trong đơn hàng
         order.setTotalMoney(totalPrice);
         orderRepository.save(order);
 
@@ -83,6 +90,7 @@ public class OrderServiceImpl implements OrderService {
 
         return order;
     }
+
 
 
 
