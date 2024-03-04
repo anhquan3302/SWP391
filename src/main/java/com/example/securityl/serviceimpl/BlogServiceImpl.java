@@ -71,13 +71,15 @@ public class BlogServiceImpl implements BlogService {
             blog.setContent(blogRequest.getContent());
             blog.setCreatedAt(new Date());
             blog.setUpdatedAt(new Date());
-            var user = userRepository.findUsersByUserId(blogRequest.getUserId());//huy code do
 
+            var user = userRepository.findUsersByUserId(blogRequest.getUserId());//huy code do
+            blog.setUser(user);
 
             Blog savedBlog = blogRepository.save(blog);
+            BlogRequest blogRequest1 = new BlogRequest(savedBlog.getTitle(), savedBlog.getContent(), savedBlog.getUser().getUserId());
 
 
-            return ResponseEntity.ok(new ResponseObject("Success", "Create blog success", savedBlog));
+            return ResponseEntity.ok(new ResponseObject("Success", "Create blog success", blogRequest1));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ResponseObject("Fail", "Internal Server Error", null));
         }
@@ -96,6 +98,7 @@ public class BlogServiceImpl implements BlogService {
     public List<Blog> searchBlog(String createdAt, String searchValue, String orderBy) {
         return blogRepository.findBlogsByFilter(createdAt, searchValue, orderBy);
     }
+
     @Override
     public ResponseEntity<ResponseObject> updateBlog(int blogId, BlogRequest blogRequest) {
         try {
@@ -144,7 +147,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public ResponseEntity<ResponseObject> findAllBlog() {
         var blogAll = blogRepository.findAll();
-        return ResponseEntity.ok().body(new ResponseObject("Success","List blog",blogAll));
+        return ResponseEntity.ok().body(new ResponseObject("Success", "List blog", blogAll));
     }
 
 
