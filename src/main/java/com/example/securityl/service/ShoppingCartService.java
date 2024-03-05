@@ -20,8 +20,5 @@ public interface ShoppingCartService {
 
     int getCount();
 
-
-
-
     List<CartItem> addToCart(List<ShoppingRequest> shoppingRequest);
 }

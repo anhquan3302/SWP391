@@ -110,6 +110,8 @@ public class UserServiceimpl implements UserService {
         }
     }
 
+
+
     private UserResponse convertToUserResponse(User user) {
         return UserResponse.builder()
                 .userId(user.getUserId())
@@ -124,12 +126,13 @@ public class UserServiceimpl implements UserService {
 
 
     @Override
-    public ResponseEntity<UpdateUserResponse> updateUser(String email, UpdateUserRequest updateUserRequest) {
-        var user = userRepository.findByEmail(email).orElse(null);
+    public ResponseEntity<UpdateUserResponse> updateUser(Integer userId, UpdateUserRequest updateUserRequest) {
+        var user = userRepository.findById(userId).orElse(null);
         if (user != null) {
             if (updateUserRequest != null && updateUserRequest.getName() != null && !updateUserRequest.getName().isEmpty() && updateUserRequest.getName().length() <= MAX_NAME_LENGTH) {
                 user.setName(updateUserRequest.getName());
             }
+            assert updateUserRequest != null;
             Matcher matcher = pattern.matcher(updateUserRequest.getEmail());
             if (matcher.matches()) {
                 user.setEmail(updateUserRequest.getEmail());
@@ -175,8 +178,8 @@ public class UserServiceimpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<DeleteResponse> deleteUser(String email) {
-        var userEmail = userRepository.findUsersByEmail(email);
+    public ResponseEntity<DeleteResponse> deleteUser(Integer userId) {
+        var userEmail = userRepository.findById(userId).orElse(null);
         if (userEmail != null) {
             userEmail.setStatus(false);
             userRepository.save(userEmail);

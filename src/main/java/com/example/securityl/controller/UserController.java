@@ -47,13 +47,13 @@ public class UserController {
         }
     }
 
-    @PutMapping("/updateUser/{email}")
+    @PutMapping("/updateUser/{userId}")
     @PreAuthorize("hasAuthority('admin:update')")
     public ResponseEntity<UpdateUserResponse> updateUser(
-            @PathVariable String email,
+            @PathVariable Integer userId,
             @RequestBody UpdateUserRequest updateUserRequest) {
         try {
-            return ResponseEntity.ok(userService.updateUser(email, updateUserRequest).getBody());
+            return ResponseEntity.ok(userService.updateUser(userId, updateUserRequest).getBody());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(UpdateUserResponse.builder()
                     .status("Update fail")
@@ -62,12 +62,12 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/delete/{email}")
+    @DeleteMapping("/delete/{userId}")
     @PreAuthorize("hasAuthority('admin:delete')")
     public ResponseEntity<DeleteResponse> deleteUser(
-            @PathVariable String email) {
+            @PathVariable Integer userId) {
         try {
-            return ResponseEntity.ok(userService.deleteUser(email).getBody());
+            return ResponseEntity.ok(userService.deleteUser(userId).getBody());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(DeleteResponse.builder()
                     .status("Delete fail")

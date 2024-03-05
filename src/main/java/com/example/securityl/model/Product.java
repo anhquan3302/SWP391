@@ -54,6 +54,9 @@ public class Product {
     @Column(name ="quantity")
     private Integer quantity;
 
+    @Column(name ="images")
+    private String images;
+
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "user_id")

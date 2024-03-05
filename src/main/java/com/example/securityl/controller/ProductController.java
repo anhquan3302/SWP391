@@ -80,11 +80,8 @@ public class ProductController {
         if (files == null || files.length == 0) {
             return ResponseEntity.badRequest().body("No files uploaded");
         }
-
         List<String> imageUrls = fireBaseService.uploadImages(files);
-
         productService.uploadProductImage(productId, imageUrls);
-
         return ResponseEntity.ok("Images uploaded successfully");
     }
 

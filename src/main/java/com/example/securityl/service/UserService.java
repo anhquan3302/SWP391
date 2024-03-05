@@ -11,8 +11,8 @@ import java.util.List;
 
 public interface UserService {
     CreateResponse createUser(UserRequest request);
-    ResponseEntity<UpdateUserResponse> updateUser(String email, UpdateUserRequest updateUserRequest);
-    ResponseEntity<DeleteResponse> deleteUser(String email);
+    ResponseEntity<UpdateUserResponse> updateUser(Integer userId, UpdateUserRequest updateUserRequest);
+    ResponseEntity<DeleteResponse> deleteUser(Integer userId);
     UserResponse getUser(Integer id);
     ResponseEntity<ResponseUser> findAllUser();
 

@@ -38,7 +38,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authentication -> authentication
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/shoppingCart").permitAll()
+                        .requestMatchers("/api/v1/shoppingCart/**").permitAll()
                         .requestMatchers("/api/v1/home/**").permitAll()
                         .requestMatchers("/api/v1/feedBack/**").permitAll()
                         .requestMatchers("/api/v1/vnpay/**").permitAll()
