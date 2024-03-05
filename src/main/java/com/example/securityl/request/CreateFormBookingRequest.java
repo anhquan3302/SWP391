@@ -1,14 +1,12 @@
 package com.example.securityl.request;
 
-import jakarta.persistence.Column;
-
 import java.time.LocalDateTime;
 
 public class CreateFormBookingRequest {
 
         private LocalDateTime dateTime;
         private String designDescription;
-        private int designerId;
+//        private int designerId;
         private int userId;
 
 
@@ -33,13 +31,13 @@ public class CreateFormBookingRequest {
                 this.designDescription = designDescription;
         }
 
-        public int getDesignerId() {
-                return designerId;
-        }
-
-        public void setDesignerId(int designerId) {
-                this.designerId = designerId;
-        }
+//        public int getDesignerId() {
+//                return designerId;
+//        }
+//
+//        public void setDesignerId(int designerId) {
+//                this.designerId = designerId;
+//        }
 
         public int getUserId() {
                 return userId;

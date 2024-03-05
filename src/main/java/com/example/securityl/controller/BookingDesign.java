@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/BookingDesgin")
+@RequestMapping("/api/v1/Booking")
 public class BookingDesign {
     private final BookingDesignService bookingDesignService;
 

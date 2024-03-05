@@ -44,6 +44,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/vnpay/**").permitAll()
                         .requestMatchers("/api/v1/feedBack/**").hasAnyRole(staff.name())
 
+                        .requestMatchers("/api/v1/Booking/**").permitAll()
+
                         .requestMatchers("/api/v1/order/**").hasAnyRole(deliveryStaff.name())
 
                         .requestMatchers("/api/v1/blog/**").hasAnyRole(admin.name())

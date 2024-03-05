@@ -37,10 +37,10 @@ public class BookingDesignServiceImpl implements BookingDesignService {
             }
 
             // Assuming designerId is provided in the request
-            Designer designer = desinerRepository.findById(createFormBookingRequest.getDesignerId()).orElse(null);
-            if (designer == null) {
-                return ResponseEntity.badRequest().body(new CreateFormBookingResponse("Fail", "Invalid designerId", null));
-            }
+//            Designer designer = desinerRepository.findById(createFormBookingRequest.getDesignerId()).orElse(null);
+//            if (designer == null) {
+//                return ResponseEntity.badRequest().body(new CreateFormBookingResponse("Fail", "Invalid designerId", null));
+//            }
 
             // Assuming userId is provided in the request
             User user = userRepository.findById(createFormBookingRequest.getUserId()).orElse(null);
@@ -55,7 +55,7 @@ public class BookingDesignServiceImpl implements BookingDesignService {
             booking.setMeetingTime(createFormBookingRequest.getMeetingTime());
 
             // Set other fields similarly
-            booking.setDesigner(designer);
+//            booking.setDesigner(designer);
             booking.setUser(user);
 
             BookingDesign savedBooking = bookingDesignRepository.save(booking);
