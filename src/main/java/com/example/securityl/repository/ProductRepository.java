@@ -1,5 +1,6 @@
 package com.example.securityl.repository;
 
+import com.example.securityl.model.Orders;
 import com.example.securityl.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -41,4 +42,5 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     boolean existsProductByProductName(String productName);
     Product findProductsByProductName(String productName);
 
+    Product findById(Product product);
 }
