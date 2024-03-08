@@ -30,15 +30,7 @@ public class FeedBackController {
         return feedbackService.updateFeedback(feedbackId, feedbackRequest);
     }
 
-    @DeleteMapping("/deleteFeedback/{feedbackId}")
-    public ResponseEntity<ResponseObject> deleteFeedback(@PathVariable int feedbackId) {
-        return feedbackService.deleteFeedback(feedbackId);
-    }
 
-    @GetMapping("/findFeedback/{feedbackId}")
-    public ResponseEntity<ResponseObject> findFeedbackById(@PathVariable int feedbackId) {
-        return feedbackService.findFeedbackById(feedbackId);
-    }
 
     @GetMapping("/getAllFeedback")
     public ResponseEntity<ResponseObject> getAllFeedback() {
