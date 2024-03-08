@@ -1,7 +1,7 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.response.OrderResponse.ListOrderResponse;
-import com.example.securityl.response.OrderResponse.ObjectRepose;
+import com.example.securityl.dto.request.response.OrderResponse.ListOrderResponse;
+import com.example.securityl.dto.request.response.OrderResponse.ObjectRepose;
 import com.example.securityl.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

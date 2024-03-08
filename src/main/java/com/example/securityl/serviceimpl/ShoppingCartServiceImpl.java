@@ -1,19 +1,13 @@
 package com.example.securityl.serviceimpl;
 
-import ch.qos.logback.core.model.Model;
 import com.example.securityl.model.*;
-import com.example.securityl.repository.OrderRepository;
 import com.example.securityl.repository.ProductRepository;
-import com.example.securityl.repository.VoucherRepository;
-import com.example.securityl.request.CheckoutResquest.CheckoutRequest;
 //import com.example.securityl.request.CheckoutResquest.ShoppingRequest;
-import com.example.securityl.request.CheckoutResquest.ShoppingRequest;
+import com.example.securityl.dto.request.CheckoutResquest.ShoppingRequest;
 import com.example.securityl.service.ShoppingCartService;
-import jakarta.persistence.criteria.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.*;
 

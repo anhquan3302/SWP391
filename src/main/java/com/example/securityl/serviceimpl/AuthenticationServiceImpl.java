@@ -1,15 +1,14 @@
 package com.example.securityl.serviceimpl;
 
-import com.example.securityl.model.Enum.Role;
 import com.example.securityl.model.Token;
 import com.example.securityl.model.Enum.TokenType;
 import com.example.securityl.model.User;
 import com.example.securityl.repository.TokenRepository;
 import com.example.securityl.repository.UserRepository;
-import com.example.securityl.request.UserRequest.AuthenticationRequest;
-import com.example.securityl.request.UserRequest.RegisterRequest;
-import com.example.securityl.response.UserResponse.AuthenticationResponse;
-import com.example.securityl.response.UserResponse.RegisterResponse;
+import com.example.securityl.dto.request.UserRequest.AuthenticationRequest;
+import com.example.securityl.dto.request.UserRequest.RegisterRequest;
+import com.example.securityl.dto.request.response.UserResponse.AuthenticationResponse;
+import com.example.securityl.dto.request.response.UserResponse.RegisterResponse;
 import com.example.securityl.service.AuthenticationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

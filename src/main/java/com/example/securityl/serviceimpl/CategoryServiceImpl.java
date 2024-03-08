@@ -2,8 +2,8 @@ package com.example.securityl.serviceimpl;
 
 import com.example.securityl.model.Category;
 import com.example.securityl.repository.CategoryRepository;
-import com.example.securityl.request.CategoryRequest.RequestCategory;
-import com.example.securityl.response.ObjectResponse.ResponseObject;
+import com.example.securityl.dto.request.CategoryRequest.RequestCategory;
+import com.example.securityl.dto.request.response.ObjectResponse.ResponseObject;
 import com.example.securityl.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

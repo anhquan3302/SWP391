@@ -2,10 +2,9 @@ package com.example.securityl.service;
 
 import com.example.securityl.model.CartItem;
 import com.example.securityl.model.Orders;
-import com.example.securityl.request.CheckoutResquest.CheckoutRequest;
-import com.example.securityl.response.OrderResponse.ListOrderResponse;
-import com.example.securityl.response.OrderResponse.ObjectRepose;
-import com.example.securityl.response.OrderResponse.OrderResponse;
+import com.example.securityl.dto.request.CheckoutResquest.CheckoutRequest;
+import com.example.securityl.dto.request.response.OrderResponse.ListOrderResponse;
+import com.example.securityl.dto.request.response.OrderResponse.ObjectRepose;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 

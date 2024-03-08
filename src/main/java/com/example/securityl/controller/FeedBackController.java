@@ -1,8 +1,7 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.model.Feedback;
-import com.example.securityl.request.FeedBackRequest.FeedBackRequest;
-import com.example.securityl.response.BlogResponse.ResponseObject;
+import com.example.securityl.dto.request.FeedBackRequest.FeedBackRequest;
+import com.example.securityl.dto.request.response.BlogResponse.ResponseObject;
 import com.example.securityl.service.FeedBackService;
 import lombok.RequiredArgsConstructor;
 

@@ -1,10 +1,10 @@
 package com.example.securityl.controller;
 
 import com.example.securityl.model.User;
-import com.example.securityl.request.UserRequest.AuthenticationRequest;
-import com.example.securityl.request.UserRequest.RegisterRequest;
-import com.example.securityl.response.UserResponse.AuthenticationResponse;
-import com.example.securityl.response.UserResponse.RegisterResponse;
+import com.example.securityl.dto.request.UserRequest.AuthenticationRequest;
+import com.example.securityl.dto.request.UserRequest.RegisterRequest;
+import com.example.securityl.dto.request.response.UserResponse.AuthenticationResponse;
+import com.example.securityl.dto.request.response.UserResponse.RegisterResponse;
 import com.example.securityl.service.AuthenticationService;
 import com.example.securityl.service.EmailService;
 import com.example.securityl.service.UserService;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('USER','ADMIN','STAFF')")
-@CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:5173/", maxAge = 3600)
 public class AuthenticationController {
 
     private final AuthenticationService service;

@@ -1,7 +1,7 @@
 package com.example.securityl.service;
 
-import com.example.securityl.request.CreateFormBookingRequest;
-import com.example.securityl.response.CreateFormBookingResponse;
+import com.example.securityl.dto.request.CreateFormBookingRequest;
+import com.example.securityl.dto.request.response.CreateFormBookingResponse;
 import org.springframework.http.ResponseEntity;
 
 public interface BookingDesignService {

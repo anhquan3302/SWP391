@@ -1,11 +1,11 @@
 package com.example.securityl.controller;
 
 
+import com.example.securityl.dto.request.response.UserResponse.*;
 import com.example.securityl.model.User;
-import com.example.securityl.request.UserRequest.UserRequest;
-import com.example.securityl.request.UserRequest.SearchRequest;
-import com.example.securityl.request.UserRequest.UpdateUserRequest;
-import com.example.securityl.response.UserResponse.*;
+import com.example.securityl.dto.request.UserRequest.UserRequest;
+import com.example.securityl.dto.request.UserRequest.SearchRequest;
+import com.example.securityl.dto.request.UserRequest.UpdateUserRequest;
 import com.example.securityl.serviceimpl.UserServiceimpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 @RequestMapping("/api/v1/admin")
 @PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
-//@CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:5173/", maxAge = 3600)
 public class UserController {
     private final UserServiceimpl userService;
 

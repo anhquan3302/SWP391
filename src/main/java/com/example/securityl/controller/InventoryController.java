@@ -1,6 +1,6 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.response.Inventory.QuantityResponse;
+import com.example.securityl.dto.request.response.Inventory.QuantityResponse;
 import com.example.securityl.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

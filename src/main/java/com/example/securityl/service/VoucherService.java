@@ -1,9 +1,8 @@
 package com.example.securityl.service;
 
 import com.example.securityl.model.Voucher;
-import com.example.securityl.request.VoucherRequest.RequestVoucher;
-import com.example.securityl.request.VoucherRequest.VoucherRequest;
-import com.example.securityl.response.ObjectResponse.ResponseObject;
+import com.example.securityl.dto.request.VoucherRequest.VoucherRequest;
+import com.example.securityl.dto.request.response.ObjectResponse.ResponseObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 

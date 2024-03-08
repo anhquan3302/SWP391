@@ -1,7 +1,7 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.request.DesignProjectRequest;
-import com.example.securityl.response.DesignProjectResponse;
+import com.example.securityl.dto.request.DesignProjectRequest;
+import com.example.securityl.dto.request.response.DesignProjectResponse;
 import com.example.securityl.service.DesignProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

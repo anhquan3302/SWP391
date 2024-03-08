@@ -1,10 +1,9 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.request.CreateFormBookingRequest;
-import com.example.securityl.response.CreateFormBookingResponse;
+import com.example.securityl.dto.request.CreateFormBookingRequest;
+import com.example.securityl.dto.request.response.CreateFormBookingResponse;
 import com.example.securityl.service.BookingDesignService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

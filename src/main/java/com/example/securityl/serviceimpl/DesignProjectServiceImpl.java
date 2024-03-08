@@ -2,8 +2,8 @@ package com.example.securityl.serviceimpl;
 
 import com.example.securityl.model.DesignProjects;
 import com.example.securityl.repository.DesignProjectsRepository;
-import com.example.securityl.request.DesignProjectRequest;
-import com.example.securityl.response.DesignProjectResponse;
+import com.example.securityl.dto.request.DesignProjectRequest;
+import com.example.securityl.dto.request.response.DesignProjectResponse;
 import com.example.securityl.service.DesignProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

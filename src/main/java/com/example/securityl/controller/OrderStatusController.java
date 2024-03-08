@@ -1,10 +1,10 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.request.CreateOrderStatusRequest;
-import com.example.securityl.request.UpdateOrderStatusRequest;
-import com.example.securityl.response.OrderStatusResponse;
+import com.example.securityl.dto.request.CreateOrderStatusRequest;
+import com.example.securityl.dto.request.UpdateOrderStatusRequest;
+import com.example.securityl.dto.request.response.OrderStatusResponse;
 
-import com.example.securityl.response.UpdateOrderStatusResponse;
+import com.example.securityl.dto.request.response.UpdateOrderStatusResponse;
 import com.example.securityl.service.OrderStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

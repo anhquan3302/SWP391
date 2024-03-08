@@ -3,13 +3,12 @@ package com.example.securityl.controller;
 
 import com.example.securityl.model.CartItem;
 import com.example.securityl.model.Orders;
-import com.example.securityl.request.CheckoutResquest.CheckoutRequest;
+import com.example.securityl.dto.request.CheckoutResquest.CheckoutRequest;
 //import com.example.securityl.request.CheckoutResquest.ShoppingRequest;
-import com.example.securityl.request.CheckoutResquest.ShoppingRequest;
-import com.example.securityl.request.VoucherRequest.RequestVoucher;
-import com.example.securityl.response.ObjectResponse.ResponseObject;
-import com.example.securityl.response.ShoppingCartResponse.CartResponse;
-import com.example.securityl.response.ShoppingCartResponse.DeleteCartResponse;
+import com.example.securityl.dto.request.CheckoutResquest.ShoppingRequest;
+import com.example.securityl.dto.request.response.ObjectResponse.ResponseObject;
+import com.example.securityl.dto.request.response.ShoppingCartResponse.CartResponse;
+import com.example.securityl.dto.request.response.ShoppingCartResponse.DeleteCartResponse;
 import com.example.securityl.service.OrderService;
 import com.example.securityl.service.ShoppingCartService;
 import com.example.securityl.service.VoucherService;
@@ -27,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/shoppingCart")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:5173/", maxAge = 3600)
 public class ShoppingController {
   private final ShoppingCartService shoppingCartService;
   private final OrderService orderService;

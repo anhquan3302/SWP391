@@ -1,10 +1,10 @@
 package com.example.securityl.service;
 
-import com.example.securityl.request.UserRequest.SearchRequest;
+import com.example.securityl.dto.request.UserRequest.SearchRequest;
+import com.example.securityl.dto.request.response.UserResponse.*;
 import com.example.securityl.model.User;
-import com.example.securityl.request.UserRequest.UserRequest;
-import com.example.securityl.request.UserRequest.UpdateUserRequest;
-import com.example.securityl.response.UserResponse.*;
+import com.example.securityl.dto.request.UserRequest.UserRequest;
+import com.example.securityl.dto.request.UserRequest.UpdateUserRequest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

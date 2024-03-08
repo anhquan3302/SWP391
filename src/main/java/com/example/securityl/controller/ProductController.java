@@ -1,12 +1,12 @@
 package com.example.securityl.controller;
 
 import com.example.securityl.model.Product;
-import com.example.securityl.request.ProductRequest.RequestObject;
-import com.example.securityl.request.ProductRequest.SearchProduct;
-import com.example.securityl.request.ProductRequest.WishlistRequest;
-import com.example.securityl.response.ProductResponse.ListProductResponse;
-import com.example.securityl.response.ProductResponse.ProductResponse;
-import com.example.securityl.response.ProductResponse.ResponseObject;
+import com.example.securityl.dto.request.ProductRequest.RequestObject;
+import com.example.securityl.dto.request.ProductRequest.SearchProduct;
+import com.example.securityl.dto.request.ProductRequest.WishlistRequest;
+import com.example.securityl.dto.request.response.ProductResponse.ListProductResponse;
+import com.example.securityl.dto.request.response.ProductResponse.ProductResponse;
+import com.example.securityl.dto.request.response.ProductResponse.ResponseObject;
 import com.example.securityl.service.FireBaseService;
 import com.example.securityl.service.ProductService;
 import lombok.RequiredArgsConstructor;

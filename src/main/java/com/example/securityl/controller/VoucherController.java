@@ -1,8 +1,7 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.model.Voucher;
-import com.example.securityl.request.VoucherRequest.VoucherRequest;
-import com.example.securityl.response.ObjectResponse.ResponseObject;
+import com.example.securityl.dto.request.VoucherRequest.VoucherRequest;
+import com.example.securityl.dto.request.response.ObjectResponse.ResponseObject;
 import com.example.securityl.service.VoucherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,21 +11,22 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/coupon")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('admin')")
+@PreAuthorize("hasAnyRole('ADMIN','STAFF')")
+@CrossOrigin(origins = "http://localhost:5173/", maxAge = 3600)
 public class VoucherController {
     private final VoucherService voucherService;
 
-    @PostMapping()
+    @PostMapping("/createVoucher")
     private ResponseEntity<ResponseObject> createVoucher(@RequestBody VoucherRequest voucherRequest){
         return voucherService.createVoucher(voucherRequest);
     }
 
-    @GetMapping()
+    @GetMapping("/getAllVoucher")
     private ResponseEntity<ResponseObject> getAll(){
         return  voucherService.findAllVoucher();
     }
 
-    @DeleteMapping("{voucherId}")
+    @DeleteMapping("/deleteVoucher/{voucherId}")
     private ResponseEntity<ResponseObject> deleteVoucherById(@PathVariable Integer voucherId){
         voucherService.deleteVoucher(voucherId);
         return ResponseEntity.ok().body(new ResponseObject("Success","Delete success",null));
@@ -35,10 +35,5 @@ public class VoucherController {
     @GetMapping("/{voucherCode}")
     public ResponseEntity<ResponseObject> checkVoucherExistence(@PathVariable String voucherCode) {
         return voucherService.searchVoucher(voucherCode);
-    }
-
-    @PutMapping("/{voucherId}")
-    public ResponseEntity<ResponseObject> updateVoucher(@PathVariable Integer voucherId,@RequestBody VoucherRequest voucherRequest){
-        return voucherService.updateVoucher(voucherId,voucherRequest);
     }
 }

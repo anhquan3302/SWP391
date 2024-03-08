@@ -1,13 +1,13 @@
 package com.example.securityl.service;
 
 import com.example.securityl.model.Product;
-import com.example.securityl.request.ProductRequest.RequestObject;
-import com.example.securityl.request.ProductRequest.SearchProduct;
-import com.example.securityl.request.ProductRequest.WishlistRequest;
-import com.example.securityl.response.Inventory.QuantityResponse;
-import com.example.securityl.response.ProductResponse.ListProductResponse;
-import com.example.securityl.response.ProductResponse.ProductResponse;
-import com.example.securityl.response.ProductResponse.ResponseObject;
+import com.example.securityl.dto.request.ProductRequest.RequestObject;
+import com.example.securityl.dto.request.ProductRequest.SearchProduct;
+import com.example.securityl.dto.request.ProductRequest.WishlistRequest;
+import com.example.securityl.dto.request.response.Inventory.QuantityResponse;
+import com.example.securityl.dto.request.response.ProductResponse.ListProductResponse;
+import com.example.securityl.dto.request.response.ProductResponse.ProductResponse;
+import com.example.securityl.dto.request.response.ProductResponse.ResponseObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
