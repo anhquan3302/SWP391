@@ -51,7 +51,6 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         double totalPrice = 0;
 
-        // apply voucher vào nếu có
         if (checkoutRequest.getVoucherCode() != null) {
             ResponseEntity<ResponseObject> voucherResponse = voucherService.applyVoucher(checkoutRequest.getVoucherCode());
             if (voucherResponse.getStatusCode().is2xxSuccessful()) {
@@ -60,7 +59,6 @@ public class OrderServiceImpl implements OrderService {
                 throw new RuntimeException("Failed to apply voucher: " + voucherResponse.getBody().getMessage());
             }
         } else {
-            // Nếu không có voucher, sử dụng tổng giá tiền của giỏ hàng
             totalPrice = shoppingCartService.getTotal();
         }
 
@@ -94,6 +92,7 @@ public class OrderServiceImpl implements OrderService {
 
 
 
+
     @Override
     public ResponseEntity<ListOrderResponse> viewOder() {
         List<Orders> list = orderRepository.findAll();
@@ -111,7 +110,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-
+    private OrderResponse convertToOrderResponseV2(Orders orderRequest) {
+        return OrderResponse.builder()
+                .orderId(orderRequest.getOrderId())
+                .phone(orderRequest.getPhone())
+                .email(orderRequest.getEmail())
+                .code(orderRequest.getCode())
+                .address(orderRequest.getAddress())
+                .totalMoney(orderRequest.getTotalMoney())
+                .history(orderRequest.getHistory())
+                .note(orderRequest.getNote())
+                .build();
+    }
 
 
 
