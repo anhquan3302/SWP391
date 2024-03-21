@@ -16,6 +16,11 @@ public enum Permission {
     STAFF_CREATE("staff:create"),
     STAFF_DELETE("staff:delete"),
 
+    DELIVERY_STAFF_VIEW("staff:read"),
+    DELIVERY_STAFF_UPDATE("staff:update"),
+    DELIVERY_STAFF_CREATE("staff:create"),
+    DELIVERY_STAFF_DELETE("staff:delete"),
+
     USER_VIEW("user:read"),
     USER_UPDATE("user:update"),
     USER_CREATE("user:create"),

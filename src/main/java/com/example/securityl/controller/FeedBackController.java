@@ -1,8 +1,7 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.model.Feedback;
-import com.example.securityl.request.FeedBackRequest.FeedBackRequest;
-import com.example.securityl.response.BlogResponse.ResponseObject;
+import com.example.securityl.dto.request.FeedBackRequest.FeedBackRequest;
+import com.example.securityl.dto.request.response.BlogResponse.ResponseObject;
 import com.example.securityl.service.FeedBackService;
 import lombok.RequiredArgsConstructor;
 
@@ -11,10 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/managementFeedBack")
+@RequestMapping("/api/v1/feedBack")
 public class FeedBackController {
-
-
     private final FeedBackService feedbackService;
 
 

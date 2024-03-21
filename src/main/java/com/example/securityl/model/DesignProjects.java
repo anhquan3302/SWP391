@@ -36,6 +36,18 @@ public class DesignProjects {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "deposit")
+    private double deposit;
+
+    @OneToOne
+    @JoinColumn(name = "designer_id")
+    private Designer designer;
+
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "customer_id")
+    private User customer;
+
     @ManyToOne
     @JoinColumn(name = "booking_id")
     @JsonBackReference

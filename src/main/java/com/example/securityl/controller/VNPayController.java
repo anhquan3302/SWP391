@@ -1,11 +1,10 @@
 package com.example.securityl.controller;
 
 import com.example.securityl.config.VNPayConfig;
-import com.example.securityl.response.PaymentResDTO.PaymentResponse;
+import com.example.securityl.dto.request.response.PaymentResDTO.PaymentResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,18 +13,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/payment")
+@RequestMapping("/api/v1/vnpay")
 public class VNPayController {
 
-    @Autowired
-    private HttpServletRequest request;
+
 
     @GetMapping("/pay")
     public ResponseEntity<?> getPay(HttpServletRequest req, HttpServletResponse resp,
@@ -47,8 +44,6 @@ public class VNPayController {
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
-//        vnp_Params.put("username", username);
-
         if (bankCode != null && !bankCode.isEmpty()) {
             vnp_Params.put("vnp_BankCode", bankCode);
         }

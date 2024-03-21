@@ -33,4 +33,6 @@ public class Designer {
     @Column(name = "experience_years")
     private int experienceYears;
 
+    @Column(name ="design_type")
+    private String desgin_type;
 }

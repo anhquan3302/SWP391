@@ -2,14 +2,12 @@ package com.example.securityl.serviceimpl;
 
 
 import com.example.securityl.model.BookingDesign;
-import com.example.securityl.model.Designer;
 import com.example.securityl.model.User;
-import com.example.securityl.repository.BlogRepository;
 import com.example.securityl.repository.BookingDesignRepository;
 import com.example.securityl.repository.DesinerRepository;
 import com.example.securityl.repository.UserRepository;
-import com.example.securityl.request.CreateFormBookingRequest;
-import com.example.securityl.response.CreateFormBookingResponse;
+import com.example.securityl.dto.request.CreateFormBookingRequest;
+import com.example.securityl.dto.request.response.CreateFormBookingResponse;
 import com.example.securityl.service.BookingDesignService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -37,10 +35,10 @@ public class BookingDesignServiceImpl implements BookingDesignService {
             }
 
             // Assuming designerId is provided in the request
-            Designer designer = desinerRepository.findById(createFormBookingRequest.getDesignerId()).orElse(null);
-            if (designer == null) {
-                return ResponseEntity.badRequest().body(new CreateFormBookingResponse("Fail", "Invalid designerId", null));
-            }
+//            Designer designer = desinerRepository.findById(createFormBookingRequest.getDesignerId()).orElse(null);
+//            if (designer == null) {
+//                return ResponseEntity.badRequest().body(new CreateFormBookingResponse("Fail", "Invalid designerId", null));
+//            }
 
             // Assuming userId is provided in the request
             User user = userRepository.findById(createFormBookingRequest.getUserId()).orElse(null);
@@ -55,7 +53,7 @@ public class BookingDesignServiceImpl implements BookingDesignService {
             booking.setMeetingTime(createFormBookingRequest.getMeetingTime());
 
             // Set other fields similarly
-            booking.setDesigner(designer);
+//            booking.setDesigner(designer);
             booking.setUser(user);
 
             BookingDesign savedBooking = bookingDesignRepository.save(booking);

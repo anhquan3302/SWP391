@@ -1,10 +1,10 @@
 package com.example.securityl.controller;
 
 import com.example.securityl.model.User;
-import com.example.securityl.request.UserRequest.AuthenticationRequest;
-import com.example.securityl.request.UserRequest.RegisterRequest;
-import com.example.securityl.response.UserResponse.AuthenticationResponse;
-import com.example.securityl.response.UserResponse.RegisterResponse;
+import com.example.securityl.dto.request.UserRequest.AuthenticationRequest;
+import com.example.securityl.dto.request.UserRequest.RegisterRequest;
+import com.example.securityl.dto.request.response.UserResponse.AuthenticationResponse;
+import com.example.securityl.dto.request.response.UserResponse.RegisterResponse;
 import com.example.securityl.service.AuthenticationService;
 import com.example.securityl.service.EmailService;
 import com.example.securityl.service.UserService;
@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('USER','ADMIN','STAFF')")
-@CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:5173/", maxAge = 3600)
 public class AuthenticationController {
 
     private final AuthenticationService service;
@@ -41,13 +42,21 @@ public class AuthenticationController {
                     .message("Register fail")
                     .build());
         }
-
-
     }
 
-    @PostMapping("/authenticate")
+    @GetMapping("/google")
+    public ResponseEntity<String> googleLogin(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .header(HttpHeaders.LOCATION, "/oauth2/authorization/google")
+                    .build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
+    }
 
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+    @PostMapping("/login")
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
         try {
             return ResponseEntity.ok(service.authenticate(request));
         } catch (Exception e) {
@@ -64,7 +73,7 @@ public class AuthenticationController {
         service.refreshToken(request, response);
     }
 
-    @PostMapping("/forgetpass")
+    @PostMapping("/forgot-password")
     public ResponseEntity<?> register(@RequestParam String email) {
         try {
             User user = userService.findByEmailForMail(email);

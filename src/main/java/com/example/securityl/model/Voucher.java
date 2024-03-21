@@ -37,7 +37,7 @@ public class Voucher {
 
 
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
-//    private Orders orders;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
+    private Orders orders;
 }

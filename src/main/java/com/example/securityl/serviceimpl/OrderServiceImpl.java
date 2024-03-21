@@ -1,25 +1,35 @@
 package com.example.securityl.serviceimpl;
 
-import com.example.securityl.model.*;
+import com.example.securityl.model.CartItem;
+import com.example.securityl.model.OrderDetail;
+import com.example.securityl.model.Orders;
+import com.example.securityl.model.Product;
 import com.example.securityl.repository.OrderDetailRepository;
 import com.example.securityl.repository.OrderRepository;
 import com.example.securityl.repository.ProductRepository;
-import com.example.securityl.repository.VoucherRepository;
-import com.example.securityl.request.CheckoutResquest.CheckoutRequest;
+import com.example.securityl.dto.request.CheckoutResquest.CheckoutRequest;
+import com.example.securityl.dto.request.response.ObjectResponse.ResponseObject;
+import com.example.securityl.dto.request.response.OrderResponse.ListOrderResponse;
+import com.example.securityl.dto.request.response.OrderResponse.ObjectRepose;
+import com.example.securityl.dto.request.response.OrderResponse.OrderResponse;
 import com.example.securityl.service.OrderService;
 import com.example.securityl.service.ShoppingCartService;
+import com.example.securityl.service.VoucherService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+
 @Service
 @SessionScope
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
-    private final VoucherRepository voucherRepository;
+    private final VoucherService voucherService;
     private final ProductRepository productRepository;
     private final OrderDetailRepository orderDetailRepository;
     private final ShoppingCartService shoppingCartService;
@@ -30,41 +40,33 @@ public class OrderServiceImpl implements OrderService {
         if (cartItems == null || cartItems.isEmpty()) {
             throw new IllegalArgumentException("Cart is empty");
         }
-
-        // Tạo đơn hàng mới
         Orders order = Orders.builder()
                 .phone(checkoutRequest.getPhone())
                 .email(checkoutRequest.getEmail())
-                .fullname(checkoutRequest.getFullname())
+                .code(checkoutRequest.getCode())
+                .custormer(checkoutRequest.getFullname())
                 .address(checkoutRequest.getAddress())
                 .note(checkoutRequest.getNote())
                 .history(date)
-                .status(true)
+                .status("Dang cho xu ky")
                 .build();
+        double totalPrice = 0;
 
-        // Tính tổng giá trị đơn hàng
-        double totalPrice = shoppingCartService.getTotal();
-
-        // Kiểm tra và áp dụng mã giảm giá
         if (checkoutRequest.getVoucherCode() != null) {
-            Voucher voucher = voucherRepository.findByVoucherCode(checkoutRequest.getVoucherCode());
-            if (voucher != null && voucher.isActive()) {
-                totalPrice = calculateDiscount(totalPrice, voucher);
-                voucher.setActive(false);
-                voucherRepository.save(voucher);
+            ResponseEntity<ResponseObject> voucherResponse = voucherService.applyVoucher(checkoutRequest.getVoucherCode());
+            if (voucherResponse.getStatusCode().is2xxSuccessful()) {
+                totalPrice = (double) Objects.requireNonNull(voucherResponse.getBody()).getPayload();
             } else {
-                throw new RuntimeException("Mã voucher không hợp lệ hoặc đã hết hạn");
+                throw new RuntimeException("Failed to apply voucher: " + Objects.requireNonNull(voucherResponse.getBody()).getMessage());
             }
+        } else {
+            totalPrice = shoppingCartService.getTotal();
         }
-
-        // Lưu tổng giá trị đơn hàng vào đơn hàng
         order.setTotalMoney(totalPrice);
         orderRepository.save(order);
-
-        // Lưu chi tiết đơn hàng
         for (CartItem cartItem : cartItems) {
             Integer productId = cartItem.getProductId();
-            Products product = productRepository.findById(productId).orElse(null);
+            Product product = productRepository.findById(productId).orElse(null);
             if (product == null) {
                 throw new RuntimeException("Product with ID " + productId + " is not found");
             }
@@ -84,23 +86,105 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
-    private double calculateDiscount(double totalPrice, Voucher voucher) {
-        double discountPercentage = voucher.getDiscountPercentage();
-        if (totalPrice >= 10000) {
-            discountPercentage = 20;
-        } else if (totalPrice >= 5000) {
-            discountPercentage = 10;
+    public Orders checkoutV2(CheckoutRequest checkoutRequest, List<CartItem> cartItems) {
+        Date date = new Date();
+        if (cartItems == null || cartItems.isEmpty()) {
+            throw new IllegalArgumentException("Cart is empty");
+        }
+        Orders order = Orders.builder()
+                .phone(checkoutRequest.getPhone())
+                .email(checkoutRequest.getEmail())
+                .code(checkoutRequest.getCode())
+                .custormer(checkoutRequest.getFullname())
+                .address(checkoutRequest.getAddress())
+                .note(checkoutRequest.getNote())
+                .history(date)
+                .status("Dang cho xu ky")
+                .build();
+        double totalPrice = 0;
+
+        if (checkoutRequest.getVoucherCode() != null) {
+            ResponseEntity<ResponseObject> voucherResponse = voucherService.applyVoucher(checkoutRequest.getVoucherCode());
+            if (voucherResponse.getStatusCode().is2xxSuccessful()) {
+                totalPrice = (double) Objects.requireNonNull(voucherResponse.getBody()).getPayload();
+            } else {
+                throw new RuntimeException("Failed to apply voucher: " + Objects.requireNonNull(voucherResponse.getBody()).getMessage());
+            }
         } else {
-            discountPercentage = 0;
+            totalPrice = shoppingCartService.getTotal();
+        }
+        order.setTotalMoney(totalPrice);
+        orderRepository.save(order);
+        for (CartItem cartItem : cartItems) {
+            Integer productId = cartItem.getProductId();
+            Product product = productRepository.findById(productId).orElse(null);
+            if (product == null) {
+                throw new RuntimeException("Product with ID " + productId + " is not found");
+            }
+            int quantity = cartItem.getQuantity();
+            double totalMoney = cartItem.getPrice() * quantity;
+            OrderDetail orderDetail = OrderDetail.builder()
+                    .product(product)
+                    .fullname(product.getProductName())
+                    .price(cartItem.getPrice())
+                    .number(quantity)
+                    .order(order)
+                    .totalMoney(totalMoney)
+                    .build();
+            orderDetailRepository.save(orderDetail);
         }
 
-        double discountAmount = (totalPrice * discountPercentage) / 100;
-        return totalPrice - discountAmount;
+        return order;
     }
 
 
 
 
+
+    @Override
+    public ResponseEntity<ListOrderResponse> viewOder() {
+        List<Orders> list = orderRepository.findAll();
+
+        return ResponseEntity.ok().body(new ListOrderResponse("Sucees","List Order",list));
+    }
+
+    @Override
+    public ResponseEntity<ObjectRepose> getInfor(Integer orderId) {
+        Orders orders = orderRepository.findOrdersByOrderId(orderId);
+        if(orders != null){
+            return ResponseEntity.ok().body(new ObjectRepose("Success","InforOrder",convertToOrderResponse(orders)));
+        }
+        return ResponseEntity.badRequest().body(new ObjectRepose("Fail","Not found order",null));
+    }
+
+
+    private OrderResponse convertToOrderResponseV2(Orders orderRequest) {
+        return OrderResponse.builder()
+                .orderId(orderRequest.getOrderId())
+                .phone(orderRequest.getPhone())
+                .email(orderRequest.getEmail())
+                .code(orderRequest.getCode())
+                .address(orderRequest.getAddress())
+                .totalMoney(orderRequest.getTotalMoney())
+                .history(orderRequest.getHistory())
+                .note(orderRequest.getNote())
+                .build();
+    }
+
+
+
+    private OrderResponse convertToOrderResponse(Orders orderRequest) {
+        return OrderResponse.builder()
+                .orderId(orderRequest.getOrderId())
+                .phone(orderRequest.getPhone())
+                .email(orderRequest.getEmail())
+                .code(orderRequest.getCode())
+                .address(orderRequest.getAddress())
+                .totalMoney(orderRequest.getTotalMoney())
+                .history(orderRequest.getHistory())
+                .note(orderRequest.getNote())
+                .build();
+    }
 
 
 

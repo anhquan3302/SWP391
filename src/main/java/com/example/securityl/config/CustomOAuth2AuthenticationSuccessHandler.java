@@ -3,7 +3,7 @@ package com.example.securityl.config;
 import com.example.securityl.model.Enum.Role;
 import com.example.securityl.model.User;
 import com.example.securityl.repository.UserRepository;
-import com.example.securityl.response.UserResponse.AuthenticationResponse;
+import com.example.securityl.dto.request.response.UserResponse.AuthenticationResponse;
 import com.example.securityl.serviceimpl.JwtServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
@@ -37,39 +37,39 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
             String email = oAuth2User.getAttribute("email");
             String name = oAuth2User.getAttribute("name");
             String address = oAuth2User.getAttribute("address");
+
             User existingUser = userRepository.findByEmail(email).orElse(null);
+            String accessToken;
+            String refreshToken;
             if (existingUser == null) {
                 User newUser = User.builder()
                         .name(name)
                         .email(email)
                         .address(address)
-                        .role(Role.USER)
+                        .role(Role.user)
+                        .status(true)
                         .build();
-
                 User savedUser = userRepository.save(newUser);
-                String jwtToken = jwtService.generateToken(savedUser);
-
-                AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
-                        .staus("Success")
-                        .messages("Register success")
-                        .token(jwtToken)
-                        .build();
-
-                response.getWriter().write(new ObjectMapper().writeValueAsString(authenticationResponse));
-                response.setStatus(HttpServletResponse.SC_OK);
+                accessToken = jwtService.generateToken(savedUser);
+                refreshToken = jwtService.generateRefeshToken(savedUser);
             } else {
-
-                String jwtToken = jwtService.generateToken(existingUser);
-
-                AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
-                        .staus("Success")
-                        .messages("Login success")
-                        .token(jwtToken)
-                        .build();
-
-                response.getWriter().write(new ObjectMapper().writeValueAsString(authenticationResponse));
-                response.setStatus(HttpServletResponse.SC_OK);
+                accessToken = jwtService.generateToken(existingUser);
+                refreshToken = jwtService.generateRefeshToken(existingUser);
             }
+            sendAuthenticationResponse(response, "Success", "Login success", accessToken, refreshToken);
         }
+    }
+
+
+    private void sendAuthenticationResponse(HttpServletResponse response, String status, String message, String accessToken, String refreshToken) throws IOException {
+        AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
+                .status(status)
+                .messages(message)
+                .token(accessToken)
+                .refeshToken(refreshToken)
+                .build();
+        // Gửi thông tin đăng nhập thành công và token dưới dạng JSON
+        response.getWriter().write(new ObjectMapper().writeValueAsString(authenticationResponse));
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 }

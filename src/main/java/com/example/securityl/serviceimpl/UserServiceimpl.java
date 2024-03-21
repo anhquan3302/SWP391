@@ -1,15 +1,12 @@
 package com.example.securityl.serviceimpl;
 
-import com.example.securityl.request.UserRequest.SearchRequest;
+import com.example.securityl.dto.request.UserRequest.SearchRequest;
+import com.example.securityl.dto.request.response.UserResponse.*;
 import com.example.securityl.model.Enum.Role;
 import com.example.securityl.model.User;
 import com.example.securityl.repository.UserRepository;
-import com.example.securityl.request.UserRequest.CreateUserRequest;
-import com.example.securityl.request.UserRequest.UpdateUserRequest;
-import com.example.securityl.response.UserResponse.CreateResponse;
-import com.example.securityl.response.UserResponse.DeleteResponse;
-import com.example.securityl.response.UserResponse.ResponseUser;
-import com.example.securityl.response.UserResponse.UpdateUserResponse;
+import com.example.securityl.dto.request.UserRequest.UserRequest;
+import com.example.securityl.dto.request.UserRequest.UpdateUserRequest;
 import com.example.securityl.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,25 +29,50 @@ public class UserServiceimpl implements UserService {
     private final JwtServiceImpl jwtService;
     private final String emailRegex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
             + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+    private static final int MAX_NAME_LENGTH = 15;
+    private static final int MAX_PASSWORD_LENGTH = 6;
     Pattern pattern = Pattern.compile(emailRegex);
 
     @Override
-    public CreateResponse createUser(CreateUserRequest request) {
+    public CreateResponse createUser(UserRequest request) {
         String token = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
                 .getRequest().getHeader("Authorization").substring(7);
         String userEmail = jwtService.extractUsername(token);
         var requester = userRepository.findUserByEmail(userEmail).orElse(null);
         assert requester != null;
-        if (!requester.getRole().equals(Role.ADMIN)) {
+        if (!requester.getRole().equals(Role.admin)) {
             return CreateResponse.builder()
                     .status("Create fail")
                     .message("You are not authorized as an admin ")
+                    .userResponse(null)
                     .build();
         }
-        if (request.getPhone() == null || request.getPhone().length() != 10) {
+        if (request.getPhone() == null || request.getPhone().length() != 10 ) {
             return CreateResponse.builder()
                     .status("Create fail")
                     .message("Phone is not valid. Please provide a valid 10-digit phone number.")
+                    .userResponse(null)
+                    .build();
+        }
+        if (request.getName() == null || request.getName().length() > 15) {
+            return CreateResponse.builder()
+                    .status("Create fail")
+                    .message("Please provide a valid name with maximum length of 15 characters.")
+                    .userResponse(null)
+                    .build();
+        }
+        if(request.getPassword() == null || request.getPassword().length() > 5 ){
+            return CreateResponse.builder()
+                    .status("Create fail")
+                    .message("Password with maximum length of 5 characters.")
+                    .userResponse(null)
+                    .build();
+        }
+        var checkPhone = userRepository.existsByPhone(request.getPhone());
+        if(checkPhone){
+            return CreateResponse.builder()
+                    .status("Create fail")
+                    .message("Phone invalid")
                     .build();
         }
         Matcher matcher = pattern.matcher(request.getEmail());
@@ -59,16 +81,16 @@ public class UserServiceimpl implements UserService {
                     .builder()
                     .status("Create fail")
                     .message("Email is not valid")
+                    .userResponse(null)
                     .build();
         }
-
         var user = User.builder()
                 .name(request.getName())
                 .phone(request.getPhone())
                 .address(request.getAddress())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
+                .role(Role.user)
                 .status(true)
                 .build();
         var existedEmail = userRepository.findByEmail(user.getEmail()).orElse(null);
@@ -77,30 +99,56 @@ public class UserServiceimpl implements UserService {
             return CreateResponse.builder()
                     .status("Success")
                     .message("Create success")
+                    .userResponse(convertToUserResponse(user))
                     .build();
         } else {
             return CreateResponse.builder()
                     .status("Create fail")
                     .message("Account existed")
+                    .userResponse(null)
                     .build();
         }
     }
 
+
+
+    private UserResponse convertToUserResponse(User user) {
+        return UserResponse.builder()
+                .userId(user.getUserId())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .name(user.getName())
+                .address(user.getAddress())
+                .role(user.getRole())
+                .status(user.isStatus())
+                .build();
+    }
+
+
     @Override
-    public ResponseEntity<UpdateUserResponse> updateUser(String email, UpdateUserRequest updateUserRequest) {
-        var user = userRepository.findByEmail(email).orElse(null);
+    public ResponseEntity<UpdateUserResponse> updateUser(Integer userId, UpdateUserRequest updateUserRequest) {
+        var user = userRepository.findById(userId).orElse(null);
         if (user != null) {
-            if (updateUserRequest != null && updateUserRequest.getName() != null && !updateUserRequest.getName().isEmpty()) {
+            if (updateUserRequest != null && updateUserRequest.getName() != null && !updateUserRequest.getName().isEmpty() && updateUserRequest.getName().length() <= MAX_NAME_LENGTH) {
                 user.setName(updateUserRequest.getName());
             }
+            assert updateUserRequest != null;
             Matcher matcher = pattern.matcher(updateUserRequest.getEmail());
             if (matcher.matches()) {
                 user.setEmail(updateUserRequest.getEmail());
             }
-            if ((updateUserRequest.getPhone() != null && updateUserRequest.getPhone().length() == 10)) {
-                user.setPhone(user.getPhone());
+            if (updateUserRequest.getPhone() != null && updateUserRequest.getPhone().length() == 10) {
+                if (userRepository.existsByPhone(updateUserRequest.getPhone())) {
+                    return ResponseEntity.badRequest().body(UpdateUserResponse.builder()
+                            .status("Fail")
+                            .message("Phone already exists")
+                            .updateUser(null)
+                            .build());
+                } else {
+                    user.setPhone(updateUserRequest.getPhone());
+                }
             }
-            if (updateUserRequest.getPassword() != null && !updateUserRequest.getPassword().isEmpty()) {
+            if (updateUserRequest.getPassword() != null && !updateUserRequest.getPassword().isEmpty() && updateUserRequest.getPassword().length() <= MAX_PASSWORD_LENGTH) {
                 user.setPassword(updateUserRequest.getPassword());
             }
             if (updateUserRequest.getAddress() != null && !updateUserRequest.getAddress().isEmpty()) {
@@ -111,64 +159,63 @@ public class UserServiceimpl implements UserService {
             String userEmail = jwtService.extractUsername(token);
             var requester = userRepository.findUserByEmail(userEmail).orElse(null);
             assert requester != null;
-            if (requester.getRole().equals(Role.ADMIN)) {
+            if (requester.getRole().equals(Role.admin)) {
                 user.setRole(updateUserRequest.getRole());
             }
-            user.setStatus(updateUserRequest.isStatus());
+            user.setStatus(true);
             return ResponseEntity.ok(UpdateUserResponse.builder()
                     .status("Success")
                     .message("Update User Success")
-                    .updateUser(user)
+                    .updateUser(convertToUserResponse(user))
                     .build());
         } else {
             return ResponseEntity.badRequest().body(UpdateUserResponse.builder()
                     .status("Fail")
                     .message("Email not available")
+                    .updateUser(null)
                     .build());
         }
     }
 
     @Override
-    public ResponseEntity<DeleteResponse> deleteUser(String email) {
-        var userEmail = userRepository.findByEmail(email).orElse(null);
+    public ResponseEntity<DeleteResponse> deleteUser(Integer userId) {
+        var userEmail = userRepository.findById(userId).orElse(null);
         if (userEmail != null) {
             userEmail.setStatus(false);
             userRepository.save(userEmail);
             return ResponseEntity.ok(DeleteResponse.builder()
                     .status("Success")
                     .message("Ban success")
-                    .deleteUser(userEmail)
+                    .deleteUser(convertToUserResponse(userEmail))
                     .build());
         }
         return ResponseEntity.badRequest().body(DeleteResponse.builder()
                 .status("Fail")
                 .message("Ban fail")
-                .deleteUser(userEmail)
+                .deleteUser(null)
                 .build());
 
 
     }
 
     @Override
-    public User getUser(Integer userId) {
-        // Thực hiện truy vấn để lấy thông tin người dùng từ cơ sở dữ liệu
-        Optional<User> userOptional = userRepository.findById(userId);
-
-        // Kiểm tra xem người dùng có tồn tại không
-        if (userOptional.isPresent()) {
-            return userOptional.get();
-        } else {
-            // Nếu không tìm thấy người dùng, trả về null hoặc xử lý theo cách phù hợp
-            return null;
+    public UserResponse getUser(Integer userId) {
+        var userOptional = userRepository.findById(userId).orElse(null);
+        if (userOptional != null) {
+            return convertToUserResponse(userOptional);
         }
+        return null;
     }
+
 
 
     @Override
     public ResponseEntity<ResponseUser> findAllUser() {
         try {
             List<User> userList = userRepository.findAll();
-            return ResponseEntity.ok(new ResponseUser("Success","List users", userList));
+            List<UserResponse> userResponseList = convertToUserResponseList(userList);
+
+            return ResponseEntity.ok(new ResponseUser("Success","List users", userResponseList));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseUser.builder()
                             .status("Fail")
@@ -179,6 +226,15 @@ public class UserServiceimpl implements UserService {
 
 
     }
+
+    private List<UserResponse> convertToUserResponseList(List<User> userList) {
+        List<UserResponse> userResponseList = new ArrayList<>();
+        for (User user : userList) {
+            userResponseList.add(convertToUserResponse(user));
+        }
+        return userResponseList;
+    }
+
 
     @Override
     public ResponseEntity<ResponseUser> searchUsers(SearchRequest req) {
@@ -195,7 +251,7 @@ public class UserServiceimpl implements UserService {
             if(req.getEmail() != null && !req.getEmail().trim().isEmpty()){
                 userList = userList.stream().filter(n -> n.getEmail().contains(req.getEmail())).toList();
             }
-            return ResponseEntity.ok(new ResponseUser("Success","List users", userList));
+            return ResponseEntity.ok(new ResponseUser("Success","List users", convertToUserResponseList(userList)));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseUser.builder()
                     .status("Fail")

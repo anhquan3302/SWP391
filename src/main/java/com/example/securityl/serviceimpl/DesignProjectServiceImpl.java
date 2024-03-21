@@ -2,8 +2,8 @@ package com.example.securityl.serviceimpl;
 
 import com.example.securityl.model.DesignProjects;
 import com.example.securityl.repository.DesignProjectsRepository;
-import com.example.securityl.request.DesignProjectRequest;
-import com.example.securityl.response.DesignProjectResponse;
+import com.example.securityl.dto.request.DesignProjectRequest;
+import com.example.securityl.dto.request.response.DesignProjectResponse;
 import com.example.securityl.service.DesignProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +39,27 @@ public class DesignProjectServiceImpl implements DesignProjectService {
             designProjects.setStatus(designProjectRequest.getStatus());
 
             // Lưu đối tượng vào cơ sở dữ liệu
+            DesignProjects savedProject = designProjectsRepository.save(designProjects);
+
+            return ResponseEntity.ok(new DesignProjectResponse("Success", "Create design project success", savedProject));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new DesignProjectResponse("Fail", "Internal Server Error", null));
+        }
+    }
+
+
+    public ResponseEntity<DesignProjectResponse> createDesignProject1(DesignProjectRequest designProjectRequest) {
+        try {
+            if (designProjectRequest.getProjectName() == null || designProjectRequest.getProjectName().isEmpty() ||
+                    designProjectRequest.getUserId() == 0) {
+                return ResponseEntity.badRequest().body(new DesignProjectResponse("Fail", "Project name and user id are required", null));
+            }
+            DesignProjects designProjects = new DesignProjects();
+            designProjects.setUserId(designProjectRequest.getUserId());
+            designProjects.setProjectName(designProjectRequest.getProjectName());
+            designProjects.setStartDate(designProjectRequest.getStartDate());
+            designProjects.setEndDate(designProjectRequest.getEndDate());
+            designProjects.setStatus(designProjectRequest.getStatus());
             DesignProjects savedProject = designProjectsRepository.save(designProjects);
 
             return ResponseEntity.ok(new DesignProjectResponse("Success", "Create design project success", savedProject));

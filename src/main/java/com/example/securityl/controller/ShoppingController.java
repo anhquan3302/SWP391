@@ -3,21 +3,20 @@ package com.example.securityl.controller;
 
 import com.example.securityl.model.CartItem;
 import com.example.securityl.model.Orders;
-import com.example.securityl.model.Products;
-import com.example.securityl.request.CheckoutResquest.CheckoutRequest;
+import com.example.securityl.dto.request.CheckoutResquest.CheckoutRequest;
 //import com.example.securityl.request.CheckoutResquest.ShoppingRequest;
-import com.example.securityl.response.ObjectResponse.ResponseObject;
-import com.example.securityl.response.ShoppingCartResponse.CartResponse;
-import com.example.securityl.response.ShoppingCartResponse.DeleteCartResponse;
+import com.example.securityl.dto.request.CheckoutResquest.ShoppingRequest;
+import com.example.securityl.dto.request.response.ObjectResponse.ResponseObject;
+import com.example.securityl.dto.request.response.ShoppingCartResponse.CartResponse;
+import com.example.securityl.dto.request.response.ShoppingCartResponse.DeleteCartResponse;
 import com.example.securityl.service.OrderService;
-import com.example.securityl.service.ProductService;
 import com.example.securityl.service.ShoppingCartService;
+import com.example.securityl.service.VoucherService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,12 +26,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/shoppingCart")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('USER','ADMIN','STAFF')")
-@CrossOrigin(origins = "http://localhost:3000/", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:5173/", maxAge = 3600)
 public class ShoppingController {
   private final ShoppingCartService shoppingCartService;
-  private final ProductService productService;
   private final OrderService orderService;
+  private final VoucherService voucherService;
     private static final Logger logger = LoggerFactory.getLogger(ShoppingController.class);
 
 
@@ -61,15 +59,15 @@ public class ShoppingController {
         }
     }
 
-//    @PostMapping("/addtoCart")
-//    private ResponseEntity<List<CartItem>> addToCart(@RequestBody List<ShoppingRequest> shoppingRequest) {
-//        try {
-//            List<CartItem> cartItems = shoppingCartService.addToCart(shoppingRequest);
-//            return ResponseEntity.ok().body(cartItems);
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//    }
+    @PostMapping("/addtoCart")
+    private ResponseEntity<List<CartItem>> addToCart(@RequestBody List<ShoppingRequest> shoppingRequest) {
+        try {
+            List<CartItem> cartItems = shoppingCartService.addToCart(shoppingRequest);
+            return ResponseEntity.ok().body(cartItems);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
 
 
@@ -91,6 +89,11 @@ public class ShoppingController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseObject("Error", "Failed to checkout", null));
         }
+    }
+
+    @GetMapping("/applyVoucher")
+    public ResponseEntity<?> applyVoucherToCart(@RequestParam String voucherCode) {
+            return voucherService.applyVoucher(voucherCode);
     }
 
 

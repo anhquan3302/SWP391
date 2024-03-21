@@ -1,16 +1,13 @@
 package com.example.securityl.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Builder
@@ -27,8 +24,11 @@ public class Orders {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "fullname")
-    private String fullname;
+    @Column(name = "code")
+    private String code;
+
+    @Column(name = "custormer")
+    private String custormer;
 
     @Column(name = "phone")
     private String phone;
@@ -40,7 +40,7 @@ public class Orders {
     private String note;
 
     @Column(name = "status")
-    private boolean status;
+    private String status;
 
     @Column(name = "total_money")
     private Double totalMoney;

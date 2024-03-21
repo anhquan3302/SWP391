@@ -1,15 +1,14 @@
 package com.example.securityl.serviceimpl;
 
-import com.example.securityl.model.Enum.Role;
 import com.example.securityl.model.Token;
 import com.example.securityl.model.Enum.TokenType;
 import com.example.securityl.model.User;
 import com.example.securityl.repository.TokenRepository;
 import com.example.securityl.repository.UserRepository;
-import com.example.securityl.request.UserRequest.AuthenticationRequest;
-import com.example.securityl.request.UserRequest.RegisterRequest;
-import com.example.securityl.response.UserResponse.AuthenticationResponse;
-import com.example.securityl.response.UserResponse.RegisterResponse;
+import com.example.securityl.dto.request.UserRequest.AuthenticationRequest;
+import com.example.securityl.dto.request.UserRequest.RegisterRequest;
+import com.example.securityl.dto.request.response.UserResponse.AuthenticationResponse;
+import com.example.securityl.dto.request.response.UserResponse.RegisterResponse;
 import com.example.securityl.service.AuthenticationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -114,9 +113,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         revokeAllUsserTokens(user);
         saveToken(user, jwtToken);
         return AuthenticationResponse.builder()
-                .staus("Success")
+                .status("Success")
                 .messages("Login success")
-                .userLogin(user)
+                .userId(user.getUserId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .role(user.getRole())
                 .token(jwtToken)
                 .refeshToken(refreshToken)
                 .build();
@@ -142,7 +144,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 revokeAllUsserTokens(user);
                 saveToken(user, newToken);
                 var authResponse = AuthenticationResponse.builder()
-                        .staus("Success")
+                        .status("Success")
                         .messages("New token")
                         .token(newToken)
                         .refeshToken(refreshToken)

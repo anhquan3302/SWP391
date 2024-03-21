@@ -6,31 +6,20 @@ import com.example.securityl.model.*;
 import com.example.securityl.repository.BlogRepository;
 
 import com.example.securityl.repository.UserRepository;
-import com.example.securityl.request.BlogRequest.BlogRequest;
+import com.example.securityl.dto.request.BlogRequest.BlogRequest;
 
-import com.example.securityl.response.BlogResponse.ResponseObject;
+import com.example.securityl.dto.request.response.BlogResponse.ResponseObject;
 import com.example.securityl.service.BlogService;
 import com.example.securityl.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import com.example.securityl.request.BlogRequest.BlogRequest;
 
-import com.example.securityl.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import com.google.common.base.Strings;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service

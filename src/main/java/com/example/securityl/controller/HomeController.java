@@ -1,35 +1,28 @@
 package com.example.securityl.controller;
 
-import com.example.securityl.model.Products;
-import com.example.securityl.request.ProductRequest.SearchProduct;
-import com.example.securityl.response.ObjectResponse.ResponseObject;
-import com.example.securityl.service.ProductService;
+import com.example.securityl.dto.request.response.OrderResponse.ListOrderResponse;
+import com.example.securityl.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1/home")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173/", maxAge = 3600)
 public class HomeController {
-    private final ProductService productService;
-    @GetMapping("/getAllProduct")
-    public ResponseEntity<ResponseObject> getAllProduct(){
-        return productService.getAll();
-    }
 
-    @GetMapping("/getListProductByCategory")
-    private ResponseEntity<ResponseObject> getProductByCategoryName(@RequestParam String name) {
-        return productService.getProductByCategory(name);
-    }
+    private final OrderService orderService;
 
-    @GetMapping("/getProductById/{productId}")
-    private Products getProductById(@PathVariable Integer productId){
-        return productService.getProductById(productId);
-    }
 
-    @PostMapping("/getProduct")
-    private ResponseEntity<ResponseObject> searchProducts(@RequestBody SearchProduct searchProduct){
-        return productService.searchProduct(searchProduct);
+
+
+
+
+
+
+    @GetMapping("/getAllOrder")
+    private ResponseEntity<ListOrderResponse> listOrder(){
+        return  orderService.viewOder();
     }
 }

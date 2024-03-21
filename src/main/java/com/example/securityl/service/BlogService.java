@@ -1,12 +1,10 @@
 package com.example.securityl.service;
 
 import com.example.securityl.model.Blog;
-import com.example.securityl.request.BlogRequest.BlogRequest;
+import com.example.securityl.dto.request.BlogRequest.BlogRequest;
 
 
-import com.example.securityl.response.BlogResponse.ResponseObject;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.example.securityl.dto.request.response.BlogResponse.ResponseObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
