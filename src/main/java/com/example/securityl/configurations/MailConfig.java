@@ -1,4 +1,4 @@
-package com.example.securityl.config;
+package com.example.securityl.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
