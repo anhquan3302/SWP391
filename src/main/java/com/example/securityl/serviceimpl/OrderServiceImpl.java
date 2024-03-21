@@ -22,6 +22,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @SessionScope
@@ -54,19 +55,66 @@ public class OrderServiceImpl implements OrderService {
         if (checkoutRequest.getVoucherCode() != null) {
             ResponseEntity<ResponseObject> voucherResponse = voucherService.applyVoucher(checkoutRequest.getVoucherCode());
             if (voucherResponse.getStatusCode().is2xxSuccessful()) {
-                totalPrice = (double) voucherResponse.getBody().getPayload();
+                totalPrice = (double) Objects.requireNonNull(voucherResponse.getBody()).getPayload();
             } else {
-                throw new RuntimeException("Failed to apply voucher: " + voucherResponse.getBody().getMessage());
+                throw new RuntimeException("Failed to apply voucher: " + Objects.requireNonNull(voucherResponse.getBody()).getMessage());
             }
         } else {
             totalPrice = shoppingCartService.getTotal();
         }
-
-        // Thiết lập tổng giá tiền trong đơn hàng
         order.setTotalMoney(totalPrice);
         orderRepository.save(order);
+        for (CartItem cartItem : cartItems) {
+            Integer productId = cartItem.getProductId();
+            Product product = productRepository.findById(productId).orElse(null);
+            if (product == null) {
+                throw new RuntimeException("Product with ID " + productId + " is not found");
+            }
+            int quantity = cartItem.getQuantity();
+            double totalMoney = cartItem.getPrice() * quantity;
+            OrderDetail orderDetail = OrderDetail.builder()
+                    .product(product)
+                    .fullname(product.getProductName())
+                    .price(cartItem.getPrice())
+                    .number(quantity)
+                    .order(order)
+                    .totalMoney(totalMoney)
+                    .build();
+            orderDetailRepository.save(orderDetail);
+        }
 
-        // Lưu thông tin chi tiết đơn hàng
+        return order;
+    }
+
+    public Orders checkoutV2(CheckoutRequest checkoutRequest, List<CartItem> cartItems) {
+        Date date = new Date();
+        if (cartItems == null || cartItems.isEmpty()) {
+            throw new IllegalArgumentException("Cart is empty");
+        }
+        Orders order = Orders.builder()
+                .phone(checkoutRequest.getPhone())
+                .email(checkoutRequest.getEmail())
+                .code(checkoutRequest.getCode())
+                .custormer(checkoutRequest.getFullname())
+                .address(checkoutRequest.getAddress())
+                .note(checkoutRequest.getNote())
+                .history(date)
+                .status("Dang cho xu ky")
+                .build();
+        double totalPrice = 0;
+
+        if (checkoutRequest.getVoucherCode() != null) {
+            ResponseEntity<ResponseObject> voucherResponse = voucherService.applyVoucher(checkoutRequest.getVoucherCode());
+            if (voucherResponse.getStatusCode().is2xxSuccessful()) {
+                totalPrice = (double) Objects.requireNonNull(voucherResponse.getBody()).getPayload();
+            } else {
+                throw new RuntimeException("Failed to apply voucher: " + Objects.requireNonNull(voucherResponse.getBody()).getMessage());
+            }
+        } else {
+            totalPrice = shoppingCartService.getTotal();
+        }
+        order.setTotalMoney(totalPrice);
+        orderRepository.save(order);
         for (CartItem cartItem : cartItems) {
             Integer productId = cartItem.getProductId();
             Product product = productRepository.findById(productId).orElse(null);
