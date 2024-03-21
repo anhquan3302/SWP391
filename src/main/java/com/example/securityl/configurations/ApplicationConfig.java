@@ -1,6 +1,7 @@
 package com.example.securityl.configurations;
 
-import com.eFurnitureproject.eFurniture.repositories.UserRepository;
+
+import com.example.securityl.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

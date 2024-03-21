@@ -1,7 +1,8 @@
 package com.example.securityl.configurations;
 
-import com.eFurnitureproject.eFurniture.repositories.TokenRepository;
-import com.eFurnitureproject.eFurniture.services.impl.JwtServiceImpl;
+
+import com.example.securityl.repository.TokenRepository;
+import com.example.securityl.serviceimpl.JwtServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
