@@ -1,107 +1,107 @@
-package com.example.securityl.controllers;
-
-
-import com.example.securityl.Responses.AddressListResponse;
-import com.example.securityl.Responses.AddressResponse;
-import com.example.securityl.converter.AddressConverter;
-import com.example.securityl.dtos.AddressDto;
-import com.example.securityl.models.Address;
-import com.example.securityl.services.IAddressService;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-
-@RestController
-@RequestMapping("api/v1/address")
-@RequiredArgsConstructor
-@CrossOrigin
-public class AddressController {
-
-    private final IAddressService addressService;
-
-
-    @CrossOrigin
-    @GetMapping("/get-address-by-id/{addressId}")
-    public ResponseEntity<?> getAddressById(@PathVariable("addressId") Long addressId)
-    {
-        try {
-            Address address = addressService.getAddressById(addressId);
-            AddressResponse addressResponse = AddressConverter.toResponse(address);
-            return new ResponseEntity<>(addressResponse, HttpStatus.OK);
-        }catch (Exception e)
-        {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @CrossOrigin
-    @GetMapping("/get_all_address_by_id/{userId}")
-    public ResponseEntity<AddressListResponse> getAllAddressesByUserId(
-            @PathVariable Long userId,
-            @RequestParam(value = "keyword", required = false) String keyword,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
-    ) {
-        try {
-            PageRequest pageRequest = PageRequest.of(page, size);
-            Page<AddressResponse> addressesPage = addressService.getAllAddressesByUserId(userId, pageRequest, keyword);
-            int totalPages = addressesPage.getTotalPages();
-            List<AddressResponse> addressList = addressesPage.getContent();
-            return ResponseEntity.ok(AddressListResponse.builder()
-                    .address(addressList)
-                    .totalPages(totalPages)
-                    .build());
-        }catch (IllegalArgumentException ex){
-            AddressListResponse response = new AddressListResponse();
-            response.setError("Invalid user ID: " + userId);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-    }
-
-
-    @CrossOrigin
-    @PostMapping("/create_address/{userId}")
-    public ResponseEntity<?> createAddress(@RequestBody AddressDto addressDto, @PathVariable Long userId) {
-        try {
-            Address createdAddress = addressService.createAddress(addressDto, userId);
-            return ResponseEntity.ok(createdAddress);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while creating the address.");
-        }
-    }
-
-    @PutMapping("/update/{addressId}")
-    public ResponseEntity<?> updateAddress(@PathVariable Long addressId, @RequestBody AddressDto addressDto) {
-        try {
-            Address updatedAddress = addressService.updateAddress(addressId, addressDto);
-            return ResponseEntity.ok(updatedAddress);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the address.");
-        }
-    }
-
-    @DeleteMapping("/delete/{addressId}")
-    public ResponseEntity<?> deleteAddress(@PathVariable Long addressId) {
-        try {
-            addressService.deleteAddress(addressId);
-            return ResponseEntity.ok().body("Address with ID " + addressId + " has been successfully deleted.");
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the address.");
-        }
-    }
-
-}
+//package com.example.securityl.controllers;
+//
+//
+//import com.example.securityl.Responses.AddressListResponse;
+//import com.example.securityl.Responses.AddressResponse;
+//import com.example.securityl.converter.AddressConverter;
+//import com.example.securityl.dtos.AddressDto;
+//import com.example.securityl.models.Address;
+//import com.example.securityl.services.IAddressService;
+//import jakarta.persistence.EntityNotFoundException;
+//import lombok.RequiredArgsConstructor;
+//
+//import org.springframework.data.domain.Page;
+//import org.springframework.data.domain.PageRequest;
+//import org.springframework.http.HttpStatus;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.web.bind.annotation.*;
+//
+//import java.util.List;
+//
+//
+//@RestController
+//@RequestMapping("api/v1/address")
+//@RequiredArgsConstructor
+//@CrossOrigin
+//public class AddressController {
+//
+//    private final IAddressService addressService;
+//
+//
+//    @CrossOrigin
+//    @GetMapping("/get-address-by-id/{addressId}")
+//    public ResponseEntity<?> getAddressById(@PathVariable("addressId") Long addressId)
+//    {
+//        try {
+//            Address address = addressService.getAddressById(addressId);
+//            AddressResponse addressResponse = AddressConverter.toResponse(address);
+//            return new ResponseEntity<>(addressResponse, HttpStatus.OK);
+//        }catch (Exception e)
+//        {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+//        }
+//    }
+//
+//    @CrossOrigin
+//    @GetMapping("/get_all_address_by_id/{userId}")
+//    public ResponseEntity<AddressListResponse> getAllAddressesByUserId(
+//            @PathVariable Long userId,
+//            @RequestParam(value = "keyword", required = false) String keyword,
+//            @RequestParam(value = "page", defaultValue = "0") int page,
+//            @RequestParam(value = "size", defaultValue = "10") int size
+//    ) {
+//        try {
+//            PageRequest pageRequest = PageRequest.of(page, size);
+//            Page<AddressResponse> addressesPage = addressService.getAllAddressesByUserId(userId, pageRequest, keyword);
+//            int totalPages = addressesPage.getTotalPages();
+//            List<AddressResponse> addressList = addressesPage.getContent();
+//            return ResponseEntity.ok(AddressListResponse.builder()
+//                    .address(addressList)
+//                    .totalPages(totalPages)
+//                    .build());
+//        }catch (IllegalArgumentException ex){
+//            AddressListResponse response = new AddressListResponse();
+//            response.setError("Invalid user ID: " + userId);
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+//        }
+//    }
+//
+//
+//    @CrossOrigin
+//    @PostMapping("/create_address/{userId}")
+//    public ResponseEntity<?> createAddress(@RequestBody AddressDto addressDto, @PathVariable Long userId) {
+//        try {
+//            Address createdAddress = addressService.createAddress(addressDto, userId);
+//            return ResponseEntity.ok(createdAddress);
+//        } catch (EntityNotFoundException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while creating the address.");
+//        }
+//    }
+//
+//    @PutMapping("/update/{addressId}")
+//    public ResponseEntity<?> updateAddress(@PathVariable Long addressId, @RequestBody AddressDto addressDto) {
+//        try {
+//            Address updatedAddress = addressService.updateAddress(addressId, addressDto);
+//            return ResponseEntity.ok(updatedAddress);
+//        } catch (EntityNotFoundException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the address.");
+//        }
+//    }
+//
+//    @DeleteMapping("/delete/{addressId}")
+//    public ResponseEntity<?> deleteAddress(@PathVariable Long addressId) {
+//        try {
+//            addressService.deleteAddress(addressId);
+//            return ResponseEntity.ok().body("Address with ID " + addressId + " has been successfully deleted.");
+//        } catch (EntityNotFoundException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the address.");
+//        }
+//    }
+//
+//}
