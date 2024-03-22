@@ -1,22 +1,26 @@
 package com.example.securityl.converter;
 
-import com.example.securityl.model.ImageProduct;
 
+import com.example.securityl.dtos.ProductImageDto;
+import com.example.securityl.models.ProductImages;
+import org.springframework.stereotype.Component;
+
+@Component
 public class ProductImageConverter {
-    public static ImageProduct toDto(ImageProduct entity) {
-        ImageProduct dto = new ImageProduct();
-        dto.setProduct(entity.getProduct());
+    public static ProductImageDto toDto(ProductImages entity) {
+        ProductImageDto dto = new ProductImageDto();
+        dto.setProductId(entity.getProduct().getId());
         dto.setImageUrl(entity.getImageUrl());
         return dto;
     }
 
-    public static ImageProduct toEntity(ImageProduct dto) {
-        ImageProduct entity = new ImageProduct();
+    public static ProductImages toEntity(ProductImageDto dto) {
+        ProductImages entity = new ProductImages();
         entity.setImageUrl(dto.getImageUrl());
         return entity;
     }
 
-    public static ImageProduct toEntity(ImageProduct dto, ImageProduct entity) {
+    public static ProductImages toEntity(ProductImageDto dto, ProductImages entity) {
         entity.setImageUrl(dto.getImageUrl());
         return entity;
     }
