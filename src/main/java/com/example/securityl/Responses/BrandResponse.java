@@ -1,6 +1,7 @@
 package com.example.securityl.Responses;
 
-import com.eFurnitureproject.eFurniture.models.Brand;
+
+import com.example.securityl.models.Brand;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 

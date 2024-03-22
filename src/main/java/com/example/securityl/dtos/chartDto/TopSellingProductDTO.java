@@ -1,6 +1,7 @@
 package com.example.securityl.dtos.chartDto;
 
-import com.eFurnitureproject.eFurniture.models.Product;
+
+import com.example.securityl.models.Product;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

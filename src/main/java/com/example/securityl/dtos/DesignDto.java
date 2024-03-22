@@ -1,6 +1,7 @@
 package com.example.securityl.dtos;
 
-import com.eFurnitureproject.eFurniture.models.ProjectBooking;
+
+import com.example.securityl.models.ProjectBooking;
 import lombok.*;
 
 @Data

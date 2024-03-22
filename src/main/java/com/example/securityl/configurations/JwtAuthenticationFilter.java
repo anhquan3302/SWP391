@@ -1,8 +1,8 @@
 package com.example.securityl.configurations;
 
 
-import com.example.securityl.repository.TokenRepository;
-import com.example.securityl.serviceimpl.JwtServiceImpl;
+import com.example.securityl.repositories.TokenRepository;
+import com.example.securityl.services.impl.JwtServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,6 +1,7 @@
 package com.example.securityl.dtos;
 
-import com.eFurnitureproject.eFurniture.models.Product;
+
+import com.example.securityl.models.Product;
 import lombok.*;
 
 @Data//toString

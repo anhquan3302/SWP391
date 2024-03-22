@@ -1,6 +1,7 @@
 package com.example.securityl.dtos;
 
-import com.eFurnitureproject.eFurniture.models.Enum.Role;
+
+import com.example.securityl.models.Enum.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

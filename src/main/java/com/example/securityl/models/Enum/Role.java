@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.eFurnitureproject.eFurniture.models.Enum.Permission.*;
+import static com.example.securityl.models.Enum.Permission.*;
+
 
 @RequiredArgsConstructor
 public enum Role {

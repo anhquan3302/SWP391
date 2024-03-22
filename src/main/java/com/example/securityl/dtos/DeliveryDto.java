@@ -1,6 +1,7 @@
 package com.example.securityl.dtos;
 
-import com.eFurnitureproject.eFurniture.models.Enum.StatusDelivery;
+
+import com.example.securityl.models.Enum.StatusDelivery;
 import lombok.*;
 
 @Data//toString

@@ -1,9 +1,10 @@
 package com.example.securityl.Responses;
 
-import com.eFurnitureproject.eFurniture.dtos.CartItemDto;
-import com.eFurnitureproject.eFurniture.models.OrderDetail;
-import com.eFurnitureproject.eFurniture.models.OrderStatus;
-import com.eFurnitureproject.eFurniture.models.PaymentStatus;
+
+import com.example.securityl.dtos.CartItemDto;
+import com.example.securityl.models.OrderDetail;
+import com.example.securityl.models.OrderStatus;
+import com.example.securityl.models.PaymentStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;

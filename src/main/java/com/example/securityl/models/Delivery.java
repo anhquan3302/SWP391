@@ -1,6 +1,7 @@
 package com.example.securityl.models;
 
-import com.eFurnitureproject.eFurniture.models.Enum.StatusDelivery;
+
+import com.example.securityl.models.Enum.StatusDelivery;
 import jakarta.persistence.*;
 import lombok.*;
 

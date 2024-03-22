@@ -1,6 +1,7 @@
 package com.example.securityl.Responses;
 
-import com.eFurnitureproject.eFurniture.models.CouponCondition;
+
+import com.example.securityl.models.CouponCondition;
 import lombok.*;
 
 import java.util.List;

@@ -1,6 +1,7 @@
 package com.example.securityl.Responses;
 
-import com.eFurnitureproject.eFurniture.models.ProjectBooking;
+
+import com.example.securityl.models.ProjectBooking;
 import lombok.*;
 
 @Getter

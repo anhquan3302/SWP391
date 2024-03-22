@@ -1,7 +1,8 @@
 package com.example.securityl.models;
 
 
-import com.eFurnitureproject.eFurniture.models.Enum.TokenType;
+
+import com.example.securityl.models.Enum.TokenType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

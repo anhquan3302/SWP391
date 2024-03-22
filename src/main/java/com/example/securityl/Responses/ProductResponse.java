@@ -1,9 +1,10 @@
 package com.example.securityl.Responses;
 
-import com.eFurnitureproject.eFurniture.models.Brand;
-import com.eFurnitureproject.eFurniture.models.Category;
-import com.eFurnitureproject.eFurniture.models.ProductImages;
-import com.eFurnitureproject.eFurniture.models.TagsProduct;
+
+import com.example.securityl.models.Brand;
+import com.example.securityl.models.Category;
+import com.example.securityl.models.ProductImages;
+import com.example.securityl.models.TagsProduct;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;

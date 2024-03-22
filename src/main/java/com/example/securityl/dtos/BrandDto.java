@@ -1,6 +1,7 @@
 package com.example.securityl.dtos;
 
-import com.eFurnitureproject.eFurniture.models.BaseEntity;
+
+import com.example.securityl.models.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;

@@ -1,0 +1,38 @@
+package com.example.securityl.controllers;
+
+
+import com.example.securityl.models.CategoryBlog;
+import com.example.securityl.services.impl.CategoriesBlogService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@CrossOrigin
+@RequestMapping("/api/v1/categories-blog")
+@RequiredArgsConstructor
+public class CategoriesBlogController {
+    private final CategoriesBlogService categoriesBlogService;
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryBlog> getCategoryById(@PathVariable Long id){
+        CategoryBlog category = categoriesBlogService.getCategoryById(id);
+        if (category != null) {
+            return new ResponseEntity<>(category, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @GetMapping("get-all-categoriesBlog")
+    public ResponseEntity<List<CategoryBlog>> getAllCategoriesBlog() {
+        List<CategoryBlog> categoriesBlog = categoriesBlogService.getAllCategoriesBlog();
+        return new ResponseEntity<>(categoriesBlog, HttpStatus.OK);
+    }
+
+}

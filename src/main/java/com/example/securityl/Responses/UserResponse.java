@@ -1,7 +1,8 @@
 
 package com.example.securityl.Responses;
 
-import com.eFurnitureproject.eFurniture.models.Enum.Role;
+
+import com.example.securityl.models.Enum.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

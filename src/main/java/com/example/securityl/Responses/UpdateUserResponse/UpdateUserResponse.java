@@ -1,6 +1,6 @@
 package com.example.securityl.Responses.UpdateUserResponse;
 
-import com.eFurnitureproject.eFurniture.models.User;
+import com.example.securityl.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

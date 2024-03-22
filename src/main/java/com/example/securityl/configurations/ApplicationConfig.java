@@ -1,7 +1,8 @@
 package com.example.securityl.configurations;
 
 
-import com.example.securityl.repository.UserRepository;
+
+import com.example.securityl.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +25,9 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> repository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> {
+                    return new UsernameNotFoundException("User not found");
+                });
     }
 
     @Bean
