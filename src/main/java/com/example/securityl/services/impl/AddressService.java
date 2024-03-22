@@ -1,148 +1,148 @@
-package com.example.securityl.services.impl;
-
-
-import com.example.securityl.Responses.AddressResponse;
-import com.example.securityl.Responses.UserResponse;
-import com.example.securityl.converter.AddressConverter;
-import com.example.securityl.dtos.AddressDto;
-import com.example.securityl.models.Address;
-import com.example.securityl.models.User;
-import com.example.securityl.repositories.AddressRepository;
-import com.example.securityl.repositories.UserRepository;
-import com.example.securityl.services.IAddressService;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-
-@Service
-@RequiredArgsConstructor
-public class AddressService implements IAddressService {
-
-    private final AddressRepository addressRepository;
-    private final UserRepository userRepository;
-
-
-
-    @Override
-    public Page<AddressResponse> getAllAddressesByUserId(Long userId, Pageable pageable, String keyword) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
-
-        Page<Address> addressPage = addressRepository.searchAddress(keyword, pageable, userId);
-
-        Page<AddressResponse> addressResponsePage = addressPage.map(address -> {
-            AddressResponse addressResponse = AddressConverter.toResponse(address);
-
-            UserResponse userResponse = UserResponse.builder()
-                    .id(user.getId())
-                    .fullName(user.getFullName())
-                    .phoneNumber(user.getPhoneNumber())
-                    .address(user.getAddress())
-
-                    .active(user.isActive())
-                    .dateOfBirth(user.getDateOfBirth())
-                    .facebookAccountId(user.getFacebookAccountId())
-                    .googleAccountId(user.getGoogleAccountId())
-                    .build();
-
-            addressResponse.setUser(userResponse);
-
-            return addressResponse;
-        });
-
-        return addressResponsePage;
-    }
-
-
-
-    @Override
-    public Address createAddress(AddressDto addressDto, Long userId) {
-
-        User userid = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-
-
-        Address newAddress = Address.builder()
-                .firstName(addressDto.getFirstName())
-                .lastName(addressDto.getLastName())
-                .streetAddress(addressDto.getStreetAddress())
-                .wardCode(addressDto.getWardCode())
-                .districtCode(addressDto.getDistrictCode())
-                .provinceCode(addressDto.getProvinceCode())
-                .wardName(addressDto.getWardName())
-                .districtName(addressDto.getDistrictName())
-                .provinceName(addressDto.getProvinceName())
-                .phoneNumber(addressDto.getPhoneNumber())
-                .user(userid)
-                .build();
-
-        return addressRepository.save(newAddress);
-
-    }
-
-    @Override
-    public Address updateAddress(Long addressId, AddressDto addressDto) {
-        Address existingAddress = addressRepository.findById(addressId)
-                .orElseThrow(() -> new EntityNotFoundException("Address not found with id: " + addressId));
-
-        if (addressDto.getFirstName() != null && !addressDto.getFirstName().isEmpty()) {
-            existingAddress.setFirstName(addressDto.getFirstName());
-        }
-        if (addressDto.getLastName() != null && !addressDto.getLastName().isEmpty()) {
-            existingAddress.setLastName(addressDto.getLastName());
-        }
-        if (addressDto.getStreetAddress() != null && !addressDto.getStreetAddress().isEmpty()) {
-            existingAddress.setStreetAddress(addressDto.getStreetAddress());
-        }
-        if (addressDto.getPhoneNumber() != null && !addressDto.getPhoneNumber().isEmpty()) {
-            existingAddress.setPhoneNumber(addressDto.getPhoneNumber());
-        }
-        if (addressDto.getWardCode() != null && !addressDto.getWardCode().isEmpty()) {
-            existingAddress.setWardCode(addressDto.getWardCode());
-        }
-        if (addressDto.getDistrictCode() != null && !addressDto.getDistrictCode().isEmpty()) {
-            existingAddress.setDistrictCode(addressDto.getDistrictCode());
-        }
-        if (addressDto.getProvinceCode() != null && !addressDto.getProvinceCode().isEmpty()) {
-            existingAddress.setProvinceCode(addressDto.getProvinceCode());
-        }
-        if (addressDto.getWardName() != null && !addressDto.getWardName().isEmpty()) {
-            existingAddress.setWardName(addressDto.getWardName());
-        }
-        if (addressDto.getDistrictName() != null && !addressDto.getDistrictName().isEmpty()) {
-            existingAddress.setDistrictName(addressDto.getDistrictName());
-        }
-        if (addressDto.getProvinceName() != null && !addressDto.getProvinceName().isEmpty()) {
-            existingAddress.setProvinceName(addressDto.getProvinceName());
-        }
-        if (addressDto.getStatus() != null && !addressDto.getStatus().isEmpty()) {
-            existingAddress.setStatus(addressDto.getStatus());
-        }
-
-        return addressRepository.save(existingAddress);
-    }
-
-
-
-    @Override
-    public void deleteAddress(Long addressId) {
-        Address existingAddress = addressRepository.findById(addressId)
-                .orElseThrow(() -> new EntityNotFoundException("Address not found with id: " + addressId));
-
-        addressRepository.delete(existingAddress);
-    }
-
-    @Override
-    public Address getAddressById(Long addressId) throws Exception {
-        Optional<Address> addressOptional = addressRepository.findById(addressId);
-
-        if (addressOptional.isPresent()) {
-            return addressOptional.get();
-        } else {
-            throw new Exception("Can not find Blog with id= " + addressId);
-        }
-    }
-}
+//package com.example.securityl.services.impl;
+//
+//
+//import com.example.securityl.Responses.AddressResponse;
+//import com.example.securityl.Responses.UserResponse;
+//import com.example.securityl.converter.AddressConverter;
+//import com.example.securityl.dtos.AddressDto;
+//import com.example.securityl.models.Address;
+//import com.example.securityl.models.User;
+//import com.example.securityl.repositories.AddressRepository;
+//import com.example.securityl.repositories.UserRepository;
+//import com.example.securityl.services.IAddressService;
+//import jakarta.persistence.EntityNotFoundException;
+//import lombok.RequiredArgsConstructor;
+//import org.springframework.data.domain.Page;
+//import org.springframework.data.domain.Pageable;
+//import org.springframework.stereotype.Service;
+//
+//import java.util.Optional;
+//
+//@Service
+//@RequiredArgsConstructor
+//public class AddressService implements IAddressService {
+//
+//    private final AddressRepository addressRepository;
+//    private final UserRepository userRepository;
+//
+//
+//
+//    @Override
+//    public Page<AddressResponse> getAllAddressesByUserId(Long userId, Pageable pageable, String keyword) {
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
+//
+//        Page<Address> addressPage = addressRepository.searchAddress(keyword, pageable, userId);
+//
+//        Page<AddressResponse> addressResponsePage = addressPage.map(address -> {
+//            AddressResponse addressResponse = AddressConverter.toResponse(address);
+//
+//            UserResponse userResponse = UserResponse.builder()
+//                    .id(user.getId())
+//                    .fullName(user.getFullName())
+//                    .phoneNumber(user.getPhoneNumber())
+//                    .address(user.getAddress())
+//
+//                    .active(user.isActive())
+//                    .dateOfBirth(user.getDateOfBirth())
+//                    .facebookAccountId(user.getFacebookAccountId())
+//                    .googleAccountId(user.getGoogleAccountId())
+//                    .build();
+//
+//            addressResponse.setUser(userResponse);
+//
+//            return addressResponse;
+//        });
+//
+//        return addressResponsePage;
+//    }
+//
+//
+//
+//    @Override
+//    public Address createAddress(AddressDto addressDto, Long userId) {
+//
+//        User userid = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+//
+//
+//        Address newAddress = Address.builder()
+//                .firstName(addressDto.getFirstName())
+//                .lastName(addressDto.getLastName())
+//                .streetAddress(addressDto.getStreetAddress())
+//                .wardCode(addressDto.getWardCode())
+//                .districtCode(addressDto.getDistrictCode())
+//                .provinceCode(addressDto.getProvinceCode())
+//                .wardName(addressDto.getWardName())
+//                .districtName(addressDto.getDistrictName())
+//                .provinceName(addressDto.getProvinceName())
+//                .phoneNumber(addressDto.getPhoneNumber())
+//                .user(userid)
+//                .build();
+//
+//        return addressRepository.save(newAddress);
+//
+//    }
+//
+//    @Override
+//    public Address updateAddress(Long addressId, AddressDto addressDto) {
+//        Address existingAddress = addressRepository.findById(addressId)
+//                .orElseThrow(() -> new EntityNotFoundException("Address not found with id: " + addressId));
+//
+//        if (addressDto.getFirstName() != null && !addressDto.getFirstName().isEmpty()) {
+//            existingAddress.setFirstName(addressDto.getFirstName());
+//        }
+//        if (addressDto.getLastName() != null && !addressDto.getLastName().isEmpty()) {
+//            existingAddress.setLastName(addressDto.getLastName());
+//        }
+//        if (addressDto.getStreetAddress() != null && !addressDto.getStreetAddress().isEmpty()) {
+//            existingAddress.setStreetAddress(addressDto.getStreetAddress());
+//        }
+//        if (addressDto.getPhoneNumber() != null && !addressDto.getPhoneNumber().isEmpty()) {
+//            existingAddress.setPhoneNumber(addressDto.getPhoneNumber());
+//        }
+//        if (addressDto.getWardCode() != null && !addressDto.getWardCode().isEmpty()) {
+//            existingAddress.setWardCode(addressDto.getWardCode());
+//        }
+//        if (addressDto.getDistrictCode() != null && !addressDto.getDistrictCode().isEmpty()) {
+//            existingAddress.setDistrictCode(addressDto.getDistrictCode());
+//        }
+//        if (addressDto.getProvinceCode() != null && !addressDto.getProvinceCode().isEmpty()) {
+//            existingAddress.setProvinceCode(addressDto.getProvinceCode());
+//        }
+//        if (addressDto.getWardName() != null && !addressDto.getWardName().isEmpty()) {
+//            existingAddress.setWardName(addressDto.getWardName());
+//        }
+//        if (addressDto.getDistrictName() != null && !addressDto.getDistrictName().isEmpty()) {
+//            existingAddress.setDistrictName(addressDto.getDistrictName());
+//        }
+//        if (addressDto.getProvinceName() != null && !addressDto.getProvinceName().isEmpty()) {
+//            existingAddress.setProvinceName(addressDto.getProvinceName());
+//        }
+//        if (addressDto.getStatus() != null && !addressDto.getStatus().isEmpty()) {
+//            existingAddress.setStatus(addressDto.getStatus());
+//        }
+//
+//        return addressRepository.save(existingAddress);
+//    }
+//
+//
+//
+//    @Override
+//    public void deleteAddress(Long addressId) {
+//        Address existingAddress = addressRepository.findById(addressId)
+//                .orElseThrow(() -> new EntityNotFoundException("Address not found with id: " + addressId));
+//
+//        addressRepository.delete(existingAddress);
+//    }
+//
+//    @Override
+//    public Address getAddressById(Long addressId) throws Exception {
+//        Optional<Address> addressOptional = addressRepository.findById(addressId);
+//
+//        if (addressOptional.isPresent()) {
+//            return addressOptional.get();
+//        } else {
+//            throw new Exception("Can not find Blog with id= " + addressId);
+//        }
+//    }
+//}
