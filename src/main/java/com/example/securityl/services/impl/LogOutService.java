@@ -1,6 +1,7 @@
 package com.example.securityl.services.impl;
 
-import com.eFurnitureproject.eFurniture.repositories.TokenRepository;
+
+import com.example.securityl.repositories.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

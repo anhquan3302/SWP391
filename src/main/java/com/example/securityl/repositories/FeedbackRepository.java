@@ -27,10 +27,9 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
             "GROUP BY f.rating")
     List<Object[]> findFeedbackCountByRating();
 
-    @Query("SELECT NEW  com.eFurnitureproject.eFurniture.dtos.FeedbackDto(f.id, f.user.fullName, f.comment, f.parentId)" +
+    @Query("SELECT NEW  com.example.securityl.dtos.FeedbackDto(f.id, f.user.fullName, f.comment, f.parentId)" +
             "FROM Feedback as f WHERE f.parentId = :parent_id")
      List<FeedbackDto> findByParent(@Param("parent_id") Long parent_id);
-
 
     Page<Feedback> findAllByUserId(Pageable pageable, Long userId);
 }

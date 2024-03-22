@@ -59,6 +59,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT SUM(o.totalAmount) FROM Order o WHERE o.orderDate = CURRENT_DATE")
     Double getTotalAmountToday();
 
-    @Query("SELECT SUM(o.totalAmount) FROM Order o WHERE o.orderDate = CURRENT_DATE - 1")
-    Double getTotalAmountYesterday();
-}//o.active = true AND
+
+
+
+
+
+
+
+
+}

@@ -1,7 +1,8 @@
 package com.example.securityl.Responses;
 
-import com.eFurnitureproject.eFurniture.models.Address;
-import com.eFurnitureproject.eFurniture.models.Order;
+
+import com.example.securityl.models.Address;
+import com.example.securityl.models.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

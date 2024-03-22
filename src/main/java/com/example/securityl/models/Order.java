@@ -30,11 +30,7 @@ public class Order extends BaseEntity {
     @Column(name = "payment_method", length = 255)
     private String paymentMethod;
 
-//    @Column(name = "shipping_address", length = 255)
-//    private String shippingAddress;
 
-    //    @Column(name = "tracking_number", length = 255)
-//    private String trackingNumber;
     @Column(name = "province", length = 255)
     private String province;
 

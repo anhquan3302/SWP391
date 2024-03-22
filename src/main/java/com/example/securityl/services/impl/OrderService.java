@@ -211,7 +211,7 @@ public class OrderService implements IOrderService {
     public RevenueDayDTO getTotalSales() {
         RevenueDayDTO totalSalesDTO = new RevenueDayDTO();
         totalSalesDTO.setTotalSalesToday(orderRepository.getTotalAmountToday());
-        totalSalesDTO.setTotalSalesYesterday(orderRepository.getTotalAmountYesterday());
+//        totalSalesDTO.setTotalSalesYesterday(orderRepository.getTotalAmountYesterday());
         return totalSalesDTO;
     }
 
